@@ -1,0 +1,160 @@
+{% extends '::fronted.html.twig' %}
+
+{% block title %}Con Quito{% endblock %}            
+            
+
+                                
+{% block leftpanel %}
+
+    <!--{e% if  entity.estadocreditos != "PAGADO"%}-->
+
+
+                                <div groups="base.group_user,base.group_portal,share.group_shared">
+                                    
+            <a href="#" class="oe_logo">
+                {#<span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>#}
+                <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+            </a>
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+                        
+                            <div data-menu-parent="99" class="oe_secondary_menu" style="">
+                                
+                                    <!-- <div class="oe_secondary_menu_section">
+                                        Datos Empresas
+                                    </div> -->
+                                    
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li id="CajadeAhorros">
+                    
+            
+            <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('entidad') }}">
+                <span class="oe_menu_text">
+                    Datos Caja de Ahorros
+                </span>
+            </a>
+        
+                    
+            
+        
+                </li>
+            </ul>
+        
+                                
+                                   <!--  <div class="oe_secondary_menu_section">
+                                        Personas
+                                    </div> -->
+                                    
+            <!--<ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li id="Personas"> 
+                     <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('persona') }}">
+                     <span class="oe_menu_text">Personas</span>
+                     </a>
+                </li>
+            </ul>
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="TipodePersona">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('tipopersona') }}">
+                                            <span class="oe_menu_text">Tipo de Persona</span>
+                                        </a>
+                                    </li>
+             </ul>-->
+
+                                           
+            <!--<ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li id="Cargos"> 
+                     <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('cargo') }}">
+                     <span class="oe_menu_text">Cargos</span>
+                     </a>
+                </li>
+            </ul>-->
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="TipodeCrédito">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('productodecreditos') }}">
+                                            <span class="oe_menu_text">Tipo de Crédito</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                              
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="Estadodecreditos">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('estadocreditos') }}">
+                                            <span class="oe_menu_text">Estado de créditos</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="MetodoAmortizacioCredito">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('metododeamortizacion') }}">
+                                            <span class="oe_menu_text">Métodos Amort. Créditos</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="Tipodeahorro">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('tipoahorro') }}">
+                                            <span class="oe_menu_text">Tipo de Ahorro</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                              
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="Estadodeahorro">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('estadoahorro') }}">
+                                            <span class="oe_menu_text">Estado de ahorro</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="MetodoAmortizacioAhorro">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('metodoamortizacionahorro') }}">
+                                            <span class="oe_menu_text">Métodos Amort. Ahorro</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="TipodeTransacción">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="105" class="oe_menu_leaf" href="{{ path('tipoproductocontable') }}">
+                                             <span class="oe_menu_text"> Tipo de Transacciones</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                                    <li id="Usuarios">
+                                        <a  data-action-model="ir.actions.act_window" data-menu="105" class="oe_menu_leaf" href="{{ path('listadousuarios') }}">
+                                            <span class="oe_menu_text"> Gestión de Usuarios</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+
+                            </div>
+      
+       
+                       
+    
+                        
+         
+      
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Desarrollado por:<br><a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+            </div>
+        
+                                </div>
+            
+{% endblock %}
+        

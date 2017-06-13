@@ -1,0 +1,44 @@
+ahorro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:index" }
+
+ahorro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:show" }
+
+ahorro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:new" }
+
+ahorro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:create" }
+
+
+ahorro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:edit" }
+
+ahorro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:update" }
+
+ahorro_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:delete",id:""}
+    
+libroAhorros:
+    path:     /libroAhorros
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:libroAhorros"}
+
+cargarPersonasAho:
+    path:     /cargarPersonasAho/{idTransaccion}/{persona}/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:cargarPersonasAho",idTransaccion:'',persona:'',id:''}
+
+depositoAho:
+    path:     /{persona}/{id}/depositoAho
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:deposito",persona:'',id:'' }
+
+exportarAhorro:
+    path:     /exportarAhorro
+    defaults: { _controller: "ModulosPersonasBundle:Ahorro:exportarAhorroLibro"}

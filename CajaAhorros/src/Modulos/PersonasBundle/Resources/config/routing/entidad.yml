@@ -1,0 +1,29 @@
+entidad:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:index" }
+
+entidad_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:show" }
+
+entidad_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:new" }
+
+entidad_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:create" }
+
+entidad_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:edit" }
+
+entidad_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:update" }
+    
+
+entidad_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Entidad:delete", id:""}
+    

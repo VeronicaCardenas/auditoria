@@ -1,0 +1,163 @@
+{% extends '::fronted6.html.twig' %}
+{% block title %}Aportes Socios{% endblock %}
+{% block encabezado %}Aportes Socios{% endblock %}
+
+{% block contenedor %}
+    <script>
+        $(document).ready(function () {
+            $(document).on("click","#aportes",function(){
+                $('#aportes').attr("href","{{ path('aportesExcel',{'personalist':''}) }}" + '/' + "{{ personalist }}");
+            });
+
+            $("#Personas").addClass("active");
+            $("#Socios").addClass("active");
+        });
+
+    </script>
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+        .tabla_right_align {
+            text-align: right !important;
+        }
+        .tabla_left_align {
+            text-align: left !important;
+        }
+    </style>
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            <table class="oe_view_manager_header">
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('persona')}}">Listado de Personas</a>
+                                <span class="oe_fade">/</span>
+                                {% if personalist > 0 %}
+                                    <span class="oe_breadcrumb_item">Aportes Individual de Socios</span>
+                                {% else %}
+                                    <span class="oe_breadcrumb_item">Libro General de Aportaciones de Socios</span>
+                                {% endif %}
+                            </span>
+                        </h2>
+                    </td>
+
+                </tr>
+
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons">
+                            <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                            <a id="aportes"  href="#" class="oe_button oe_form_button_cancel" accesskey="D">Exportar Excel</a>
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tabla_center_align" style="margin: 10px">
+            {% if personalist > 0 %}
+                <label style="font-size: 18px;">REPORTE DE APORTES INDIVIDUAL DE SOCIOS</label>
+            {% else %}
+                <label style="font-size: 18px;">LIBRO GENERAL DE APORTACIONES DE SOCIOS</label>
+            {% endif %}
+            <br>
+            <label style="font-size: 16px;">{{ nombrecaja }}</label>
+        </div>
+        <div class="tabla_center_align" >
+            <div class="oe_form_sheetbg">
+                <div class="oe_form_sheet oe_form_sheet_width" style="max-width:80% !important;">
+
+            {% set mesindex = 0%}
+            {% for mes in meses %}
+                <h3>{{ mesesTexto[mes] }}</h3>
+                <table class="table" style="margin: 5px">
+                    <thead>
+                    <th width="10%" class="tabla_center_align">No</th>
+                    <th width="25%" class="tabla_center_align">Nombre y Apellidos</th>
+                    <th  class="tabla_center_align">Usuario No</th>
+                    <th  class="tabla_center_align">Saldo Anterior</th>
+                    <th  class="tabla_center_align">{{ mesindex == 0 ? "Aportes Iniciales" : "Aporte Mensual" }}</th>
+                    <th width="10%"  class="tabla_center_align">Retiro de Aportes</th>
+                    <th  class="tabla_center_align">Saldo final de Aportes</th>
+                    </thead>
+                    <tbody>
+                    {% set cont=1 %}
+                    {% set saldoAnteriorTotal=0 %}
+                    {% set aportesTotal=0 %}
+                    {% set retiroaportesTotal=0 %}
+                    {% set saldoFinalTotal=0 %}
+                    {% for personaAportes in aportes[mes] %}
+                        <tr>
+
+                            <td width="10%"
+                                class="tabla_center_align"> {{ cont }}</td>
+                            <td  width="20%"
+                                 class="tabla_left_align"> &nbsp;{{ personaAportes['persona'] }} &nbsp;</td>
+                            <td  class="tabla_right_align">&nbsp;{{ cont }} &nbsp;</td>
+                            <td  class="tabla_right_align">&nbsp;$&nbsp;{{ personaAportes['saldoAnterior']|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                {% set saldoAnteriorTotal = saldoAnteriorTotal + personaAportes['saldoAnterior'] %}
+                            <td  class="tabla_right_align">&nbsp;$&nbsp;{{ personaAportes['aportes']|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                {% set aportesTotal = aportesTotal + personaAportes['aportes'] %}
+                            <td  class="tabla_right_align">&nbsp;$&nbsp;{{ personaAportes['retiroaportes']|number_format(2, '.' , ',' ) }}</td>
+                                {% set retiroaportesTotal = retiroaportesTotal + personaAportes['retiroaportes'] %}
+                            <td  class="tabla_right_align">&nbsp;$&nbsp;{{ personaAportes['saldoFinal']|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                {% set saldoFinalTotal = saldoFinalTotal + personaAportes['saldoFinal'] %}
+                            {% set cont=cont + 1 %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+
+                        <td width="10%"
+                            class="tabla_center_align"> </td>
+                        <td  width="20%"
+                             class="tabla_left_align" style="font-weight: bold"> &nbsp;Total &nbsp;</td>
+                        <td  class="tabla_right_align" style="font-weight: bold">&nbsp;{{ cont-1 }} &nbsp;</td>
+                        <td  class="tabla_right_align" style="font-weight: bold">$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+
+                        {% if   aportesTotal == "0"%}
+                            <td width="" class="tabla_right_align"><b>&nbsp;$&nbsp;{{ aportesTotal| number_format(2, '.' , ',' )}}</b></td>
+                        {% else%}
+                            <td width="" class="tabla_right_align" style='color: green;'><b>&nbsp;$&nbsp;{{ aportesTotal| number_format(2, '.' , ',' )}}</b></td>
+                        {% endif %}
+
+                        {% if  retiroaportesTotal == "0"%}
+                            <td width="" class="tabla_right_align"><b>&nbsp;$&nbsp;{{(retiroaportesTotal)| number_format(2, '.' , ',' )}}</b></td>
+                        {% else%}
+                            <td width="" class="tabla_right_align" style='color: red;'><b>&nbsp;$&nbsp;{{(retiroaportesTotal )| number_format(2, '.' , ',' )}}</b></td>
+                        {% endif %}
+
+                        {% if  saldoFinalTotal >= "0"%}
+                            <td width="" class="tabla_right_align" style='color: darkblue;'>
+                                <b>&nbsp;$&nbsp;{{ saldoFinalTotal|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                        {% else%}
+                            <td width="" class="tabla_right_align" style='color: red;'>
+                                <b>&nbsp;$&nbsp;{{ saldoFinalTotal|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                        {% endif %}
+
+                        </tr>
+                    </tbody>
+                </table>
+                <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                {% set mesindex = 1%}
+            {% endfor %}
+        </div>
+        </div>
+        </div>
+        </div>
+{% endblock %}
+    

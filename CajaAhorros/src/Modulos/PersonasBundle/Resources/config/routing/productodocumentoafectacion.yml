@@ -1,0 +1,30 @@
+productodocumentoafectacion:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:index" }
+
+productodocumentoafectacion_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:show" }
+
+productodocumentoafectacion_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:new" }
+
+productodocumentoafectacion_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:create" }
+
+
+productodocumentoafectacion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:edit" }
+
+productodocumentoafectacion_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:update" }
+    methods:  [POST, PUT]
+
+productodocumentoafectacion_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDocumentoAfectacion:delete",id:""}
+    

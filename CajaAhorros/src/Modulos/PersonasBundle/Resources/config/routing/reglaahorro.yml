@@ -1,0 +1,30 @@
+reglaahorro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:index" }
+
+reglaahorro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:show" }
+
+reglaahorro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:new" }
+
+reglaahorro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:create" }
+
+
+reglaahorro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:edit" }
+
+reglaahorro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:update" }
+    methods:  [POST, PUT]
+
+reglaahorro_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:ReglaAhorro:delete",id:"" }
+    

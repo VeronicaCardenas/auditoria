@@ -1,0 +1,626 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Listado de Productos documentos afectacion{% endblock %}
+{% block encabezado %}Listado de Productos documentos afectacion{% endblock %}
+
+{% block contenedor %}
+
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla estÃ¡ vacÃ­a',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Ãšltima"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'asc']]
+
+            });
+            $("#example_length").hide();
+            $("#example_filter").prop("style",'margin-top:-18%;width:30%;margin-left:23%;');
+
+            $("#example_filter input").prop("style",'width:254%;border-radius:20px;height:26px');
+
+            $("#example_info").prop("style",'padding-left: 8px');
+
+            $("#example_paginate").prop("style",'padding-right: 8px');
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+
+
+            $('#EliminarUsuarios').click(function(){
+                oTable= $('#example').dataTable();
+                var lll = $('input', oTable.fnGetNodes()).serialize();
+                if(lll== "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Eliminar Usuarios',
+                        message: 'No existen usuarios marcados',
+                        buttons: [{
+                            label: 'Cancelar',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }
+                        ]
+                    });
+                }
+                else{
+                    BootstrapDialog.show({
+                        title: 'Eliminar Usuarios',
+                        message: 'Â¿Realmente desea eliminar los usuarios marcados?',
+                        buttons: [{
+                            label: 'Si',
+                            action: function(dialogItself) {
+
+                                oTable= $('#example').dataTable();
+                                var sData = $('input', oTable.fnGetNodes()).serialize();
+
+                                var dividir = sData.split("&");
+                                var elementos = new Array();
+                                var auxiliar = "";
+                                for(var i= 0; i < dividir.length; i++)
+                                {
+                                    if(i!=0)
+                                    {
+                                        elementos.push("Â§");
+                                    }
+                                    auxiliar = dividir[i].split("=");
+                                    elementos.push(auxiliar[1]);
+                                    auxiliar = "";
+                                }
+                                $('#EliminarUsuarios').attr('href',"{{ path('eliminar_usuariosmarcados',{'elementos':''})}}" + '/' + elementos);
+                                window.location = $('#EliminarUsuarios').attr('href');
+                                dialogItself.close();
+
+                            }
+                        },
+                            {
+                                label: 'No',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            } ]
+                    });
+
+                }
+
+
+
+
+            });
+            $('[data-toggle="tooltip"]').tooltip()
+
+
+        });
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar producto documento afectacion',
+                    message: '¿Realmente desea eliminar el producto documento afectacion: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('productodocumentoafectacion_delete',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+
+        }
+
+
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current"   data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="alert alert-success">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}   
+
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="30%">
+                </colgroup>
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Informacion de Productos Documentos Afectacion</span></span>
+                        </h2>
+                    </td>
+                    <td colspan="2">
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+
+                                <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('productodocumentoafectacion_create') }}">
+                                    Crear
+                                </a>
+
+                                <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+        <span class="oe_alternative">
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+
+            <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+        </span>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody></table>
+
+
+
+        </div>
+        <table id="example" class="table table-striped" cellspacing="0" width="100%" style="margin-top: -1px;">
+            <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>Cuenta</th>
+                <th>Valor</th>
+                <th>Porciento</th>
+                <th>Tipo Producto Contable</th>
+                <th>Cuenta</th>
+            </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #ddd">
+            {% for entity in entities %}
+                <tr>
+                    <td>
+                        <input type="checkbox" value="{{ entity.id }}" class="EliminarChechbox" name="valor" style="margin-right: 5px;">
+                        <a href="{{ path('productodocumentoafectacion_edit',{'id':entity.id,'estado':0}) }}" title="Editar" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                        <a href="#" title="Eliminar" class="delete" id="{{ entity.id }}" name="{{ entity.operador }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    </td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.operador}}</td>
+                    <td>{{entity.valor}}</td>
+                    <td>{{entity.porciento}}</td>
+                    <td>{{entity.tipoproductocontable}}</td>
+                    <td>{{entity.cuenta}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+{# <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <table class="oe_view_manager_header">
+            <colgroup><col width="20%">
+                <col width="35%">
+                <col width="15%">
+                <col width="30%">
+            </colgroup><tbody><tr class="oe_header_row oe_header_row_top">
+                <td colspan="2">
+
+
+                    <h2 class="oe_view_title">
+                        <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Informaci&oacute;n de las Productos documentos afectaci&oacute;n</span></span>
+                    </h2>
+                </td>
+                <td colspan="2">
+
+
+                    <div class="oe_view_manager_view_search">
+                        <div class="oe_searchview">
+                            <div class="oe_searchview_facets">
+                                <div contenteditable="true" tabindex="0" class="oe_searchview_input">
+
+                                </div>
+                            </div>
+                            <div class="oe_searchview_clear">
+
+                            </div>
+                            <div title="B?squeda avanzada..." class="oe_searchview_unfold_drawer">
+
+                            </div>
+                            <button type="button" title="Volver a buscar" class="oe_searchview_search">Buscar</button>
+                            <div class="oe-autocomplete" style="width: 400px; display: none;">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+            <tr class="oe_header_row">
+                <td>
+                    <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+
+                            <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('productodocumentoafectacion_create') }}">
+                                Crear
+                            </a>
+
+                            <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+        <span class="oe_alternative">
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+
+            <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+        </span>
+
+
+                        </div></div>
+                </td>
+                <td colspan="2">
+                    <div class="oe_view_manager_sidebar"><div style="display: none;">
+                            <div class="oe_sidebar">
+
+                                <div class="oe_form_dropdown_section">
+                                    <button class="oe_dropdown_toggle oe_dropdown_arrow">
+
+                                        Imprimir
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+
+                                    <ul class="oe_dropdown_menu">
+                                        <li class="oe_sidebar_print">
+
+                                            <a title="" data-section="print" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Facturas
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                                <div class="oe_form_dropdown_section">
+                                    <button class="oe_dropdown_toggle oe_dropdown_arrow">
+
+                                        M?s
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+
+                                    <ul class="oe_dropdown_menu">
+                                        <li class="oe_share">
+
+                                            <a title="" data-section="other" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Compartir
+                                            </a>
+
+                                        </li><li class="oe_share">
+
+                                            <a title="" data-section="other" data-index="1" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Incrustar
+                                            </a>
+
+                                        </li><li>
+
+                                            <a title="" data-section="other" data-index="2" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Exportar
+                                            </a>
+
+                                        </li><li>
+
+                                            <a title="" data-section="other" data-index="3" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Borrar
+                                            </a>
+
+                                        </li><li class="oe_sidebar_action">
+
+                                            <a title="" data-section="other" data-index="4" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                                Confirmar Facturas en Borrador
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div></div>
+                </td>
+                <td>
+
+                    <div class="oe_view_manager_pager oe_right"><div colspan="12" class="oe_list_pager oe_list_pager_single_page">
+
+                            <div class="oe_pager_value">
+
+                                <span class="oe_list_pager_state">1-1 de 1</span>
+
+                            </div>
+                            <ul class="oe_pager_group">
+
+                                <li>
+                                    <a type="button" data-pager-action="previous" class="oe_i">(</a>
+                                </li>
+                                <li>
+                                    <a type="button" data-pager-action="next" class="oe_i">)</a>
+                                </li>
+
+                            </ul>
+
+                        </div></div>
+                </td>
+            </tr>
+            </tbody></table>
+
+
+
+                    <div class="oe_view_manager_view_list"><div class="oe_list oe_view"><table class="oe_list_content">
+
+                                <thead>
+
+                                <tr class="oe_list_header_columns">
+
+                                    <th width="90">
+                                        <input type="checkbox" class="oe_list_record_selector">
+                                    </th>
+
+                                   <th class="oe_list_header_many2one oe_sortable" data-id="partner_id"><div>
+                                    Operador
+                                    </div></th>
+
+                                    <th class="oe_list_header_date oe_sortable" data-id="date_invoice"><div>
+                                        Valor
+                                    </div></th>
+
+                                    <th class="oe_list_header_many2one oe_sortable" data-id="factura"><div>
+                                        Porciento
+                                    </div></th>
+
+                                    <th class="oe_list_header_many2one oe_sortable" data-id="factura"><div>
+                                        Tipo de producto contable
+                                    </div></th>
+
+                                    <th class="oe_list_header_many2one oe_sortable" data-id="factura"><div>
+                                        Cuenta
+                                    </div></th>
+
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td class="oe_list_footer oe_number">
+                                    </td><td class="oe_list_footer oe_number">
+                                    </td><td class="oe_list_footer oe_number">
+                                    </td><td class="oe_list_footer oe_number">
+                                    </td><td class="oe_list_footer oe_number">
+
+
+                                </tr>
+                                </tfoot>
+                                <tbody>
+
+                                {% for entity in entities %}
+
+                                    <tr style="color: black;" data-id="1">
+
+                                        <th width="90" class="oe_list_record_selector">
+                                            <input type="checkbox" name="radiogroup">
+                                            <a   href="{{ path('productodocumentoafectacion_edit', { 'id': entity.id }) }}"  > Editar </a>
+                                        </th>
+
+                                        <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.operador }}</td>
+
+                                        <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.valor }}</td>
+
+                                        <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.porciento }}</td>
+
+                                        <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.getTipoProductoContable() }}</td>
+
+                                        <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.cuenta }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody></table></div></div>
+
+                    <div class="oe_view_manager_view_form" style="display: none;"></div>
+
+                    <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                    <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>#}
+{% endblock %}
+
+    {% block leftpanel %}
+            
+        <div groups="base.group_user,base.group_portal,share.group_shared">
+                                    
+            <a href="/web" class="oe_logo">
+                <span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>
+                <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+            </a>
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+                        
+                            <div data-menu-parent="99" class="oe_secondary_menu" style="">
+                                
+                                    <div class="oe_secondary_menu_section">
+                                        Gestión de infromes
+                                    </div>
+                                    
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+            
+            
+                    <li >
+                            <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105"
+                                   class="oe_menu_leaf" href="{{ path('libro_cartera') }}">
+                                <span class="oe_menu_text">
+                                
+                                    Cartera general
+                                </span>
+                                <div id="menu_counter" class="badge pull-right">
+        
+                                  1 
+                                 </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105"
+                                   class="oe_menu_leaf" href="{{ path('libro_pyg') }}">
+                                <span class="oe_menu_text">
+                                    P y G períodico
+                                </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105"
+                                   class="oe_menu_leaf" href="{{ path('libro_balancegeneral') }}">
+                                <span class="oe_menu_text">
+                                    Balance períodico
+                                </span>
+                                </a>
+                            </li>
+            
+
+                 <div class="oe_secondary_menu_section">
+                                Cofiguración
+                            </div>
+
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipodecuenta') }}">
+                         <span class="oe_menu_text">
+                            Tipos de cuentas
+                         </span>
+                     </a>
+                </li>
+
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('cuenta') }}">
+                         <span class="oe_menu_text">
+                            Catalogos de cuentas
+                         </span>
+                     </a>
+                </li>
+
+
+                 <li class="active">
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('productodocumentoafectacion') }}">
+                         <span class="oe_menu_text">
+                            Prod. Documento Afectación
+                         </span>
+                    </a>
+                </li>
+
+                <li >
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('caja') }}">
+                         <span class="oe_menu_text">
+                            Caja
+                         </span>
+                    </a>
+                </li>
+
+                <li >
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('cajapersona') }}">
+                         <span class="oe_menu_text">
+                            Caja Persona
+                         </span>
+                    </a>
+                </li>
+                
+               
+                <li >
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipoproductocontable') }}">
+                         <span class="oe_menu_text">
+                            Tipo Productos contables
+                         </span>
+                    </a>
+                </li>
+
+                <li >
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('documentocontable') }}">
+                         <span class="oe_menu_text">
+                            Documentos contables
+                         </span>
+                    </a>
+                </li>
+
+                <li >
+                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('estadodocumento') }}">
+                         <span class="oe_menu_text">
+                            Estado documento
+                         </span>
+                    </a>
+                </li>
+
+                
+            </ul>
+
+            </div>
+      
+       
+                       
+    
+                        
+         
+      
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Desarrollado por:<br> <a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+            </div>
+        
+                                </div>
+            
+{% endblock %}

@@ -1,0 +1,29 @@
+metodoamortizacionahorro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:index" }
+
+metodoamortizacionahorro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:show" }
+
+metodoamortizacionahorro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:new" }
+
+metodoamortizacionahorro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:create" }
+    methods:  POST
+
+metodoamortizacionahorro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:edit" }
+
+metodoamortizacionahorro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:update" }
+
+metodoamortizacionahorro_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:MetodoAmortizacionAhorro:delete" }
+    methods:  [POST, DELETE]

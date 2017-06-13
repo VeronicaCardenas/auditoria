@@ -1,0 +1,30 @@
+tipodeparcialidad:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:index" }
+
+tipodeparcialidad_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:show" }
+
+tipodeparcialidad_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:new" }
+
+tipodeparcialidad_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:create" }
+    
+
+tipodeparcialidad_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:edit" }
+
+tipodeparcialidad_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:update" }
+    
+
+tipodeparcialidad_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeParcialidad:delete",id:"" }
+    

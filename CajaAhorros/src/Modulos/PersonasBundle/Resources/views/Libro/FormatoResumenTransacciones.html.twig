@@ -1,0 +1,66 @@
+<h1 align="center">Resumen de Transacciones Anuales</h1>
+
+<h3>{{ fechaLabel }}</h3>
+
+<table border="1" style="margin: 5px">
+    <tbody>
+    <tr>
+    <td width="3%" align="center" style= "background-color: #F0F0F0"><b>No</b></td>
+    <td width="19%" align="center" style= "background-color: #F0F0F0"><b>Transacción</b></td>
+    {% for mes in meses %}
+        <td width="6%" align="center" style= "background-color: #F0F0F0"><b>{{ mesesTexto[mes] }}</b></td>
+    {% endfor %}
+    <td width="6%" align="center" style= "background-color: #F0F0F0"><b>Total</b></td>
+    </tr>
+    {% set cont=1 %}
+    {% for resumenAporte in resumen %}
+        <tr>
+            <td width="3%"
+                align="center">{{ cont }}</td>
+            <td  width="19%"
+                align="left">{{ resumenAporte['transacciones']}}</td>
+            {% for mes in meses %}
+                <td width="6%" align="right">{{ resumenAporte['meses'][mes] |number_format(2, '.' , ',' )}}</td>
+            {% endfor %}
+            <td width="6%"
+                align="right">{{ resumenAporte['total']|number_format(2, '.' , ',' ) }}</td>
+            {% set cont=cont + 1 %}
+        </tr>
+    {% endfor %}
+    {% set total=0  %}
+    <tr>
+        <td width="3%"
+            align="center"> </td>
+        <td width="19%"
+            align="center" style="font-weight: bold">Total</td>
+        {% for mes in meses %}
+            <td width="6%" align="right"><b>{{ mesesTotales[mes]|number_format(2, '.' , ',' ) }}</b></td>
+            {% set total = total + mesesTotales[mes] %}
+        {% endfor %}
+        <td width="6%" align="right" ><b>{{ total|number_format(2, '.' , ',' )  }}</b></td>
+    </tr>
+
+    <tr>
+        <td colspan="15" align="right" style= "background-color: #F0F0F0">/ </td>
+    </tr>
+    <tr>
+        <td colspan="3" align="center" style= "background-color: #F0F0F0"><b> Número Total de Personas en la Caja:</b></td>
+        <td colspan="6" align="center"><b>{{ numeroPersonas }}</b> </td>
+        <td colspan="6" align="right" style= "background-color: #F0F0F0">/ </td>
+    </tr>
+    <tr>
+        <td colspan="3" align="center" style= "background-color: #F0F0F0"><b> Número de Socios:</b></td>
+        <td colspan="2" align="center"><b>{{ socios }}</b> </td>
+        <td colspan="3" align="center" style= "background-color: #F0F0F0"><b> Hombres:</b></td>
+        <td colspan="2" align="center"><b>{{ hombres }}</b> </td>
+        <td colspan="3" align="center" style= "background-color: #F0F0F0"><b> Mujeres:</b></td>
+        <td colspan="2" align="center"><b>{{ mujeres }}</b> </td>
+    </tr>
+    <tr>
+        <td colspan="3" align="center" style= "background-color: #F0F0F0"><b> Número Personal:</b></td>
+        <td colspan="2" align="center"><b>{{ personal }}</b> </td>
+        <td colspan="10" align="right" style= "background-color: #F0F0F0">/ </td>
+    </tr>
+    </tbody>
+</table>
+    

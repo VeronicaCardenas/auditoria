@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>TipoAhorro</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ entity.nombre }}</td>
+            </tr>
+            <!--<tr>
+                <th>Plazo</th>
+                <td>{##}{ entity.plazo }}</td>
+            </tr>
+            <tr>
+                <th>Montominimo</th>
+                <td>{##}{ entity.montoMinimo }}</td>
+            </tr>
+            <tr>
+                <th>Montomaximo</th>
+                <td>{##}{ entity.montoMaximo }}</td>
+            </tr>-->
+            <tr>
+                <th>Tasainteres</th>
+                <td>{{ entity.tasaInteres }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('tipoahorro') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('tipoahorro_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

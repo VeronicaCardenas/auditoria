@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}Con Quito{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content=""> 
+  
+   
+    {% block stylesheets %}
+<style>body {
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    height: 100%;
+}</style>  
+
+
+ <link type="text/css" href="{{ asset('bundles/PE/css/bootstrap.css') }}" rel="stylesheet"
+    xmlns="http://www.w3.org/1999/html"/>
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/sticky-footer.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/dataTables.bootstrap.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/custom.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-submenu.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-dialog.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-dialog.min.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-select.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-select.min.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/fileinput.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/custom_1.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{asset('bundles/PE/css/bootstrap-timepicker.css')}}" rel="stylesheet" />
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+   <script type="text/javascript" src="{{asset('bundles/PE/js/jquery-1.11.3.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/collapse.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/tab.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/tooltip.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/transition.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/dropdown.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/jquery.dataTables.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/dataTables.bootstrap.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap-submenu.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap-dialog.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap3-dialog.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap-select.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/fileinput.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/canvasjs.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/locale.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/PE/js/bootstrap-datetimepicker.js')}}"></script>
+<script>
+    //$(document).ready(function() {
+   // $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+   // });
+</script>
+
+{% endblock %}
+
+</head>
+
+<body>
+   {% block body %}
+
+   {% endblock %}
+
+</body>
+
+</html>
+

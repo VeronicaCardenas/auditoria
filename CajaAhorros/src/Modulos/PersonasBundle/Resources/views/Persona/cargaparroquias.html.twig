@@ -1,0 +1,24 @@
+cargarprovincias.html.twig{% if flag == 2 %}
+{%  set listaCreditos = lista %}
+<select id="aa">
+    {% for elem in lista %}
+        <option value="{{ elem.persona.id }}" name="{{ elem.id }}">{{ elem.persona }}  ({{ elem.id }}): {{ elem.idProductosDeCreditos }}</option>
+        (89): Crédito Ordinario
+    {% endfor %}
+
+</select>
+{% elseif flag == 4%}
+    <select id="aa">
+        {% for elem in lista %}
+            <option value="{{ elem.persona.id }}" name="{{ elem.id }}">{{ elem.persona }}  ({{ elem.id }}): {{ elem.tipoAhorro }}</option>
+            (89): Crédito Ordinario
+        {% endfor %}
+
+    </select>
+{% else %}
+    <select id="aa" >
+        {% for elem in lista %}
+            <option value="{{ elem.id }}" name="{{ elem.id }}">{{ elem }}</option>
+        {% endfor %}
+    </select>
+{% endif %}

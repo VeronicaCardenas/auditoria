@@ -1,0 +1,148 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Listado de créditos{% endblock %}
+{% block encabezado %}Listado de créditos{% endblock %}
+
+{% block contenedor %}
+    <h1>ProductoDeCreditos</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Productocredito</th>
+                <td>{{ entity.productocredito }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('productodecreditos') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('productodecreditos_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
+
+    {% block leftpanel %}
+            
+        <div groups="base.group_user,base.group_portal,share.group_shared">
+                                    
+            <a href="/web" class="oe_logo">
+                <span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>
+                <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+            </a>
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+                        
+                            <div data-menu-parent="99" class="oe_secondary_menu" style="">
+                                
+                                    <div class="oe_secondary_menu_section">
+                                        Créditos
+                                    </div>
+                                    
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+            
+            <li >
+            <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('creditos') }}">
+                <span class="oe_menu_text">
+                    Gestionar créditos
+                </span>
+            
+    <div id="menu_counter" class="badge pull-right">
+        
+         1 
+    </div>
+</a>
+        
+                    
+            
+        
+                </li>
+                
+                <li class="active">
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('productodecreditos') }}">
+                         <span class="oe_menu_text">
+                            Tipos de créditos
+                         </span>
+                     </a>
+                </li>
+                
+                
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('reglasdecreditos') }}">
+                         <span class="oe_menu_text">
+                            Reglas de créditos
+                         </span>
+                     </a>
+                </li>
+                
+                
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipodeparcialidad') }}">
+                         <span class="oe_menu_text">
+                            Tipos de parcialidad 
+                         </span>
+                     </a>
+                </li>
+                
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipodecobro') }}">
+                         <span class="oe_menu_text">
+                            Tipos de cobros 
+                         </span>
+                     </a>
+                </li>
+                
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('frecuenciadepagos') }}">
+                         <span class="oe_menu_text">
+                            Frecuencias de Pagos 
+                         </span>
+                     </a>
+                </li>
+                
+                <li >
+                     <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('destinofinanciamiento') }}">
+                         <span class="oe_menu_text">
+                            Destinos de financiamiento 
+                         </span>
+                     </a>
+                </li>
+                
+                
+                
+            </ul>
+        
+                                
+                              
+            </div>
+      
+       
+                       
+    
+                        
+         
+      
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Desarrollado por:<br> <a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+            </div>
+        
+                                </div>
+            
+{% endblock %}
+
+

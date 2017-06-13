@@ -1,0 +1,62 @@
+{% extends '::fronted.html.twig' %}
+
+{% block title %}Con Quito{% endblock %}
+
+
+
+{% block leftpanel %}
+    <div groups="base.group_user,base.group_portal,share.group_shared">
+
+        <a href="#" class="oe_logo">
+            {#<span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>#}
+            <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+        </a>
+        <div>
+            <div>
+                <div class="oe_secondary_menus_container">
+
+                    <div data-menu-parent="99" class="oe_secondary_menu" style="">
+
+                        <!-- <div class="oe_secondary_menu_section">
+                            Datos Empresas
+                        </div> -->
+
+                         <!--  <div class="oe_secondary_menu_section">
+                             Personas
+                         </div> -->
+
+                        <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                            <li id="Personas">
+                                <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('persona') }}">
+                                    <span class="oe_menu_text">Personas</span>
+                                </a>
+                            </li>
+                        </ul>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                            <li id="TipodePersona">
+                                <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('tipopersona') }}">
+                                    <span class="oe_menu_text">Tipo de Persona</span>
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif%}
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="oe_footer">
+            Desarrollado por:<br><a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+        </div>
+
+    </div>
+
+{% endblock %}
+

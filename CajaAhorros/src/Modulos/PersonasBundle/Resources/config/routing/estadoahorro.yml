@@ -1,0 +1,30 @@
+estadoahorro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:index" }
+
+estadoahorro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:show" }
+
+estadoahorro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:new" }
+
+estadoahorro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:create" }
+    
+
+estadoahorro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:edit" }
+
+estadoahorro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:update" }
+    
+
+estadoahorro_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:EstadoAhorro:delete",id:''}
+    

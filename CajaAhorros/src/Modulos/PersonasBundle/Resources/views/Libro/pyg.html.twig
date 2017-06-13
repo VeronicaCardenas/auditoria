@@ -1,0 +1,454 @@
+{% extends '::fronted5.html.twig' %}
+{% block title %}Estado de Perdidas y Ganancias (P y G){% endblock %}
+{% block encabezado %}Estado de Perdidas y Ganancias (P y G){% endblock %}
+
+{% block contenedor %}
+
+
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+
+        .tabla_right_align {
+            text-align: right !important;
+        }
+
+        .tabla_left_align {
+            text-align: left !important;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+        $("#PyGperíodico").addClass("active");
+        $("#Contabilidad").addClass("active");
+        });        
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            <table class="oe_view_manager_header">
+                <tbody>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+                        <h2 class="oe_view_title">
+                        Estado de Perdidas y Ganancias (P y G)
+                            <!-- <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3"
+                                                                                    class="oe_breadcrumb_item"
+                                                                                    href="{{ path('libro_pyg') }}">BALANCE DE RESULTADOS
+                                </a> <span class="oe_fade">/</span> <span
+                                        class="oe_breadcrumb_item">Nuevo</span></span> -->
+                        </h2>
+                    </td>
+
+                </tr>
+
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons">
+                            <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                          <a type="button" id="export" class="oe_button oe_list_add oe_highlight "
+                                             href="{{ path('exportarpyg') }}">
+                                              Exportar
+                                          </a>
+                                            <!-- <a href="{{ path('libro_pyg') }}" class="oe_bold oe_form_button_cancel"
+                                               accesskey="D">Descartar</a> -->
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="oe_view_manager_wrapper">
+            <div>
+
+                <div class="oe_view_manager_view_form" style="display: block;">
+                    <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                        <div class="oe_form_container">
+                            <div class="oe_form">
+                                <div class="">
+                                    <header>
+                                        <ul class="oe_form_field_status oe_form_status" data-original-title=""
+                                            title="">
+
+                                            <li data-id="draft" class="oe_active">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="open" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="paid" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+
+                                        </ul>
+                                        <div class="oe_clear"></div>
+                                    </header>
+
+                                    <div class="oe_form_sheetbg"
+                                         style="padding-right: 15px !important;padding-left: 15px !important;">
+                                        <div class="tabla_center_align"><h2>BALANCE DE RESULTADOS</h2>
+                                        </div>
+                                        <div class="tabla_center_align"><label style="font-size: 16px !important;">{{ nombrecaja }} </label></div>
+                                        <br>
+                                        {% for pygMes in pygMeses %}
+                                            <h3>Del {{ pygMes.getIntervaloFecha }} </h3>
+                                            <table border="1">
+                                                <thead>
+                                                <th width="10%" class="tabla_center_align">5</th>
+                                                <th width="30%" class="tabla_center_align">INGRESOS</th>
+                                                <th width="10%" class="tabla_center_align">VALOR</th>
+                                                <th width="5%" class="tabla_center_align"></th>
+                                                <th width="5%" class="tabla_center_align"></th>
+                                                <th width="10%" class="tabla_center_align">4</th>
+                                                <th width="30%" class="tabla_center_align">GASTOS</th>
+                                                <th width="10%" class="tabla_center_align">VALOR</th>
+
+                                                </thead>
+                                                <tbody>
+                                                {% set cont=1 %}
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            <b>51</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>INTERESES Y DESCUENTOS GANADOS
+                                                            &nbsp;</b> </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ (pygMes.ingresos['5101']+pygMes.ingresos['5104']+pygMes.ingresos['5190']) |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                           <b>41&nbsp;</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>INTERESES CAUSADOS</b>
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ (pygMes.gastos['4101']+pygMes.gastos['4103']+pygMes.gastos['4105']) |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            5101</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Depósitos
+                                                            &nbsp; </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5101'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4101&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Obligaciones con el público
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4101'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            5104</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Intereses y descuentos de cartera de créditos ( interés más la mora)
+                                                            &nbsp; </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5104'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                            &nbsp;</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            5190</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Otros Intereses y descuentos
+                                                            &nbsp; </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5190'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4103&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Obligaciones financieras
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4103'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            <b>54</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>INGRESOS POR SERVICIOS
+                                                            &nbsp; </b></td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ (pygMes.ingresos['5490']) |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4105&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Otros Intereses
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4105'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            5490</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Otros servicios
+                                                            &nbsp; </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5490'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                        <td colspan="5" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            <b>56</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>OTROS INGRESOS
+                                                            &nbsp;</b> </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ (pygMes.ingresos['5690']) |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            <b>44&nbsp;</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>PROVISIONES
+                                                            &nbsp;</b></td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ pygMes.gastos['4402'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_center_align">
+                                                            5690</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Otros	SOLICITUD
+                                                            &nbsp; </td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5690'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                        <td colspan="2" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4402&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Cartera de crédito
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4402'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8" class="tabla_center_align">
+                                                              .</td>
+
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td colspan="5" class="tabla_right_align">
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_center_align">
+                                                            <b>45&nbsp;</b></td>
+                                                        <td width="" class="tabla_left_align">
+                                                            <b>GASTOS DE OPERACIÓN
+                                                            &nbsp;</b></td>
+                                                        <td width="" class="tabla_right_align">
+                                                            <b>&nbsp;$&nbsp;{{ (pygMes.gastos['4501']+pygMes.gastos['4502']+pygMes.gastos['4503']+pygMes.gastos['4504']+pygMes.gastos['4507']) |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                        </td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4501&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Gastos de personal
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4501'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                        </td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4502&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Honorarios
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4502'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                        </td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4503&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Servicios varios
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4503'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                        </td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4504&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Impuestos, contribuciones y multas
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4504'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" class="tabla_center_align">
+                                                        </td>
+                                                        <td width="" class="tabla_center_align">
+                                                            4507&nbsp;</td>
+                                                        <td width="" class="tabla_left_align">
+                                                            Otros gastos
+                                                            &nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4507'] |number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8" class="tabla_center_align">
+                                                            .</td>
+                                                    </tr>
+                                                <tr>
+                                                    <td colspan="2" class="tabla_center_align">
+                                                        <b>  TOTAL INGRESOS&nbsp; </b></td>
+
+                                                    {% if  (pygMes.totales['ingresos']-pygMes.ingresos['3603'])   < "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'><b>&nbsp;$&nbsp;{{(pygMes.totales['ingresos']-pygMes.ingresos['3603']) | number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'><b>&nbsp;$&nbsp;{{(pygMes.totales['ingresos']-pygMes.ingresos['3603']) | number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    <td colspan="2" class="tabla_right_align">
+                                                        <b> &nbsp;</b></td>
+                                                    <td colspan="2" class="tabla_center_align">
+                                                        <b> TOTAL GASTOS&nbsp;</b></td>
+
+                                                    {% if  pygMes.totales['gastos']  < "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'><b>&nbsp;$&nbsp;{{pygMes.totales['gastos']| number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'><b>&nbsp;$&nbsp;{{pygMes.totales['gastos']| number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="8" class="tabla_center_align">
+                                                        .</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_center_align"><b>
+                                                            3603&nbsp;</b></td>
+                                                    <td width="" class="tabla_left_align">
+                                                        <b>ENTREGA DE UTILIDAD O EXCEDENTES A SOCIOS
+                                                            &nbsp;</b></td>
+
+                                                    {% if  pygMes.ingresos['3603']  == "0"%}
+                                                        <td width="" class="tabla_right_align"><b>&nbsp;$&nbsp;{{pygMes.ingresos['3603']| number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'><b>&nbsp;$&nbsp;{{pygMes.ingresos['3603']| number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    <td colspan="5" class="tabla_center_align">
+                                                        .</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="8" class="tabla_center_align">
+                                                        .</td>
+                                                </tr>
+                                                <tr>
+                                                    <td  width="" class="tabla_center_align">
+                                                        <b>  3603&nbsp; </b></td>
+                                                    <td width="" class="tabla_left_align">
+                                                        <b> Utilidad o excedente del ejercicio
+                                                            &nbsp;</b></td>
+
+                                                    {% if  (pygMes.totales['ingresos'] - pygMes.totales['gastos']) < "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b> &nbsp;$&nbsp;{{  (pygMes.totales['ingresos'] - pygMes.totales['gastos'])|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b> &nbsp;$&nbsp;{{  (pygMes.totales['ingresos'] - pygMes.totales['gastos'])|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                     <td colspan="5" class="tabla_right_align">
+                                                        <b> &nbsp;</b></td>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+ 

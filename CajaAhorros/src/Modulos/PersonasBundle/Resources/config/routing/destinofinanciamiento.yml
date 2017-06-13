@@ -1,0 +1,30 @@
+destinofinanciamiento:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:index" }
+
+destinofinanciamiento_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:show" }
+
+destinofinanciamiento_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:new" }
+
+destinofinanciamiento_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:create" }
+    
+
+destinofinanciamiento_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:edit" }
+
+destinofinanciamiento_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:update" }
+    
+
+destinofinanciamiento_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:DestinoFinanciamiento:delete", id:"" }
+    

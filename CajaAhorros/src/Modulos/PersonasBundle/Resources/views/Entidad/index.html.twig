@@ -1,0 +1,777 @@
+{% extends '::fronted1.html.twig' %}
+{% block title %}Datos de la Caja de Ahorros{% endblock %}
+{% block contenedor %}
+
+
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'asc']]
+
+            });
+            $("#example_length").hide();
+            $("#example_filter").prop("style",'margin-top:-18%;width:30%;margin-left:23%;');
+
+            $("#example_filter input").prop("style",'width:254%;border-radius:20px;height:26px');
+
+            $("#example_info").prop("style",'padding-left: 8px');
+
+            $("#example_paginate").prop("style",'padding-right: 8px');
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+
+
+            $('#EliminarUsuarios').click(function(){
+                oTable= $('#example').dataTable();
+                var lll = $('input', oTable.fnGetNodes()).serialize();
+                if(lll== "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Eliminar Usuarios',
+                        message: 'No existen usuarios marcados',
+                        buttons: [{
+                            label: 'Cancelar',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }
+                        ]
+                    });
+                }
+                else{
+                    BootstrapDialog.show({
+                        title: 'Eliminar Usuarios',
+                        message: '¿Realmente desea eliminar los usuarios marcados?',
+                        buttons: [{
+                            label: 'Si',
+                            action: function(dialogItself) {
+
+                                oTable= $('#example').dataTable();
+                                var sData = $('input', oTable.fnGetNodes()).serialize();
+
+                                var dividir = sData.split("&");
+                                var elementos = new Array();
+                                var auxiliar = "";
+                                for(var i= 0; i < dividir.length; i++)
+                                {
+                                    if(i!=0)
+                                    {
+                                        elementos.push("§");
+                                    }
+                                    auxiliar = dividir[i].split("=");
+                                    elementos.push(auxiliar[1]);
+                                    auxiliar = "";
+                                }
+                                $('#EliminarUsuarios').attr('href',"{{ path('eliminar_usuariosmarcados',{'elementos':''})}}" + '/' + elementos);
+                                window.location = $('#EliminarUsuarios').attr('href');
+                                dialogItself.close();
+
+                            }
+                        },
+                            {
+                                label: 'No',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            } ]
+                    });
+
+                }
+
+
+
+
+            });
+            $('[data-toggle="tooltip"]').tooltip()
+
+
+        });
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar Cooperativa',
+                    message: '¿Realmente desea eliminar la cooperativa: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('entidad_delete',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+
+        }
+
+
+
+
+        $(document).ready(function() {
+        $("#CajadeAhorros").addClass("active");
+        $("#Configurar").addClass("active");
+        });
+        
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="alert alert-success">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="30%">
+                </colgroup>
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Datos de la Caja de Ahorros</span></span>
+                        </h2>
+                    </td>
+                    <td colspan="2">
+
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+                               {% if entity== "NO ESPECIFICADO" %}
+                                <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('entidad_create') }}">
+                                    Crear
+                                </a>
+                                {% else %}
+                                    <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('entidad_update',{'id':entity.id}) }}">
+                                        Editar
+                                    </a>
+                                {% endif %}
+
+                                <!-- <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+        <span class="oe_alternative">
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+
+            <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+        </span> -->
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody></table>
+
+
+
+        </div>
+        <div class="oe_view_manager_wrapper">
+            <div>
+
+                <div class="oe_view_manager_view_form" style="display: block;">
+                    <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                        <div class="oe_form_container">
+                            <div class="oe_form">
+                                <div class="">
+                                    <header>
+                                        <ul class="oe_form_field_status oe_form_status" data-original-title="" title="">
+
+                                            <li data-id="draft" class="oe_active">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="open" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="paid" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+
+                                        </ul>
+                                        <div class="oe_clear"></div>
+                                    </header>
+
+                                    <div class="oe_form_sheetbg">
+                                        <div class="oe_form_sheet oe_form_sheet_width">
+                                            <h1>
+                                                <label class="oe_form_label oe_align_right"> Datos de la Caja de Ahorros </label>
+                                            </h1>
+
+                                             {% if entity != "NO ESPECIFICADO" %}
+
+                                            {% if entity.rutaLogo != "" %}
+
+                                                <img style="height: 100px;" src="{{ asset('bundles/PE/logo/' ~ entity.rutaLogo) }}" class="img-polaroid"/>
+
+                                            {% endif %}
+                                            <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                <tbody>
+                                                <tr class="oe_form_group_row">
+                                                    <td width="100%" class="oe_form_group_cell" colspan="1">
+                                                        <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                            <tbody>
+                                                            <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                        Nombre de la Caja de Ahorros 
+                                                                    </label>
+                                                                </td>
+
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.razonSocial }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label oe_align_right" for="oe-field-input-6">
+                                                                        Nombre Corto 
+                                                                    </label>
+                                                                </td>
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.nombreFantasia }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                </td>
+                                                            </tr>
+
+                                                             <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Descripción
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.descripcion }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                </tr>
+
+                                                                 <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Fecha de Creación 
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.fechaCreacion |date('d-m-Y') }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+                                                            
+
+                                                            <!-- <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label_help oe_align_right" for="oe-field-input-7" data-original-title="" title="">
+                                                                        Correo
+                                                                    </label>
+                                                                </td>
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                <div>
+                                                                                    {{ entity.correo }}
+                                                                                    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                </div>
+                                                                             </span>
+                                                                </td>
+                                                            </tr> -->
+
+                                                            <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label oe_align_right" for="oe-field-input-8">
+                                                                        Dirección
+                                                                    </label>
+                                                                </td>
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            <span class="oe_form_field oe_form_field_char">
+                                                                                {{ entity.direccion }}
+                                                                            </span>
+                                                                </td>
+                                                            </tr>
+                                                            
+
+                                                            <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label_help oe_align_right" for="oe-field-input-9" data-original-title="" title="">
+                                                                        Teléfono
+                                                                    </label>
+                                                                </td>
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.telefono }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr class="oe_form_group_row">
+                                                                <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                    <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                        Nombre Administrador 
+                                                                    </label>
+                                                                </td>
+                                                                <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ entity.ruc }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                </tbody>
+                                            </table>
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div></div>
+
+                <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+        </div>
+        {#<table id="example" class="table table-striped" cellspacing="0" width="100%" style="margin-top: -1px;">
+            <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>Razon Social</th>
+                <th>Nombre Fantasia</th>
+                <th>Direccion</th>
+                <th>telefono</th>
+                <th>RUC</th>
+                <th>correo</th>
+
+            </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #ddd">
+            {% for entity in entities %}
+                <tr>
+                    <td>
+                        <input type="checkbox" value="{{ entity.id }}" class="EliminarChechbox" name="valor" style="margin-right: 5px;">
+                        <a href="{{ path('caja_edit',{'id':entity.id,'estado':0}) }}" title="Editar" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                        <a href="#" title="Eliminar" class="delete" id="{{ entity.id }}" name="{{ entity.nombreFantasia }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    </td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.razonSocial}}</td>
+                    <td>{{entity.nombreFantasia}}</td>
+                    <td>{{entity.direccion}}</td>
+                    <td>{{entity.telefono}}</td>
+                    <td>{{entity.ruc}}</td>
+                    <td>{{entity.correo}}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>#}
+    </div>
+
+
+
+    {#<div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                <col width="35%">
+                <col width="15%">
+                <col width="30%">
+                </colgroup><tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+        <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Información de la Cooperativa</span></span>
+                            </h2>
+                    </td>
+                    <td colspan="2">
+
+
+                        <div class="oe_view_manager_view_search">
+                            <div class="oe_searchview">
+                                 <div class="oe_searchview_facets">
+                                     <div contenteditable="true" tabindex="0" class="oe_searchview_input">
+
+                                     </div>
+                                 </div>
+                                <div class="oe_searchview_clear">
+
+                                </div>
+                                <div title="Búsqueda avanzada..." class="oe_searchview_unfold_drawer">
+
+                                </div>
+                                <button type="button" title="Volver a buscar" class="oe_searchview_search">Buscar</button>
+                                <div class="oe-autocomplete" style="width: 400px; display: none;">
+                                <ul>
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                            <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+
+            <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('entidad_new') }}">
+                Crear
+            </a>
+
+            <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+            <span class="oe_alternative">
+                <span class="oe_fade">o</span>
+                <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+
+                <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+            </span>
+
+
+        </div></div>
+                    </td>
+                    <td colspan="2">
+                            <div class="oe_view_manager_sidebar"><div style="display: none;">
+        <div class="oe_sidebar">
+
+                <div class="oe_form_dropdown_section">
+                    <button class="oe_dropdown_toggle oe_dropdown_arrow">
+
+                        Imprimir
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+
+                    <ul class="oe_dropdown_menu">
+                        <li class="oe_sidebar_print">
+
+                            <a title="" data-section="print" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Facturas
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="oe_form_dropdown_section">
+                    <button class="oe_dropdown_toggle oe_dropdown_arrow">
+
+                        Más
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+
+                    <ul class="oe_dropdown_menu">
+                        <li class="oe_share">
+
+                            <a title="" data-section="other" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Compartir
+                            </a>
+
+                        </li><li class="oe_share">
+
+                            <a title="" data-section="other" data-index="1" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Incrustar
+                            </a>
+
+                        </li><li>
+
+                            <a title="" data-section="other" data-index="2" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Exportar
+                            </a>
+
+                        </li><li>
+
+                            <a title="" data-section="other" data-index="3" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Borrar
+                            </a>
+
+                        </li><li class="oe_sidebar_action">
+
+                            <a title="" data-section="other" data-index="4" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                                Confirmar Facturas en Borrador
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+
+        </div>
+    </div></div>
+                    </td>
+                    <td>
+
+                        <div class="oe_view_manager_pager oe_right"><div colspan="12" class="oe_list_pager oe_list_pager_single_page">
+
+        <div class="oe_pager_value">
+
+                <span class="oe_list_pager_state">1-1 de 1</span>
+
+        </div>
+        <ul class="oe_pager_group">
+
+            <li>
+                <a type="button" data-pager-action="previous" class="oe_i">(</a>
+            </li>
+            <li>
+                <a type="button" data-pager-action="next" class="oe_i">)</a>
+            </li>
+
+        </ul>
+
+        </div></div>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        <div class="oe_view_manager_wrapper">
+            <div>
+                <div class="oe_view_manager_body">
+                    <div class="oe_searchview_drawer_container"><div style="display:none;" class="oe_searchview_drawer">
+        <div class="col-md-7"><div class="oe_searchview_custom oe_searchview_section" style="display: block;">
+        <dl class="dl-horizontal">
+            <dt><span class="oe_i">M</span> Favoritos</dt>
+            <dd><ul class="oe_searchview_custom_list"><li><span class="oe_searchview_custom_public">By Salespersons</span><a class="oe_searchview_custom_delete">x</a></li></ul></dd>
+        </dl>
+    </div><div class="oe_searchview_filters oe_searchview_section">
+
+    <dl class="dl-horizontal"><dt><span class="oe_i">q</span> Filtros</dt><dd><ul>
+        <li title="Facturas borrador" data-index="0">
+            Borrador
+        </li><li title="Facturas en estado Proforma/Abierta/Pagada" data-index="2">
+            Facturas
+        </li><li title="Facturas sin Pagar" data-index="3">
+            Sin Pagar
+        </li>
+    </ul><ul>
+        <li data-index="0">
+            Mis facturas
+        </li>
+    </ul></dd><dt><span class="oe_i">w</span> Agrupar por</dt><dd><ul>
+        <li data-index="0">
+            Empresa
+        </li><li data-index="1">
+            Comercial
+        </li><li data-index="2">
+            Estado
+        </li><li data-index="3">
+            Equipo de ventas
+        </li>
+    </ul><ul>
+        <li data-index="0">
+            Período
+        </li><li data-index="1">
+            Mes de vencimiento
+        </li>
+    </ul></dd></dl></div></div>
+        <div class="col-md-5"><div class="oe_searchview_savefilter">
+        <h4>Guardar filtro actual</h4>
+        <form class="oe_form">
+            <p class="oe_form_required"><input placeholder="Nombre del filtro" id="oe_searchview_custom_input"></p>
+            <p>
+                <input type="checkbox" id="oe_searchview_custom_public">
+                <label for="oe_searchview_custom_public">Compartir con todos los usuarios</label>
+                <input type="checkbox" id="oe_searchview_custom_default">
+                <label for="oe_searchview_custom_default">Usar por defecto</label>
+            </p>
+            <button>Guardar</button>
+        </form>
+    </div><div class="oe_searchview_advanced">
+        <h4>Búsqueda Avanzada</h4>
+        <form>
+            <ul>
+
+            <li>
+            <span class="searchview_extended_prop_or">o</span>
+            <select class="searchview_extended_prop_op"><option value="=">es verdadero</option><option value="!=">es falso</option></select>
+            <span class="searchview_extended_prop_value"><span></span></span>
+            <a class="searchview_extended_delete_prop button">x</a>
+        </li></ul>
+            <button type="button" class="oe_add_condition button">Agregar condición</button><br>
+            <button type="submit" class="oe_apply">Aplicar</button>
+        </form>
+    </div><div class="oe_searchview_dashboard">
+        <h4>Añadir al tablero</h4>
+        <form>
+            <p><input placeholder="Título del nuevo elemento del tablero"></p>
+            <button type="submit" class="oe_apply">Añadir</button>
+        </form>
+    </div></div>
+    </div></div>
+
+                            <div class="oe_view_manager_view_list"><div class="oe_list oe_view"><table class="oe_list_content">
+
+        <thead>
+
+            <tr class="oe_list_header_columns">
+
+
+
+                <th width="90">
+                    <input type="checkbox" class="oe_list_record_selector">
+
+                </th>
+
+                    <th class="oe_list_header_many2one oe_sortable" data-id="partner_id"><div>
+                        Razon Social
+                    </div></th>
+
+
+                    <th class="oe_list_header_date oe_sortable" data-id="date_invoice"><div>
+                        Nombre Fantasía
+                    </div></th>
+
+                    <th class="oe_list_header_char oe_sortable" data-id="factura"><div>
+                        Dirección
+                    </div></th>
+                    <th class="oe_list_header_many2one oe_sortable" data-id="user_id"><div>
+                        Teléfono
+                    </div></th>
+
+                    <th class="oe_list_header_many2one oe_sortable" data-id="section_id"><div>
+                        Ruc
+                    </div></th>
+
+                     <th class="oe_list_header_many2one oe_sortable" data-id="section_id"><div>
+                        Correo
+                    </div></th>
+
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td class="oe_list_footer oe_number">
+                </td><td class="oe_list_footer oe_number">
+                </td><td class="oe_list_footer oe_number">
+                </td><td class="oe_list_footer oe_number">
+                </td><td class="oe_list_footer oe_number">
+                </td><td class="oe_list_footer oe_number">
+            </tr>
+        </tfoot>
+    <tbody>
+
+     {% for entity in entities %}
+
+        <tr style="color: black;" data-id="1">
+
+        <th width="90" class="oe_list_record_selector">
+            <input type="checkbox" name="radiogroup">
+             <a   href="{{ path('entidad_edit', { 'id': entity.id }) }}"  > Editar </a>
+        </th>
+
+            <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly oe_required" data-field="partner_id">{{ entity.razonSocial }}</td>
+
+            <td class="oe_list_field_cell oe_list_field_date   oe_readonly " title="Nombre fantasia." data-field="date_invoice">{{ entity.nombreFantasia }}</td>
+
+            <td class="oe_list_field_cell oe_list_field_char   oe_readonly " >{{ entity.direccion }}</td>
+
+            <td class="oe_list_field_cell oe_list_field_many2one   oe_readonly " data-field="user_id">{{ entity.telefono }}</td>
+
+            <td class="oe_list_field_cell oe_list_field_many2one    " data-field="section_id">{{entity.ruc}}</td>
+
+            <td class="oe_list_field_cell oe_list_field_many2one    " data-field="section_id">{{entity.correo}}</td>
+
+        </tr>
+     {% endfor %}
+
+    </tbody></table></div></div>
+
+                            <div class="oe_view_manager_view_form" style="display: none;"></div>
+
+                            <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                            <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>  #}
+{% endblock %}

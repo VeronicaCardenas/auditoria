@@ -1,0 +1,78 @@
+{% extends '::fronted.html.twig' %}
+
+{% block title %}Con Quito{% endblock %}            
+                 
+                               
+{% block leftpanel %}
+
+    <div groups="base.group_user,base.group_portal,share.group_shared">
+
+        <a href="#" class="oe_logo">
+            
+            <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+        </a>
+
+        <div>
+            <div>
+                <div class="oe_secondary_menus_container">
+
+                    <div data-menu-parent="99" class="oe_secondary_menu" style="">
+
+                      
+
+                        <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+
+                            <li id="GestionarAhorros">  
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102"
+                                   class="oe_menu_leaf" href="{{ path('ahorro') }}">
+                <span class="oe_menu_text">
+                    Listado de Ahorros
+                </span>
+                                   
+                                </a>
+
+                            </li>
+                            
+                            <li id="LibroAhorros">  
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102"
+                                   class="oe_menu_leaf" href="{{ path('libroAhorros') }}">
+                <span class="oe_menu_text">
+                    Libro de Ahorros
+                </span>
+                                   
+                                </a>
+
+                            </li>
+                            
+                            
+                            
+                            <li id="simulacionAhorro">  
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102"
+                                   class="oe_menu_leaf" href="{{ path('simulacionAhorro') }}">
+                <span class="oe_menu_text">
+                    Simulación de Ahorro
+                </span>
+                                   
+                                </a>
+
+                            </li>
+
+                            
+
+                        </ul>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="oe_footer">
+            Desarrollado por:<br><a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+        </div>
+
+    </div>
+
+{% endblock %}
+ 
+ 

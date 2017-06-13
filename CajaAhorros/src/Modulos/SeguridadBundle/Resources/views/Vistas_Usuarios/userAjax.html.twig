@@ -1,0 +1,69 @@
+<div class="col-xs-6 col-sm-4">
+    <strong>Nombre y apellidos</strong><br>
+    {{ user.nombre }}<br><br>
+    {% set telefono = "" %}
+    {% if user.telefono is null %}
+        {% set telefono = "No Especificado" %}
+    {% else %}
+        {% set telefono = user.telefono %}
+    {% endif %}
+    <strong>Tel&eacute;fono</strong><br>
+    {{ telefono }}
+    <br><br>
+    <strong>Nombre de usuario</strong><br>
+    {{ user.usuario }}
+
+
+</div>
+
+
+<div class="col-xs-6 col-sm-4">
+    <strong>Ci</strong><br>
+    {% set ci = "" %}
+    {% if user.ci is not empty %}
+        {% set ci =  user.ci %}
+    {% else %}
+        {% set ci = "No especificado "%}
+    {% endif %}
+    {{ ci }}
+    <br><br>
+    {% set correo = "" %}
+    {% if user.email is null %}
+        {% set correo = "No posee" %}
+    {% else %}
+        {% set correo = user.email %}
+    {% endif %}
+    <strong>Correo electr&oacute;nico</strong><br>
+    {{ correo }}
+    <br><br>
+    <strong>Privilegios</strong><br>
+    {% for rol in user.role %}
+        {{ rol.descripcion }}<br>
+    {% endfor %}
+</div>
+
+<div class="col-xs-6 col-sm-4">
+    <strong>G&eacute;nero</strong><br>
+    {% set sexo = "" %}
+    {% if user.sexo is not empty %}
+        {% set sexo =  user.sexo %}
+    {% else %}
+        {% set sexo = "No especificado "%}
+    {% endif %}
+    {{sexo }}
+    <br><br>
+    <strong>Direcci&oacute;n particular</strong><br>
+    {% set direccion = "" %}
+    {% if user.direccion is not empty %}
+        {% set direccion =  user.direccion %}
+    {% else %}
+        {% set direccion = "No especificado "%}
+    {% endif %}
+    {{ direccion }}
+    <br><br>
+    {% if user.rutaFoto != "" %}
+        <label><strong>Foto</strong></label><br>
+        <img style="height: 63px;width: 70px;" src="{{ asset('bundles/PE/imagesuser/' ~ user.rutaFoto) }}" class="img-polaroid"/>
+    {% endif %}
+</div>
+

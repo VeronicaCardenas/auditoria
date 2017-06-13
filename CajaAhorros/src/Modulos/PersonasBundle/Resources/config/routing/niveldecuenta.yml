@@ -1,0 +1,30 @@
+niveldecuenta:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:index" }
+
+niveldecuenta_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:show" }
+
+niveldecuenta_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:new" }
+
+niveldecuenta_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:create" }
+    methods:  POST
+
+niveldecuenta_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:edit" }
+
+niveldecuenta_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:update" }
+    methods:  [POST, PUT]
+
+niveldecuenta_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:NivelDeCuenta:delete" }
+    methods:  [POST, DELETE]

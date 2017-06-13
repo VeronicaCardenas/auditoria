@@ -1,0 +1,7 @@
+simulacionCredito:
+    path:     /simulacionCredito
+    defaults: { _controller: "ModulosPersonasBundle:CreditosSimular:simulacionCredito" }
+
+despliegueSimulacionCredito:
+    path:     /{id}/despliegueSimulacionCredito
+    defaults: { _controller: "ModulosPersonasBundle:CreditosSimular:despliegueSimulacionCredito" }

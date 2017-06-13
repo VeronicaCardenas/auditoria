@@ -1,0 +1,29 @@
+tipoproductocontable:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:index" }
+
+tipoproductocontable_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:show" }
+
+tipoproductocontable_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:new" }
+
+tipoproductocontable_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:create" }
+#    methods:  POST
+
+tipoproductocontable_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:edit" }
+
+tipoproductocontable_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:update" }
+
+tipoproductocontable_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:TipoProductoContable:delete",id:""}
+    

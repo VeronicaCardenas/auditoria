@@ -1,0 +1,137 @@
+creditos:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:index" }
+
+creditosAux:
+    path:     /{idCredito}/aux
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:indexAux", idCredito:"" }
+
+creditos_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:show" }
+
+creditos_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:new" }
+
+creditos_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:create" }
+
+creditos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:edit" }
+
+creditos_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:update" }
+
+creditos_aprobar:
+    path:     /aprobar/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:aprobar", id:"" }
+
+creditos_rechazar:
+    path:     /rechazar/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:rechazar", id:"" }
+
+creditos_enrevision:
+    path:     /enrevision/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:enRevision", id:"" }
+
+creditos_pagados:
+    path:     /pagados/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pagado", id:"" }
+
+creditos_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:delete",id:"" }
+
+
+creditos_pago:
+    path:     /{id}/pago
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pago" }
+
+creditos_pagoLibro:
+    path:     /{id}/{sininteres}/pagoLibro
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pagoMensual" }
+
+#creditos_pagoLibro:
+ #   path:     /{id}/pagoLibro
+  #  defaults: { _controller: "ModulosPersonasBundle:Creditos:pagoMensual" }
+
+#creditos_liquidacion_total:
+ #   path:     /{id}/LiquidacionTotalCredito
+  #  defaults: { _controller: "ModulosPersonasBundle:Creditos:liquidacionTotalCredito",id:"" }
+
+#creditos_liquidacion_parcial:
+#    path:    /LiquidacionParcialCredito/{id}/{cuotas}
+#    defaults: { _controller: "ModulosPersonasBundle:Creditos:liquidacionParcialCredito",id:"",cuotas:"" }
+
+#creditos_cargar_liquidacion_parcial:
+#    path:    /cargarLiquidacionParcialCredito/{id}/{cuotas}
+#    defaults: { _controller: "ModulosPersonasBundle:Creditos:cargarliquidacionParcialCredito",id:"",cuotas:"" }
+
+creditos_liquidacion_total:
+    path:     /LiquidacionTotalCredito/{id}/{ano}/{mes}/{dia}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:liquidacionTotalCredito",id:"",ano:"",mes:"",dia:"" }
+
+creditos_liquidacion_parcial:
+    path:    /LiquidacionParcialCredito/{id}/{cuotas}/{ano}/{mes}/{dia}/{h}/{m}/{s}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:liquidacionParcialCredito",id:"",cuotas:"",ano:"",mes:"",dia:"",h:"",m:"",s:""}
+
+
+creditos_cargar_liquidacion_parcial:
+    path:    /cargarLiquidacionParcialCredito/{id}/{cuotas}/{ano}/{mes}/{dia}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:cargarliquidacionParcialCredito",id:"",cuotas:"",ano:"",mes:"",dia:"" }
+
+creditos_liquidacion_parcial_form:
+    path:     /{id}/LiquidacionParcialCredito
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:liquidacionParcialCreditoForm",id:"" }
+
+exportarCreditos:
+     path:     /exportarCreditos/
+     defaults: {_controller: "ModulosPersonasBundle:Creditos:exportarCreditos"}
+
+asociarDocumentoCredito:
+     path:     /asociarDocumento/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Creditos:asociarDocumento" }
+
+editarasociarDocumentoCredito:
+     path:     /editarasociarDocumento/{id}/{idCredito}
+     defaults: { _controller: "ModulosPersonasBundle:Creditos:editarasociarDocumento" }
+
+eliminarasociarDocumentoCredito:
+     path:     /eliminarasociarDocumento/{id}/{idCredito}
+     defaults: { _controller: "ModulosPersonasBundle:Creditos:eliminarasociarDocumento" }
+
+pagare:
+    path:     /pagare
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pagare" }
+
+otorgarCredito:
+    path:     /{persona}/{id}/otorgarCredito
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:otorgarCredito",persona:'',id:'' }
+
+otorgarCreditoEmergente:
+    path:     /{persona}/{id}/otorgarCreditoEmergente
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:otorgarCreditoEmergente",persona:'',id:'' }
+
+pagoDesgravamen:
+    path:     /{persona}/{id}/pagoDesgravamen
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pagoDesgravamen",persona:'',id:'' }
+
+cargarPersonas:
+    path:     /cargarPersonas/{idTransaccion}/{persona}/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:cargarPersonas",idTransaccion:'',persona:'',id:''}
+
+creditos_pago_libros:
+    path:     /pagolibros/{id}/{idCredito}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:pagosLibro",id:'',idCredito:''}
+
+impresion_tabla_amortizacion_creditos:
+    path: /impresionTablaAmortizacion/{idCredito}
+    defaults: { _controller: "ModulosPersonasBundle:Creditos:impresionTablaAmortizacion",idCredito:''}
+
+
+
+

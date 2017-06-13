@@ -1,0 +1,33 @@
+pagocuotacredito:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:index" }
+
+pagocuotacredito_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:show" }
+
+pagocuotacredito_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:new" }
+
+pagocuotacredito_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:create" }
+    methods:  POST
+
+pagocuotacredito_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:edit" }
+
+pagocuotacredito_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:update" }
+    methods:  [POST, PUT]
+
+pagocuotacredito_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:delete" }
+
+pagocuotacredito_liquidacion_parcial:
+    path:     /LiqParcial
+    defaults: { _controller: "ModulosPersonasBundle:PagoCuotaCredito:LiqParcial" }

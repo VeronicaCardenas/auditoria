@@ -1,0 +1,30 @@
+productocontable:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:index" }
+
+productocontable_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:show" }
+
+productocontable_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:new" }
+
+productocontable_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:create" }
+    methods:  POST
+
+productocontable_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:edit" }
+
+productocontable_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:update" }
+    methods:  [POST, PUT]
+
+productocontable_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:ProductoContable:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,483 @@
+{% extends '::fronted4.html.twig' %}
+{% block title %}Simular Ahorro{% endblock %}
+{% block encabezado %}Simular Ahorro{% endblock %}
+
+{% block contenedor %}
+    <script>
+        $(function(){
+            $("#modulos_personasbundle_ahorro_estadoAhorro").attr("disabled", true);
+            $("#modulos_personasbundle_ahorro_estadoAhorro").val(4);
+
+            $('.datetimepicker1').datetimepicker({
+                //viewMode: 'years',
+
+                //format: 'DD/MM/YYYY HH:mm',
+                locale: 'es'
+            });
+            $("#simulacionAhorro").addClass("active");
+            $("#Ahorros").addClass("active");
+
+            var montominimo = 0;
+            var montomaximo = 0;
+
+            {% for tiposahorro in tiposahorros %}
+            var valor = "AHORRO INDIVIDUAL";
+            var objValor = "{{ tiposahorro.nombre }}";
+            if(valor == objValor){
+                {#$("#modulos_personasbundle_ahorro_cuotas").val("{{ tiposahorro.plazo  }}");#}
+                $("#modulos_personasbundle_ahorro_tasaInteres").val("{{ tiposahorro.tasaInteres  }}");
+//                $("#modulos_personasbundle_ahorro_cuotas").attr("readonly",true);
+                $("#modulos_personasbundle_ahorro_tasaInteres").attr("readonly",true);
+                montominimo = "{{ tiposahorro.montominimo }}";
+                montomaximo = "{{ tiposahorro.montomaximo }}";
+
+            }
+            {% endfor %}
+
+            $("#modulos_personasbundle_ahorro_tipoAhorro").change(function(){
+                var valorahorroTipo= $("#modulos_personasbundle_ahorro_tipoAhorro").val();
+                {% for tiposahorro in tiposahorros %}
+                var valor = "AHORRO INDIVIDUAL";
+                var objValor = "{{ tiposahorro.id }}";
+                if(valorahorroTipo == objValor){
+                    {#$("#modulos_personasbundle_ahorro_cuotas").val("{{ tiposahorro.plazo  }}");#}
+                    $("#modulos_personasbundle_ahorro_tasaInteres").val("{{ tiposahorro.tasaInteres*100  }}");
+//                    $("#modulos_personasbundle_ahorro_cuotas").attr("readonly",true);
+                    $("#modulos_personasbundle_ahorro_tasaInteres").attr("readonly",true);
+                    montominimo = "{{ tiposahorro.montominimo }}";
+                    montomaximo = "{{ tiposahorro.montomaximo }}";
+
+                    var valor = $("#modulos_personasbundle_ahorro_valorAhorrar").val();
+
+//                    var cuotas = $("#modulos_personasbundle_ahorro_cuotas").val();
+                    var tasa = $("#modulos_personasbundle_ahorro_tasaInteres").val();
+                    if((parseInt(valor)>=parseInt(montominimo)) && (parseInt(valor)<=parseInt(montomaximo))){
+
+                        $("#Guardar").attr('disabled',false);
+                    }
+                    else{
+                        $("#Guardar").attr('disabled',true);
+                    }
+
+
+                }
+
+
+
+
+                {% endfor %}
+                if(valorahorroTipo != 2){
+                    $("#modulos_personasbundle_ahorro_fechafinal").attr("readonly",true);
+                    $("#modulos_personasbundle_ahorro_cuotas").attr("readonly",false);
+                }else{
+                    $("#modulos_personasbundle_ahorro_fechafinal").attr("readonly",false);
+                    $("#modulos_personasbundle_ahorro_cuotas").attr("readonly",true);
+                }
+
+
+            });
+
+            /* $("#modulos_personasbundle_ahorro_tipoAhorro").change(function(){
+
+             var valorahorroTipo= $("#modulos_personasbundle_ahorro_tipoAhorro").val();
+
+             if(valorahorroTipo != 2){
+             $("#modulos_personasbundle_ahorro_fechafinal").attr("readonly",true);
+             }
+             });*/
+
+            $("#Guardar").attr('disabled',true);
+
+            $("#modulos_personasbundle_ahorro_valorAhorrar").on('keyup', function(){
+                var valor = $(this).val();
+
+//                var cuotas = $("#modulos_personasbundle_ahorro_cuotas").val();
+                var tasa = $("#modulos_personasbundle_ahorro_tasaInteres").val();
+                if((parseInt(valor)>=parseInt(montominimo)) && (parseInt(valor)<=parseInt(montomaximo))){
+
+                    $("#Guardar").attr('disabled',false);
+                    $("#valorsolicitado").hide();
+                }
+                else{
+                    $("#Guardar").attr('disabled',true);
+                    $("#valorsolicitado").html('<span id="" class="label label-warning">El valor solicitado debe ser mayor que '+montominimo+' y menor que '+montomaximo+'</span>')
+                    $("#valorsolicitado").show();
+                }
+
+
+            });
+//             alert(montominimo + " " + montomaximo + " " + valor);
+            var valor = $("#modulos_personasbundle_ahorro_valorAhorrar").val();
+            if((parseInt(valor)>=parseInt(montominimo)) && (parseInt(valor)<=parseInt(montomaximo))){
+
+                $("#Guardar").attr('disabled',false);
+            }
+            else{
+                $("#Guardar").attr('disabled',true);
+            }
+
+            $("#modulos_personasbundle_ahorro_tasaInteres").on('keyup', function(){
+                var valor = $(this).val();
+
+                var cuotas = $("#modulos_personasbundle_ahorro_numeroDePagos").val();
+                var tasa = $("#modulos_personasbundle_ahorro_tasaInteres").val();
+                if(tasa<=0){
+
+                    $("#Guardar").attr('disabled',true);
+                    $("#tasamensual").hide();
+                }
+                else{
+                    $("#Guardar").attr('disabled',true);
+                    var tasa = $("#modulos_personasbundle_ahorro_tasaInteres").val();
+                    var tasaPeriodica=tasa/(12*100);
+                    var valorPeriodo = $("#modulos_personasbundle_ahorro_frecuenciadepago").val();
+                    switch (valorPeriodo ){
+                        //SEMANAL MENSUAL SEMESTRAL TRIMESTRAL DIARIA ANUAL
+                        case "1" :{//case 'SEMANAL':{
+                            tasaPeriodica=tasa/52;
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "2" :{//case 'MENSUAL':{
+                            tasaPeriodica=tasa/(12*100);
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "3" :{//case 'SEMESTRAL':{
+                            tasaPeriodica=tasa/2;
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "4" :{//case 'TRIMESTRAL':{
+                            tasaPeriodica=tasa/4;
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "5" :{//case 'DIARIA':{
+                            tasaPeriodica=tasa/360;
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "6" :{//case 'ANUAL':{
+                            tasaPeriodica=tasa/1;
+                            $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                            $("#tasamensual").show();
+                        }break;
+                        case "" :{
+                            $("#tasamensual").hide();
+                        }break;
+
+                    }
+
+                    $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                    $("#tasamensual").show();
+
+
+
+                    $("#modulos_personasbundle_ahorro_frecuenciadepago").change(function() {
+                        var valorPeriodo = $("#modulos_personasbundle_ahorro_frecuenciadepago").val();
+                        switch (valorPeriodo ){
+                            //SEMANAL MENSUAL SEMESTRAL TRIMESTRAL DIARIA ANUAL
+                            case "1" :{//case 'SEMANAL':{
+                                tasaPeriodica=tasa/52;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "2" :{//case 'MENSUAL':{
+                                tasaPeriodica=tasa/12;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "3" :{//case 'SEMESTRAL':{
+                                tasaPeriodica=tasa/2;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "4" :{//case 'TRIMESTRAL':{
+                                tasaPeriodica=tasa/4;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "5" :{//case 'DIARIA':{
+                                tasaPeriodica=tasa/360;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "6" :{//case 'ANUAL':{
+                                tasaPeriodica=tasa/1;
+                                $("#tasamensual").html('<span id="" class="label label-info">La tasa equivalente asociada al período es del '+tasaPeriodica.toFixed(4)+' %</span>')
+                                $("#tasamensual").show();
+                            }break;
+                            case "" :{
+                                $("#tasamensual").hide();
+                            }break;
+
+                        }
+
+                    });
+                }
+
+
+            });
+
+
+        });
+
+    </script>
+
+    <form action="{{ path('simulacionAhorro') }}" class="" method="post" {{ form_enctype(form) }}>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="alert alert-success">
+                        <strong>{{ flashMessage }}</strong>
+                    </div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('danger') %}
+                    <div class="alert alert-danger">
+                        <strong>{{ flashMessage }}</strong>
+                    </div>
+                {% endfor %}
+
+                <table class="oe_view_manager_header">
+                    <tbody><tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Simular Ahorro</span></span>
+                            </h2>
+                        </td>
+
+                    </tr>
+
+                    <tr class="oe_header_row">
+                        <td>
+                            <div class="oe_view_manager_buttons">
+                                <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                        <button id="Guardar" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Simular</button>
+                                          
+                                        <a  href="{{ path('ahorro') }}" class="oe_button oe_form_button_cancel" accesskey="D">Cancelar</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="oe_view_manager_wrapper">
+                    <div>
+
+                        <div class="oe_view_manager_view_form" style="display: block;">
+                            <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                                <div class="oe_form_container">
+                                    <div class="oe_form">
+                                        <div class="">
+                                            <header>
+                                                <ul class="oe_form_field_status oe_form_status" data-original-title="" title="">
+
+                                                    <li data-id="draft" class="oe_active">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="open" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="paid" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+
+                                                </ul>
+                                                <div class="oe_clear"></div>
+                                            </header>
+
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Datos de los ahorros </label>
+                                                    </h1>
+
+                                                    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                        <tbody>
+                                                        <tr class="oe_form_group_row">
+                                                            <td width="100%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Persona
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.persona,{'attr':{'title':'Seleccione la persona'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Tipo Ahorro
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.tipoAhorro,{'attr':{'title':'Seleccione el tipo de ahorro'} }) }}
+                                                                                      {{ form_errors(form.tipoAhorro) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Valor Ahorrar
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.valorAhorrar,{'attr':{'title':'Introduzca el valor total a ahorrar, debe ser menor al monto máximo y mayor que el monto mínimo del tipo de ahorro'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                            <span id="valorsolicitado"> </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Cuotas
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.cuotas,{'attr':{'title':'Cuota asignada del tipo de ahorro'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Interes por Pagar
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.tasaInteres,{'attr':{'title':'Tasa de interes asignada del tipo de ahorro'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr><tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Frecuencia de pago
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.frecuenciadepago,{'attr':{'title':'Seleccione la frecuencia de depósitos'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Fecha  de Solicitud
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div class="input-group">
+                                                                                      {{ form_widget(form.fechaSolicitud,{'attr':{'title':'Seleccione la fecha de solicitud'} }) }}
+                                                                                      <span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Fecha Final
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div class="input-group">
+                                                                                      {{ form_widget(form.fechafinal,{'attr':{'title':'Seleccione la fecha de finalización de Ahorro a Plazo Fijo'} }) }}
+                                                                                      <span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+
+                        <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                        <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+                </div>
+            </div>
+        </div></div>
+        {{ form_row(form._token) }}
+    </form>
+
+
+{% endblock %}
+
+

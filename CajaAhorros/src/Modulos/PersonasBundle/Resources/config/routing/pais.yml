@@ -1,0 +1,30 @@
+pais:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Pais:index" }
+
+pais_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Pais:show" }
+
+pais_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Pais:new" }
+
+pais_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Pais:create" }
+    methods:  POST
+
+pais_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Pais:edit" }
+
+pais_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Pais:update" }
+    methods:  [POST, PUT]
+
+pais_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Pais:delete" }
+    methods:  [POST, DELETE]

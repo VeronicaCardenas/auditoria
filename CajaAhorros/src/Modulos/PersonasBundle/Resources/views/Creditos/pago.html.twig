@@ -1,0 +1,839 @@
+{% extends '::fronted3.html.twig' %}
+{% block title %}Pago de Cuota de Crédito{% endblock %}
+{% block encabezado %}Pago de Cuota de Crédito{% endblock %}
+
+{% block contenedor %}
+    <script>
+
+        $(function () {
+            $('.datetimepicker1').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm:ss',
+                locale: 'es'
+            });
+
+            $("#modulos_personasbundle_pagocuotacredito_sininteres").change(function(){
+                if(!$(this).is(':checked')){
+                    var pagar = new Number("{{ valorpago }}");
+                    $("#modulos_personasbundle_pagocuotacredito_valorIngresado").val(pagar.toFixed(2));
+                }
+                else{
+                    if($(this).is(':checked')) {
+                        var pagar = new Number("{{ valorpago - interesDescontado }}");
+                        $("#modulos_personasbundle_pagocuotacredito_valorIngresado").val(pagar.toFixed(2));
+                    }
+                }
+            });
+
+        });
+        $(document).ready(function() {
+            $("#Gestionarcréditos").addClass("active");
+            $("#Créditos").addClass("active");
+
+
+        });
+
+
+
+        function pagado(id,name)
+        {
+            if(name=="OTORGADO"){
+                $('.pagado').attr('href',"{{ path('creditos_pagados',{'id':''})}}" + '/' + id);
+                window.location = $('.pagado').attr('href');
+
+            }
+
+        }
+
+        function pagoCreditosLibro(id,name)
+        {
+            $('.pagolibro').attr('href',"{{ path('creditos_pago_libros',{'id':'','idCredito':''})}}" + '/' + id+ '/' + name);
+            window.location = $('.pagolibro').attr('href');
+        }
+
+        function liquidar(id)
+        {
+            var fecha = $("input.datetimepicker1").val();
+
+            var fechaSubmAnio=fecha.substr(6,4);
+            var fechaSubmMes=fecha.substr(3,2);
+            var fechaSubmDia=fecha.substr(0,2);
+
+            BootstrapDialog.show({
+                title: 'Liquidar Crédito',
+                message: '¿Desea liquidar el crédito: '+id+', del Socio '+"{{ entity.persona }}"+' ?',
+                buttons: [
+                    {
+                        label: 'NO',
+                        action: function(dialogItself) {
+                            $('.liquidar').attr('href',"{{ path('creditos_pago',{'id':entity.id,'estado':0}) }}");
+                            window.location = $('.liquidar').attr('href');
+                            dialogItself.close();
+                        }
+                    },
+                    {
+                        label: 'SI',
+                        action: function(dialogItself) {
+                            $('.liquidar').attr('href',"{{ path('creditos_liquidacion_total')}}" + '/' + id+ '/' + fechaSubmAnio+ '/' + fechaSubmMes+ '/' + fechaSubmDia);
+                            window.location = $('.liquidar').attr('href');
+                            dialogItself.close();
+                        }
+                    }]
+            });
+
+        }
+
+
+    </script>
+
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+
+        .tabla_right_align {
+            text-align: right !important;
+        }
+
+        .tabla_left_align {
+            text-align: left !important;
+        }
+    </style>
+
+    <form action="{{ path('pagocuotacredito_create',{'id':pagocuotaentity.id}) }}" class="" method="post" {{ form_enctype(new_pago_form) }}>
+        {{ form_start(new_pago_form) }}
+        {{ form_errors(new_pago_form) }}
+        <div>
+            <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="alert alert-success">
+                            <strong>{{ flashMessage }}</strong>
+                        </div>
+                    {% endfor %}
+                    {% for flashMessage in app.session.flashbag.get('danger') %}
+                        <div class="alert alert-danger">
+                            <strong>{{ flashMessage }}</strong>
+                        </div>
+                    {% endfor %}
+                    <table class="oe_view_manager_header">
+                    <tbody>
+                    <tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3"
+                                                                                        class="oe_breadcrumb_item"
+                                                                                        href="{{ path('creditos') }}">Pago de Cuota de Crédito
+                                        </a> <span class="oe_fade"></span></span>
+                            </h2>
+                        </td>
+
+                    </tr>
+
+                    <tr class="oe_header_row">
+                        <td>
+                            <div class="oe_view_manager_buttons">
+                                <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                        {% if pago == "pago" %}
+                                            <!--<a id="1" name="{{ entity.id  }}" onclick="pagoCreditosLibro(id,name)" type="submit" class="pagolibro oe_button oe_form_button_save oe_highlight" accesskey="S">Completar</a>-->
+                                            <button type="submit" accesskey="S"><a class="btn btn-danger btn-sm" >Pagar Cuota</a></button>
+                                            <a href="{{ path('creditos_liquidacion_parcial_form',{'id':entity.id}) }}" class="btn btn-warning btn-sm" >Pago Anticipado</a>
+                                            <a id="{{ entity.id  }}" onclick="liquidar(id)" class=" liquidar btn btn-primary btn-sm" >Liquidar Crédito</a>
+
+                                        {% else %}
+                                          <a id="{{ entity.id  }}" name="{{ entity.estadocreditos }}" onclick="pagado(id,name)"  class="pagado btn btn-success btn-sm" >Pagado</a>
+
+                                        {% endif %}
+
+                                         <a href="{{ path('creditos') }}" class="btn btn-default btn-sm" accesskey="D">Regresar</a>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="oe_view_manager_wrapper">
+                    <div>
+
+                        <div class="oe_view_manager_view_form" style="display: block;">
+                            <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                                <div class="oe_form_container">
+                                    <div class="oe_form">
+                                        <div class="">
+                                            <header>
+                                                <ul class="oe_form_field_status oe_form_status" data-original-title=""
+                                                    title="">
+
+                                                    <li data-id="draft" class="oe_active">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="open" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="paid" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+
+                                                </ul>
+                                                <div class="oe_clear"></div>
+                                            </header>
+
+                                            {% if pago == "pago" %}
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Datos
+                                                            del crédito de {{ entity.persona is null ? "" : (entity.persona.nombre is null ? " " : entity.persona.nombre) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.primerApellido is null ? " " : entity.persona.primerApellido) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.segundoApellido is null ? " " : entity.persona.segundoApellido)}}&nbsp;</label>
+                                                    </h1>
+
+                                                    <br>
+                                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                                              <a type="button" id="export" class="btn btn-success btn-sm"
+                                                                 href="{{ path('impresion_tabla_amortizacion_creditos',{'idCredito':entity.id }) }}">
+                                                                  Exportar Amortización
+                                                              </a>
+                                                        </span>
+                                                    <br>
+                                                    <br>
+                                                    <table >
+                                                        <thead>
+                                                        <th width="20%" class="tabla_right_align"></th>
+                                                        <th width="20%" class="tabla_left_align"></th>
+                                                        <th width="22%" class="tabla_right_align"></th>
+                                                        <th width="10%" class="tabla_left_align"></th>
+                                                        <th width="20%" class="tabla_right_align"></th>
+                                                        <th width="20%" class="tabla_left_align"></th>
+
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr class="oe_header_row oe_header_row_top">
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Crédito Asignado:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                   $ {{ (entity.montoSolicitado)| number_format(2, '.' , ',' ) }}
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Cuotas pagadas:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                   {{pagosrealizados | length}}
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Último Pago:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    {%if pagosrealizados is not empty %}
+                                                                        {% set ultimopago = pagosrealizados | last %}
+                                                                        {{ ultimopago.fechaDePago | date("m/d/Y")}}
+                                                                    {% else %}
+                                                                        {{ "NUNCA" }}
+                                                                    {% endif %}
+                                                                    {#{{ pagosrealizados is not empty ? (pagosrealizados | last) |date("m/d/Y"): "Nunca"}}#}
+
+                                                                </h3>
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr class="oe_header_row oe_header_row_top">
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3>
+                                                                    Cuota a pagar:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3>
+                                                                    $ {{ amortizaciones is not empty ? ((amortizaciones[1].valorcuota )| number_format(2, '.' , ',' )) : "No Existente"}}
+                                                                   {#{{ amortizaciones[1].valorcuota | round(2, 'ceil') }}</label>#}
+                                                                </h3>
+                                                            </td>
+
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Cuotas por pagar:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    {{entity.numeroDePagos - (pagosrealizados | length)}}
+                                                                </h3>
+                                                            </td>
+
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+
+                                                                </h3>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                                    <h2>Tabla de amortización</h2>
+                                                    <table border="1">
+                                                        <thead>
+                                                        <th width="10%" class="tabla_center_align">Cuota</th>
+                                                        <th width="20%" class="tabla_center_align">Fecha De Pago</th>
+                                                        <th width="18%" class="tabla_center_align">Capital</th>
+                                                        <th width="18%" class="tabla_center_align">Interes</th>
+                                                        <th width="18%" class="tabla_center_align">F. Desgravamen</th>
+                                                        <th width="18%" class="tabla_center_align">Valor cuota</th>
+                                                        <th width="20%" class="tabla_center_align">Saldo</th>
+                                                        <th width="100px" class="tabla_center_align">Pagado</th>
+
+                                                        </thead>
+                                                        <tbody>
+                                                        {% set cont=0 %}
+                                                        {% set totalCapital=0 %}
+                                                        {% set totalInteres=0 %}
+                                                        {% set totalCuota=0 %}
+                                                        {% set totalDesgravamen=0 %}
+                                                        {% for amortizaciones in amortizaciones %}
+                                                            <tr>
+                                                                <!--<td width="7%" class="tabla_right_align">&nbsp;$&nbsp;|number_format(2, '.' , ',' ) }}&nbsp;</td>-->
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ amortizaciones.cuota }}</td>
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ amortizaciones.fechaDePago | date('d/m/Y') }}</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.capital |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.interes |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.desgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.valorcuota  |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.saldo|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_center_align">
+                                                                    {{ cont == 0 ? " " :( (pagosrealizados | length) >= cont ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>" )}}</td>
+                                                                {% set cont=cont + 1 %}
+                                                                {% set totalCapital=totalCapital + amortizaciones.capital%}
+                                                                {% set totalInteres=totalInteres + amortizaciones.interes%}
+                                                                {% set totalCuota=totalCuota + amortizaciones.valorcuota%}
+                                                                {% set totalDesgravamen=totalDesgravamen + amortizaciones.desgravamen%}
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr>
+                                                            <td width="" class="tabla_right_align"></td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">TOTAL</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalCapital|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalInteres|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalDesgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalCuota|number_format(2, '.' , ',' ) }}&nbsp;</td>
+
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table cellspacing="0" cellpadding="0" border="0"
+                                                           class="oe_form_group ">
+                                                        <tbody>
+                                                        <tr class="oe_form_group_row">
+                                                            <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0"
+                                                                       class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Fecha de Pago
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell"
+                                                                            colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.fechaDePago) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Pagar sin Interés
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.sininteres) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr hidden class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Crédito
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.creditoId) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                            <td width="50%" class="oe_form_group_cell oe_group_right"
+                                                                colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0"
+                                                                       class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label_help oe_align_right"
+                                                                                   for="oe-field-input-9"
+                                                                                   data-original-title="" title="">
+                                                                                Monto a Pagar
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell"
+                                                                            colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(new_pago_form.valorIngresado)}}&nbsp;
+                                                                                      {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                                  </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+
+                                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                                    <h2>Tabla de Pagos realizados</h2>
+                                                    <table border="1">
+                                                        <thead>
+                                                        <th width="150px" class="tabla_center_align">Fecha De Pago</th>
+                                                        <th width="250px" class="tabla_center_align">Valor cuota</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% set cont=1 %}
+                                                        {% for pagorealizado in pagosrealizados %}
+                                                            <tr>
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ pagorealizado.fechaDePago | date('d/m/Y') }}</td>
+                                                                <td width="" class="tabla_right_align tabla_center_align">
+                                                                    &nbsp;$&nbsp;{{ (pagorealizado.valorIngresado   )| number_format(2) }}&nbsp;</td>
+                                                                <!--<th width="120" class="tabla_center_align">
+                                                                    {% if cont == (pagosrealizados|length)  %}
+                                                                        <a   href="{{ path('pagocuotacredito_delete', { 'id': pagorealizado.id }) }}"  style="color: brown !important;" > cancelar </a>
+                                                                    {% endif %}
+                                                                </th>-->
+                                                            </tr>
+                                                            {% set cont=cont+1 %}
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    <br><br><br><br><br><br><br><br><br>
+                                                </div>
+                                            </div>
+                                            {% else %}
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <div class="alert alert-danger tabla_center_align" >
+                                                        <strong>El cr&eacute;dito tiene todos sus pagos realizados. Debe cambiarse su estado a 'PAGADO' presionando el botón. </strong>
+                                                    </div>
+
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Datos
+                                                            del crédito de {{ entity.persona is null ? "" : (entity.persona.nombre is null ? " " : entity.persona.nombre) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.primerApellido is null ? " " : entity.persona.primerApellido) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.segundoApellido is null ? " " : entity.persona.segundoApellido)}}&nbsp;</label>
+                                                    </h1>
+                                                    <br>
+                                                    <table >
+                                                        <thead>
+                                                        <th width="20%" class="tabla_right_align"></th>
+                                                        <th width="20%" class="tabla_left_align"></th>
+                                                        <th width="22%" class="tabla_right_align"></th>
+                                                        <th width="10%" class="tabla_left_align"></th>
+                                                        <th width="20%" class="tabla_right_align"></th>
+                                                        <th width="20%" class="tabla_left_align"></th>
+
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr class="oe_header_row oe_header_row_top">
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Crédito Asignado:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    $ {{ (entity.montoSolicitado )| number_format(2, '.' , ',' ) }}
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Cuotas pagadas:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    {{pagosrealizados | length}}
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Último Pago:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    {%if pagosrealizados is not empty %}
+                                                                        {% set ultimopago = pagosrealizados | last %}
+                                                                        {{ ultimopago.fechaDePago | date("m/d/Y")}}
+                                                                    {% else %}
+                                                                        {{ "NUNCA" }}
+                                                                    {% endif %}
+                                                                    {#{{ pagosrealizados is not empty ? (pagosrealizados | last) |date("m/d/Y"): "Nunca"}}#}
+
+                                                                </h3>
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr class="oe_header_row oe_header_row_top">
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3>
+                                                                    Cuota a pagar:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3>
+                                                                    $ {{ amortizaciones is not empty ? ((amortizaciones[1].valorcuota )| number_format(2, '.' , ',' )) : "No Existente"}}
+                                                                    {#{{ amortizaciones[1].valorcuota | round(2, 'ceil') }}</label>#}
+                                                                </h3>
+                                                            </td>
+
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+                                                                    Cuotas por pagar:
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+                                                                    {{entity.numeroDePagos - (pagosrealizados | length)}}
+                                                                </h3>
+                                                            </td>
+
+                                                            <td class="tabla_right_align" style="padding-right: 20px">
+                                                                <h3 >
+
+                                                                </h3>
+                                                            </td>
+                                                            <td class="tabla_left_align">
+                                                                <h3 >
+
+                                                                </h3>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                                    <h2>Tabla de amortización</h2>
+                                                    <table border="1">
+                                                        <thead>
+                                                        <th width="10%" class="tabla_center_align">Cuota</th>
+                                                        <th width="20%" class="tabla_center_align">Fecha De Pago</th>
+                                                        <th width="18%" class="tabla_center_align">Capital</th>
+                                                        <th width="18%" class="tabla_center_align">Interes</th>
+                                                        <th width="18%" class="tabla_center_align">F. Desgravamen</th>
+                                                        <th width="18%" class="tabla_center_align">Valor cuota</th>
+                                                        <th width="20%" class="tabla_center_align">Saldo</th>
+                                                        <th width="100px" class="tabla_center_align">Pagado</th>
+
+                                                        </thead>
+                                                        <tbody>
+                                                        {% set cont=0 %}
+                                                        {% set totalCapital=0 %}
+                                                        {% set totalInteres=0 %}
+                                                        {% set totalCuota=0 %}
+                                                        {% set totalDesgravamen=0 %}
+                                                        {% for amortizaciones in amortizaciones %}
+                                                            <tr>
+                                                                <!--<td width="7%" class="tabla_right_align">&nbsp;$&nbsp;|number_format(2, '.' , ',' ) }}&nbsp;</td>-->
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ amortizaciones.cuota }}</td>
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ amortizaciones.fechaDePago | date('d/m/Y') }}</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.capital |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.interes |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.desgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.valorcuota  |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_right_align">
+                                                                    &nbsp;$&nbsp;{{ amortizaciones.saldo|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                                <td width="" class="tabla_center_align">
+                                                                    {{ cont == 0 ? " " :( (pagosrealizados | length) >= cont ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>" )}}</td>
+                                                                {% set cont=cont + 1 %}
+                                                                {% set totalCapital=totalCapital + amortizaciones.capital%}
+                                                                {% set totalInteres=totalInteres + amortizaciones.interes%}
+                                                                {% set totalCuota=totalCuota + amortizaciones.valorcuota%}
+                                                                {% set totalDesgravamen=totalDesgravamen + amortizaciones.desgravamen%}
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr>
+                                                            <td width="" class="tabla_right_align"></td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">TOTAL</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalCapital|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalInteres|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalDesgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                            <td width="" class="tabla_right_align" style="font-weight: bold">
+                                                                &nbsp;$&nbsp;{{ totalCuota|number_format(2, '.' , ',' ) }}&nbsp;</td>
+
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table cellspacing="0" cellpadding="0" border="0"
+                                                           class="oe_form_group ">
+                                                        <tbody>
+                                                        <tr class="oe_form_group_row">
+                                                            <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0"
+                                                                       class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Fecha de Pago
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell"
+                                                                            colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.fechaDePago) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Pagar sin Interés
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.sininteres) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr hidden class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right"
+                                                                                   for="oe-field-input-5">
+                                                                                Crédito
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                            {#<span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">#}
+                                                                            <div>
+                                                                                {{ form_widget(new_pago_form.creditoId) }}
+                                                                                {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                            </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                            <td width="50%" class="oe_form_group_cell oe_group_right"
+                                                                colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0"
+                                                                       class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%"
+                                                                            class="oe_form_group_cell oe_form_group_cell_label"
+                                                                            colspan="1">
+                                                                            <label class=" oe_form_label_help oe_align_right"
+                                                                                   for="oe-field-input-9"
+                                                                                   data-original-title="" title="">
+                                                                                Monto a Pagar
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell"
+                                                                            colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(new_pago_form.valorIngresado) }}
+                                                                                      {#<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>#}
+                                                                                  </div>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                                    <h2>Tabla de Pagos realizados</h2>
+                                                    <table border="1">
+                                                        <thead>
+                                                        <th width="150px" class="tabla_center_align">Fecha De Pago</th>
+                                                        <th width="250px" class="tabla_center_align">Valor cuota</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% set cont=1 %}
+                                                        {% for pagorealizado in pagosrealizados %}
+                                                            <tr>
+                                                                <td width=""
+                                                                    class="tabla_center_align"> {{ pagorealizado.fechaDePago | date('d/m/Y') }}</td>
+                                                                <td width="" class="tabla_right_align tabla_center_align">
+                                                                    &nbsp;$&nbsp;{{ (pagorealizado.valorIngresado   )| number_format(2) }}&nbsp;</td>
+                                                                <!--<th width="120" class="tabla_center_align">
+                                                                    {% if cont == (pagosrealizados|length)  %}
+                                                                        <a   href="{{ path('pagocuotacredito_delete', { 'id': pagorealizado.id }) }}"  style="color: brown !important;" > cancelar </a>
+                                                                    {% endif %}
+                                                                </th>-->
+                                                            </tr>
+                                                            {% set cont=cont+1 %}
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    <br><br><br><br><br><br><br><br><br>
+                                                </div>
+                                            </div>
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                        <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul>
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                            id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {{ form_row(new_pago_form._token) }}
+
+    </form>
+
+
+{% endblock %}
+

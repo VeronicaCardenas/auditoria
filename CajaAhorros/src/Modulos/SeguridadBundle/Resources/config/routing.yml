@@ -1,0 +1,95 @@
+pre_autenticacion:
+    path:    /
+    defaults: {_controller: SeguridadBundle:Usuario:pre_autenticacion }
+
+autenticacion:
+    path:    /autenticacion
+    defaults: {_controller: SeguridadBundle:Usuario:autenticacion }
+    
+login_check:
+    path:  /login_check
+    
+logout:
+    path:  /logout
+ 
+inicio:
+    path:     /inicio/
+    defaults: {_controller: SeguridadBundle:Usuario:inicio}
+
+listadousuarios:
+    path:     /seguridad/listadousuarios/
+    defaults: {_controller: SeguridadBundle:Usuario:listadousuarios}
+
+ver_usuarios:
+    path:     /seguridad/visualizarusuario/{id}/
+    defaults: {_controller: SeguridadBundle:Usuario:visualizarusuario}
+
+editar_usuario:
+    path:     /seguridad/editarusuario/{id}/
+    defaults: {_controller: SeguridadBundle:Usuario:editarusuario}
+
+nuevo_usuario:
+    path:     /seguridad/nuevo_usuario/
+    defaults: {_controller: SeguridadBundle:Usuario:insertarUsuario}
+
+eliminar_usuario:
+    path:     /seguridad/eliminarusuario/{id}
+    defaults: {_controller: SeguridadBundle:Usuario:eliminarusuario,id:""}
+
+eliminar_usuariosmarcados:
+    path:     /seguridad/eliminar_UsuariosMarcados/{elementos}
+    defaults: {_controller: SeguridadBundle:Usuario:eliminar_UsuariosMarcados,elementos:""}
+
+listado_eliminados:
+    path:     /seguridad/listadoeliminados/
+    defaults: {_controller: SeguridadBundle:Usuario:listadousuarioseliminados}
+
+activar_usuario:
+    path:     /seguridad/activarusuario/{id}
+    defaults: {_controller: SeguridadBundle:Usuario:activarusuario,id:""}
+
+activar_usuariosmarcados:
+    path:     /seguridad/activar_UsuariosMarcados/{elementos}
+    defaults: {_controller: SeguridadBundle:Usuario:activar_UsuariosMarcados,elementos:""}
+
+insertarldap:
+    path:     /seguridad/insertarldap/
+    defaults: {_controller: SeguridadBundle:Usuario:insertarldap}
+
+verldap:
+    path:     /seguridad/verldap/{id}
+    defaults: {_controller: SeguridadBundle:Usuario:verldap}
+
+editarldap:
+    path:     /seguridad/editarldap/{id}
+    defaults: {_controller: SeguridadBundle:Usuario:editarldap}
+
+Usuariosldap:
+    path:     /seguridad/Usuariosldap
+    defaults: {_controller: SeguridadBundle:Usuario:Usuariosldap}
+
+cargarUsuarioLdap:
+    path:     /seguridad/cargarUsuarioLdap/{id}
+    defaults: {_controller: SeguridadBundle:Usuario:cargarUsuarioLdap,id:""}
+
+cargarUserLdap:
+    path:     /seguridad/cargarUserLdap/{elementos}
+    defaults: {_controller: SeguridadBundle:Usuario:cargarUserLdap,elementos:""}
+
+cambiar:
+    path:     /cambiar/
+    defaults: {_controller: SeguridadBundle:Usuario:cambiar}
+
+listadoTrazasUser:
+    path:     /seguridad/listadoTrazasUser
+    defaults: {_controller: SeguridadBundle:Usuario:listadoTrazasUser}
+
+trazasUser:
+    path:     /seguridad/traza
+    defaults: {_controller: SeguridadBundle:Usuario:trazas}
+
+userAjax:
+     path:     /seguridad/userAjax/{username}
+     defaults: {_controller: SeguridadBundle:Usuario:userAjax,username:""}
+
+     

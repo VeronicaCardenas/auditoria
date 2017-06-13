@@ -1,0 +1,30 @@
+cajapersona:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:index" }
+
+cajapersona_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:show" }
+
+cajapersona_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:new" }
+
+cajapersona_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:create" }
+
+
+cajapersona_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:edit" }
+
+cajapersona_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:update" }
+    methods:  [POST, PUT]
+
+cajapersona_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:CajaPersona:delete",id:""}
+    

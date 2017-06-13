@@ -1,0 +1,1227 @@
+{% extends '::fronted5.html.twig' %}
+{% block title %}Estados Financieros y de Cartera{% endblock %}
+{% block encabezado %}Estados Financieros y de Cartera{% endblock %}
+
+{% block contenedor %}
+
+
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+
+        .tabla_right_align {
+            text-align: right !important;
+        }
+
+        .tabla_left_align {
+            text-align: left !important;
+        }
+
+
+    </style>
+    <script>
+        $(document).on("click","#export",function(){
+        $('#export').attr("href","{{ path('exportarCartera') }}");
+        });
+
+        $(document).ready(function() {
+        $("#estadosfinancieros").addClass("active");
+        });
+
+         $(document).ready(function() {
+        $("#Contabilidad").addClass("active");
+        });
+
+
+
+        $(document).ready(function() {
+            $("#estadosfinancieros").addClass("active");
+            $("#Contabilidad").addClass("active");
+        });
+   
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            <table class="oe_view_manager_header">
+                <tbody>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+                        <h2 class="oe_view_title">
+                            ESTADOS FINANCIEROS Y DE CARTERA
+                        </h2>
+                    </td>
+
+                </tr>
+
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons">
+                            <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                          <!--<a type="button" id="export" class="oe_button oe_list_add oe_highlight  "
+                                             href="{{ path('exportarCartera') }}">
+                                              Exportar
+                                          </a>-->
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="oe_view_manager_wrapper">
+            <div>
+
+                <div class="oe_view_manager_view_form" style="display: block;">
+                    <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                        <div class="oe_form_container">
+                            <div class="oe_form">
+                                <div class="">
+                                    <header>
+                                        <ul class="oe_form_field_status oe_form_status" data-original-title=""
+                                            title="">
+
+                                            <li data-id="draft" class="oe_active">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="open" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="paid" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+
+                                        </ul>
+                                        <div class="oe_clear"></div>
+                                    </header>
+                                    
+<!---------------------------------------------------------------------CARTERA GENERAL------------------------------------------------------->                        
+
+                                    <div class="oe_form_sheetbg"
+                                         style="padding-right: 15px !important;padding-left: 15px !important;">
+                                        <div class="tabla_center_align"><h2>ESTADOS FINCANCIEROS</h2>
+                                        </div>
+                                        
+                                        <div class="tabla_center_align"><label style="font-size: 16px !important;">{{ nombrecaja }}  </label></div>
+                                        <br>
+                                        
+                                            <table border="1">
+                                                <thead>
+                                                <th class="tabla_center_align"><b>MOVIMIENTOS DE CARTERA</b></th>
+                                                </thead>
+                                                <tbody>
+                                                <tr><td>.</td></tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="15%" class="tabla_center_align">RECUPERACIONES</th>
+                                                {% for mes in meses %}
+                                                    <th width="10%" class="tabla_center_align">{{ mesesTexto[mes] }}</th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Saldo Anterior</td>
+                                                        {% for mes in meses %}
+                                                            {% set saldoAnteriorTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set saldoAnteriorTotal = saldoAnteriorTotal + personacarpeta['saldoAnterior'] %}
+                                                            {% endfor %}
+
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <!--<tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Aporte Socios</td>
+                                                        {% for mes in meses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ carterames.totalesMes.aporte|number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>-->
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Capital Pagado</td>
+                                                        {% for mes in meses %}
+                                                            {% set capitalTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set capitalTotal= capitalTotal +personacarpeta['capital'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ capitalTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Interes Ganado</td>
+                                                        {% for mes in meses %}
+                                                            {% set interesTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set interesTotal = interesTotal + personacarpeta['interes'] %}
+                                                            {% endfor %}
+
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ interesTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Mora Pagada</td>
+                                                        {% for mes in meses %}
+                                                            {% set moraTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set moraTotal = moraTotal + personacarpeta['mora'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp{{ moraTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Fondo de Desgravamen</td>
+                                                        {% for mes in meses %}
+                                                            {% set desgravamenTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set desgravamenTotal = desgravamenTotal + personacarpeta['desgravamen'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ desgravamenTotal|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="tabla_center_align">
+                                                            <b>  TOTAL RECUPERACIONES&nbsp; </b></td>
+                                                        {% for mes in meses %}
+                                                            {% set totalpagadoTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set totalpagadoTotal = totalpagadoTotal + personacarpeta['totalpagado'] %}
+                                                             {% endfor %}
+
+                                                            {% if  totalpagadoTotal < "0"%}
+                                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                                    <b>&nbsp;$&nbsp;{{ totalpagadoTotal|number_format(2, '.' , ',' ) }}&nbsp;
+                                                                        </b></td>
+                                                            {% else%}
+                                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                                    <b>&nbsp;$&nbsp;{{ totalpagadoTotal|number_format(2, '.' , ',' ) }}&nbsp;
+                                                                    </b></td>
+                                                            {% endif %}
+
+                                                        {% endfor %}
+                                                    </tr>
+                                                </tbody>
+                                                    
+                                                <thead>
+                                                    <th width="15%" class="tabla_center_align">VALORES ENTREGADOS</th>
+                                                    {% for mes in meses %}
+                                                    <th width="10%" class="tabla_center_align"></th>
+                                                    {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Entrega de Créditos</td>
+                                                        {% for mes in meses %}
+                                                            {% set creditomesTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set creditomesTotal = creditomesTotal + personacarpeta['creditomes'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ creditomesTotal|number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <!--<tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            Retiro Ahorros</td>
+                                                        {% for mes in meses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ 0|number_format(2, '.' , ',' ) }}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>-->
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            CCMxV</td>
+                                                        {% for mes in meses %}
+                                                            {% set ccmvxTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set ccmvxTotal  = ccmvxTotal + personacarpeta['ccmxv'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ ccmvxTotal |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            CCMV</td>
+                                                        {% for mes in meses %}
+                                                            {% set ccmvTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set ccmvTotal = ccmvTotal + personacarpeta['ccmv'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ ccmvTotal|number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            CCxV</td>
+                                                        {% for mes in meses %}
+                                                            {% set ccxvTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set ccxvTotal = ccxvTotal + personacarpeta['ccxv'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ ccxvTotal |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="" class="tabla_left_align">
+                                                            CCCV</td>
+                                                        {% for mes in meses %}
+                                                            {% set cccvTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set cccvTotal = cccvTotal + personacarpeta['cccv'] %}
+                                                            {% endfor %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ cccvTotal |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="tabla_center_align">
+                                                            <b>  TOTAL VALORES ENTREGADOS&nbsp; </b></td>
+                                                        {% for mes in meses %}
+                                                        {% set ccmvxTotal=0 %}
+                                                        {% set ccmvTotal=0 %}
+                                                        {% set ccxvTotal=0 %}
+                                                        {% set cccvTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                            {% set ccmvxTotal  = ccmvxTotal + personacarpeta['ccmxv'] %}
+                                                            {% set ccmvTotal = ccmvTotal + personacarpeta['ccmv'] %}
+                                                            {% set ccxvTotal = ccxvTotal + personacarpeta['ccxv'] %}
+                                                            {% set cccvTotal = cccvTotal + personacarpeta['cccv'] %}
+                                                            {% endfor %}
+
+                                                                {% if   (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal)>= "0"%}
+                                                                    <td width="" class="tabla_right_align" style='color: green;'>
+                                                                        <b>&nbsp;$&nbsp;{{ (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal)|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                                {% else%}
+                                                                    <td width="" class="tabla_right_align" style='color: red;'>
+                                                                        <b>&nbsp;$&nbsp;{{ (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal)|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                                {% endif %}
+                                                        {% endfor %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="tabla_center_align">
+                                                            <b> FLUJO&nbsp; </b></td>
+                                                        {% for mes in meses %}
+                                                            {% set totalpagadoTotal=0 %}
+                                                            {% set ccmvxTotal=0 %}
+                                                            {% set ccmvTotal=0 %}
+                                                            {% set ccxvTotal=0 %}
+                                                            {% set cccvTotal=0 %}
+                                                            {% for personacarpeta in creditos[mes] %}
+                                                                {% set totalpagadoTotal = totalpagadoTotal + personacarpeta['totalpagado'] %}
+                                                                {% set ccmvxTotal  = ccmvxTotal + personacarpeta['ccmxv'] %}
+                                                                {% set ccmvTotal = ccmvTotal + personacarpeta['ccmv'] %}
+                                                                {% set ccxvTotal = ccxvTotal + personacarpeta['ccxv'] %}
+                                                                {% set cccvTotal = cccvTotal + personacarpeta['cccv'] %}
+                                                            {% endfor %}
+
+                                                            {% if   (totalpagadoTotal - (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal))>= "0"%}
+                                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                                    <b>&nbsp;$&nbsp;{{ (totalpagadoTotal - (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal))|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                            {% else%}
+                                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                                    <b>&nbsp;$&nbsp;{{ (totalpagadoTotal - (cccvTotal + ccxvTotal + ccmvTotal + ccmvxTotal + creditomesTotal))|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                            {% endif %}
+
+                                                        {% endfor %}
+                                                    </tr>
+                                                </tbody>
+
+<!--------------------------------------------------------------------- P Y G --------------------------------------------------------------->
+
+                                                <tbody>
+                                                <tr><td>.</td></tr>
+                                                </tbody>
+                                                <thead>
+                                                <th class="tabla_center_align"><b>PERDIDAS Y GANANCIAS</b></th>
+                                                </thead>
+                                                <tbody>
+                                                <tr><td>.</td></tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="30%" class="tabla_center_align">GANACIAS</th>
+                                                {% for pygMes in pygMeses %}
+                                                    <th width="10%" class="tabla_center_align">{{ pygMes.getMesFecha }}</th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Intereses y Descuentos Ganados</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['51'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Depósitos</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5101'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Intereses y descuentos de cartera de créditos</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5104'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Intereses y descuentos  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5190'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Ingreso por Servicio</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['54'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Servicios   </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5490'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Ingresos   </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['56'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Solicitud  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['5690'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Entrega de Utilidades o Excedentes a Socios  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.ingresos['3603'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  TOTAL GANANCIAS&nbsp; </b></td>
+                                                    {% for pygMes in pygMeses %}
+
+                                                        {% if   pygMes.totales['ingresos'] < "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{  pygMes.totales['ingresos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{  pygMes.totales['ingresos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="15%" class="tabla_center_align">PERDIDAS</th>
+                                                {% for pygMes in pygMeses %}
+                                                    <th width="10%" class="tabla_center_align"></th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Intereses Causados</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['41'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones con el público  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4101'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones financieras  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4103'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Intereses  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4105'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Provisiones</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['44'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de crédito</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4402'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Gastos de Operación</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['45'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Gastos de personal  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4501'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Honorarios </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4502'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Servicios varios    </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4503'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Impuestos, contribuciones y multas  </td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4504'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros gastos</td>
+                                                    {% for pygMes in pygMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ pygMes.gastos['4507'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  TOTAL PERDIDAS&nbsp; </b></td>
+                                                    {% for pygMes in pygMeses %}
+
+                                                        {% if  pygMes.totales['gastos'] >= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{ pygMes.totales['gastos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{ pygMes.totales['gastos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  DIFERENCIA&nbsp; </b></td>
+                                                    {% for pygMes in pygMeses %}
+                                                        {% if  (pygMes.totales['ingresos'] - pygMes.totales['gastos']) >= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{(pygMes.totales['ingresos'] - pygMes.totales['gastos']) |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{(pygMes.totales['ingresos'] - pygMes.totales['gastos']) |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+
+<!--------------------------------------------------------------------- BALANCE GENERAL --------------------------------------------------------------->
+
+                                                <tbody>
+                                                <tr><td>.</td></tr>
+                                                </tbody>
+                                                <thead>
+                                                <th class="tabla_center_align"><b>BALANCE GENERAL</b></th>
+                                                </thead>
+                                                <tbody>
+                                                <tr><td>.</td></tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="30%" class="tabla_center_align">ACTIVOS</th>
+                                                {% for balanceGralMes in balanceGralMeses %}
+                                                    <th width="10%" class="tabla_center_align">{{ balanceGralMes.getMesFecha }}</th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Fondos disponibles</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['11'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Caja</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1101'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Bancos y otras Instituciones Financieras</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1103'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Inversiones  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['13'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Para negociar de entidades del sector privado </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1301'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de crédito</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['14'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de créditos de consumo por vencer    </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1402'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de crédito para la microempresa por vencer     </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1404'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de crédito de consumo vencida</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1422'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cartera de crédito para la microempresa vencida</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1424'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        (Provisiones para créditos incobrables)</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1499'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cuentas por Cobrar</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['16'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Intereses por cobrar de inversiones</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1602'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Intereses por cobrar de cartera de créditos   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1603'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cuentas por cobrar varias   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1690'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Propiedad y Equipos </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['18'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Terrenos </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1801'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Edificios </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1802'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Muebles, enseres y equipos de oficina  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1805'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Equipos de computación   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1806'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Unidades de Transporte   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1807'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Equipos de construcción   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1808'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1890'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros activos</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['19'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Gastos Diferidos</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1905'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.activos['1990'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  TOTAL ACTIVOS&nbsp; </b></td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+
+                                                        {% if   balanceGralMes.totales['activos'] < "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{  balanceGralMes.totales['activos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{  balanceGralMes.totales['activos'] |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+
+
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="15%" class="tabla_center_align">PASIVOS</th>
+                                                {% for balanceGralMes in balanceGralMeses %}
+                                                    <th width="10%" class="tabla_center_align"></th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['21'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Depósitos a la vista   </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2101'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Depósitos a plazo fijo  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2103'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Depósitos restringidos</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2105'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cuentas por Pagar</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['25'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones Patronales</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2503'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Retenciones</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2504'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Contribuciones, impuestos y multas </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2505'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Cuentas por pagar varias F.DESGRAVAMEN  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2590'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones Financieras</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['26'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones con Instituciones financieras del país  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2602'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Obligaciones con entidades financieras del sector privado  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2606'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros Pasivos</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['29'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.pasivos['2990'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  TOTAL PASIVOS&nbsp; </b></td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+
+                                                        {% if   balanceGralMes.totales['pasivos']>= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{ balanceGralMes.totales['pasivos']|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{ balanceGralMes.totales['pasivos']|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+
+                                                <thead>
+                                                <th width="15%" class="tabla_center_align">PATRIMONIO</th>
+                                                {% for balanceGralMes in balanceGralMeses %}
+                                                    <th width="10%" class="tabla_center_align"></th>
+                                                {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Capital Social</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['31'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Aportes de Socios  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3103'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros aportes patrimoniales </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['34'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Donaciones</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3402'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Otros (Cap. De Utilidades)</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3490'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Resultados</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['36'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Utilidades o excedentes acumuladas  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3601'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Perdidas acumuladas </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3602'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        Utilidad o excedente del ejercicio</td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3603'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td width="" class="tabla_left_align">
+                                                        (Perdidas del ejercicio)  </td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{ balanceGralMes.patrimonio['3604'] |number_format(2, '.' , ',' )}}
+                                                            &nbsp; </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  TOTAL PATRIMONIO&nbsp; </b></td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+
+                                                        {% if   balanceGralMes.totales['patrimonio']  >= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>&nbsp;$&nbsp;{{ balanceGralMes.totales['patrimonio']  |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>&nbsp;$&nbsp;{{ balanceGralMes.totales['patrimonio']  |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  PASIVOS + PATRIMONIO&nbsp; </b></td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+
+                                                        {% if   (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio']) >= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>$ {{ (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio']) |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>$ {{ (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio']) |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabla_center_align">
+                                                        <b>  DIFERENCIA&nbsp; </b></td>
+                                                    {% for balanceGralMes in balanceGralMeses %}
+
+                                                        {% if  (balanceGralMes.totales['activos'] - (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio']))>= "0"%}
+                                                            <td width="" class="tabla_right_align" style='color: green;'>
+                                                                <b>$ {{(balanceGralMes.totales['activos'] - (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio'])) |number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% else%}
+                                                            <td width="" class="tabla_right_align" style='color: red;'>
+                                                                <b>$ {{(balanceGralMes.totales['activos'] - (balanceGralMes.totales['pasivos'] + balanceGralMes.totales['patrimonio']))|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr style="width: 100%;padding: 2px;border-color: #0081c2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

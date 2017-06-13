@@ -1,0 +1,654 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Inicio{% endblock %}
+{% block encabezado %}Inicio{% endblock %}
+ {% block javascripts %}
+     {{ parent() }}
+     <script>
+        $(function(){
+            var chart = new CanvasJS.Chart("chartContainer",
+                    {
+                        title:{
+                            text: "Usuarios"
+                        },
+                        data: [
+                            {
+                                type: "line",
+                                dataPoints: [
+                                    { y: {{ data[0] }}, label: "Total"},
+                                    { y: {{ data[1] }}, label: "Locales" },
+                                    { y: {{ data[2] }},  label: "Eliminados"},
+                                    { y: {{ data[3] }}, label: "Ldap"}
+                                ]
+                            }
+                        ]
+                    });
+            var chart1 = new CanvasJS.Chart("chartContainer1",
+                    {
+                        title:{
+                            text: "Otros"
+                        },
+                        data: [
+                            {
+                                type: "line",
+                                dataPoints: [
+                                    { y: 300, label: "Otros"},
+                                    { y: 20,  label: "Otros" },
+                                    {  y: 100,label: "Otros"},
+                                    { y: 75,  label: "Otros"}
+                                ]
+                            }
+                        ]
+                    });
+            var chart2 = new CanvasJS.Chart("chartContainer2",
+                    {
+                        title:{
+                            text: "Otros"
+                        },
+                        data: [
+                            {
+                                type: "line",
+                                dataPoints: [
+                                    { y: 40,  label: "Otros"},
+                                    { y: 100, label: "Otros" },
+                                    { y: 20,  label: "Otros"},
+                                    { y: 80,  label: "Otros"}
+                                ]
+                            }
+                        ]
+                    });
+
+            chart.render();
+            chart1.render();
+            chart2.render();
+        });
+  </script>
+ {% endblock %}
+ {% block contenedor %}
+     
+     
+     <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <table class="oe_view_manager_header">
+            <colgroup><col width="20%">
+            <col width="35%">
+            <col width="15%">
+            <col width="30%">
+            </colgroup><tbody><tr class="oe_header_row oe_header_row_top">
+                <td colspan="2">
+                        
+        
+    <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Contratos</span></span>
+                        </h2>
+                </td>
+                <td colspan="2">
+                        <div class="oe_view_manager_view_search"><div class="oe_searchview" style="display: block;">
+    <div class="oe_searchview_facets"><div contenteditable="true" tabindex="0" class="oe_searchview_input"></div></div>
+    <div class="oe_searchview_clear"></div>
+    <div title="Búsqueda avanzada..." class="oe_searchview_unfold_drawer"></div>
+    <button type="button" title="Volver a buscar" class="oe_searchview_search">Buscar</button>
+<div class="oe-autocomplete" style="width: 400px; display: none;">
+    <ul>
+    </ul>
+</div></div></div>
+                </td>
+            </tr>
+            <tr class="oe_header_row">
+                <td>
+                        <div class="oe_view_manager_buttons"><div class="oe_list_buttons" style="display: block;">
+    
+        <button type="button" class="oe_button oe_list_add oe_highlight">
+            Crear
+        </button>
+        <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+        <span class="oe_alternative">
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+        
+            <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+        </span>
+    
+    
+    </div><div class="oe_form_buttons" style="display: none;">
+    
+        <span class="oe_form_buttons_view" style="display: none;">
+            
+            <div style="display: inline-block;">
+                <button type="button" class="oe_button oe_form_button_edit" accesskey="E">Editar</button>
+            </div>
+            <button type="button" class="oe_button oe_form_button_create" accesskey="C">Crear</button>
+        </span>
+        <span class="oe_form_buttons_edit" style="display: inline;">
+            <button type="button" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Guardar</button>
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_form_button_cancel" accesskey="D">Descartar</a>
+        </span>
+    
+</div></div>
+                </td>
+                <td colspan="2">
+                        <div class="oe_view_manager_sidebar" style="display: none;"><div style="display: none;">
+    <div class="oe_sidebar">
+        
+            <div class="oe_form_dropdown_section" style="display: none;">
+                <button class="oe_dropdown_toggle oe_dropdown_arrow">
+                    
+                    Imprimir
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <ul class="oe_dropdown_menu">
+                    
+                    
+                </ul>
+            </div>
+        
+            <div class="oe_form_dropdown_section">
+                <button class="oe_dropdown_toggle oe_dropdown_arrow">
+                    
+                    Más
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <ul class="oe_dropdown_menu">
+                    <li class="oe_share">
+                        
+                        <a title="" data-section="other" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Compartir
+                        </a>
+                         
+                    </li><li class="oe_share">
+                        
+                        <a title="" data-section="other" data-index="1" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Incrustar
+                        </a>
+                         
+                    </li><li>
+                        
+                        <a title="" data-section="other" data-index="2" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Exportar
+                        </a>
+                         
+                    </li><li>
+                        
+                        <a title="" data-section="other" data-index="3" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Borrar
+                        </a>
+                         
+                    </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</div><div style="display: none;">
+    <div class="oe_sidebar">
+        
+            <div class="oe_form_dropdown_section" style="display: none;">
+                <button class="oe_dropdown_toggle oe_dropdown_arrow">
+                    
+                    Imprimir
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <ul class="oe_dropdown_menu">
+                    
+                    
+                </ul>
+            </div>
+        
+            <div class="oe_form_dropdown_section">
+                <button class="oe_dropdown_toggle oe_dropdown_arrow">
+                    
+                    Más
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                
+                <ul class="oe_dropdown_menu">
+                    <li class="oe_share">
+                        
+                        <a title="" data-section="other" data-index="0" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Compartir
+                        </a>
+                         
+                    </li><li class="oe_share">
+                        
+                        <a title="" data-section="other" data-index="1" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Incrustar
+                        </a>
+                         
+                    </li><li>
+                        
+                        <a title="" data-section="other" data-index="2" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Borrar
+                        </a>
+                         
+                    </li><li>
+                        
+                        <a title="" data-section="other" data-index="3" target="_blank" class="oe_sidebar_action_a" data-original-title="">
+                            Duplicar
+                        </a>
+                         
+                    </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</div></div>
+                </td>
+                <td>
+                    <ul class="oe_view_manager_switch oe_button_group oe_right">
+                        
+                          <li class="oe_e active">
+                            <a class="oe_vm_switch_list" title="" data-view-type="list" data-original-title="Vista Lista"></a>
+                          </li>
+                        
+                          <li class="oe_e">
+                            <a class="oe_vm_switch_form" title="" data-view-type="form" data-original-title="Vista Formulario"></a>
+                          </li>
+                        
+                    </ul>
+                    <div class="oe_view_manager_pager oe_right"><div colspan="8" class="oe_list_pager oe_list_pager_single_page" style="display: none;">
+        
+    <div class="oe_pager_value">
+        
+            <span class="oe_list_pager_state">-</span>
+        
+    </div>
+    <ul class="oe_pager_group">
+        
+        <li>
+            <a type="button" data-pager-action="previous" class="oe_i">(</a>
+        </li>
+        <li>
+            <a type="button" data-pager-action="next" class="oe_i">)</a>
+        </li>
+        
+    </ul>
+
+    </div></div>
+                </td>
+            </tr>
+        </tbody></table>
+
+    <div class="oe_view_manager_wrapper">
+        <div>
+            <div class="oe_view_manager_body">
+                <div class="oe_searchview_drawer_container"><div style="display:none;" class="oe_searchview_drawer">
+    <div class="col-md-7"><div class="oe_searchview_custom oe_searchview_section" style="display: none;">
+    <dl class="dl-horizontal">
+        <dt><span class="oe_i">M</span> Favoritos</dt>
+        <dd><ul class="oe_searchview_custom_list"></ul></dd>
+    </dl>
+</div><div class="oe_searchview_filters oe_searchview_section">
+
+<dl class="dl-horizontal"><dt><span class="oe_i">w</span> Agrupar por</dt><dd><ul>
+    <li data-index="0">
+        Empleado
+    </li><li data-index="1">
+        Planificación de trabajo
+    </li><li data-index="2">
+        Puesto de Trabajo
+    </li><li data-index="3">
+        Tipo de contrato
+    </li>
+</ul></dd></dl></div></div>
+    <div class="col-md-5"><div class="oe_searchview_savefilter">
+    <h4>Guardar filtro actual</h4>
+    <form class="oe_form">
+        <p class="oe_form_required"><input placeholder="Nombre del filtro" id="oe_searchview_custom_input"></p>
+        <p>
+            <input type="checkbox" id="oe_searchview_custom_public">
+            <label for="oe_searchview_custom_public">Compartir con todos los usuarios</label>
+            <input type="checkbox" id="oe_searchview_custom_default">
+            <label for="oe_searchview_custom_default">Usar por defecto</label>
+        </p>
+        <button>Guardar</button>
+    </form>
+</div><div class="oe_searchview_advanced">
+    <h4>Búsqueda Avanzada</h4>
+    <form>
+        <ul>
+
+        <li>
+        <span class="searchview_extended_prop_or">o</span>
+        <select class="searchview_extended_prop_field">
+            
+                <option value="create_date">
+                    Creado en
+                </option>
+            
+                <option value="create_uid">
+                    Creado por
+                </option>
+            
+                <option value="department_id">
+                    Departamento
+                </option>
+            
+                <option value="employee_id">
+                    Empleado
+                </option>
+            
+                <option value="trial_date_end">
+                    Fecha de finalización
+                </option>
+            
+                <option value="trial_date_start">
+                    Fecha de inicio
+                </option>
+            
+                <option value="visa_expire">
+                    Fecha expiración visado
+                </option>
+            
+                <option value="date_end">
+                    Fecha final
+                </option>
+            
+                <option value="date_start">
+                    Fecha inicial
+                </option>
+            
+                <option value="id">
+                    ID
+                </option>
+            
+                <option value="notes">
+                    Notas
+                </option>
+            
+                <option value="permit_no">
+                    Nº Permiso
+                </option>
+            
+                <option value="visa_no">
+                    Núm de Visa
+                </option>
+            
+                <option value="working_hours">
+                    Planificación de trabajo
+                </option>
+            
+                <option value="job_id">
+                    Puesto de Trabajo
+                </option>
+            
+                <option value="name">
+                    Ref. de Contrato
+                </option>
+            
+                <option value="wage">
+                    Salario
+                </option>
+            
+                <option value="type_id">
+                    Tipo de contrato
+                </option>
+            
+                <option value="advantages">
+                    Ventajas
+                </option>
+            
+                <option value="write_uid">
+                    Última actualización de
+                </option>
+            
+                <option value="write_date">
+                    Última actualización en
+                </option>
+            
+        </select>
+        <select class="searchview_extended_prop_op"><option value="=">Es igual a</option><option value="!=">No es igual a</option><option value="&gt;">Mayor que</option><option value="&lt;">menor que</option><option value="&gt;=">mayor o igual que</option><option value="&lt;=">menor o igual que</option><option value="∃">está configurado</option><option value="∄">no está configurado</option></select>
+        <span class="searchview_extended_prop_value"><span><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723646">
+        <input type="text" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span></span>
+        <a class="searchview_extended_delete_prop button">x</a>
+    </li></ul>
+        <button type="button" class="oe_add_condition button">Agregar condición</button><br>
+        <button type="submit" class="oe_apply">Aplicar</button>
+    </form>
+</div><div class="oe_searchview_dashboard">
+    <h4>Añadir al tablero</h4>
+    <form>
+        <p><input placeholder="Título del nuevo elemento del tablero"></p>
+        <button type="submit" class="oe_apply">Añadir</button>
+    </form>
+</div></div>
+</div></div>
+                    
+                        <div class="oe_view_manager_view_list" style="display: block;"><div class="oe_list oe_view" style="display: block;"><table class="oe_list_content">
+    
+    <thead>
+        
+        <tr class="oe_list_header_columns">
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+            <th width="1">
+                <input type="checkbox" class="oe_list_record_selector">
+            </th>
+            
+                <th class="oe_list_header_char oe_sortable" data-id="name"><div>
+                    Ref. de Contrato
+                </div></th>
+            
+                <th class="oe_list_header_many2one oe_sortable" data-id="employee_id"><div>
+                    Empleado
+                </div></th>
+            
+                <th class="oe_list_header_many2one oe_sortable" data-id="type_id"><div>
+                    Tipo de contrato
+                </div></th>
+            
+                <th class="oe_list_header_many2one oe_sortable" data-id="job_id"><div>
+                    Puesto de Trabajo
+                </div></th>
+            
+                <th class="oe_list_header_many2one oe_sortable" data-id="working_hours"><div>
+                    Planificación de trabajo
+                </div></th>
+            
+                <th class="oe_list_header_date oe_sortable" data-id="date_start"><div>
+                    Fecha inicial
+                </div></th>
+            
+                <th class="oe_list_header_date oe_sortable" data-id="date_end"><div>
+                    Fecha final
+                </div></th>
+            
+                
+            
+            
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td><td class="oe_list_footer oe_number">
+            </td>
+            
+        </tr>
+    </tfoot>
+<tbody><tr><th class="oe_list_record_selector"></th><td title="Ref. de Contrato">&nbsp;</td><td title="Empleado">&nbsp;</td><td title="Tipo de contrato">&nbsp;</td><td title="Puesto de Trabajo">&nbsp;</td><td title="Planificación de trabajo">&nbsp;</td><td title="Fecha inicial">&nbsp;</td><td title="Fecha final">&nbsp;</td></tr><tr><th class="oe_list_record_selector"></th><td title="Ref. de Contrato">&nbsp;</td><td title="Empleado">&nbsp;</td><td title="Tipo de contrato">&nbsp;</td><td title="Puesto de Trabajo">&nbsp;</td><td title="Planificación de trabajo">&nbsp;</td><td title="Fecha inicial">&nbsp;</td><td title="Fecha final">&nbsp;</td></tr><tr><th class="oe_list_record_selector"></th><td title="Ref. de Contrato">&nbsp;</td><td title="Empleado">&nbsp;</td><td title="Tipo de contrato">&nbsp;</td><td title="Puesto de Trabajo">&nbsp;</td><td title="Planificación de trabajo">&nbsp;</td><td title="Fecha inicial">&nbsp;</td><td title="Fecha final">&nbsp;</td></tr><tr><th class="oe_list_record_selector"></th><td title="Ref. de Contrato">&nbsp;</td><td title="Empleado">&nbsp;</td><td title="Tipo de contrato">&nbsp;</td><td title="Puesto de Trabajo">&nbsp;</td><td title="Planificación de trabajo">&nbsp;</td><td title="Fecha inicial">&nbsp;</td><td title="Fecha final">&nbsp;</td></tr></tbody></table></div></div>
+                    
+                        <div class="oe_view_manager_view_form" style="display: none;"><div class="oe_formview oe_view oe_form_editable" style="opacity: 1; display: none;">
+        <div class="oe_form_buttons"></div>
+        <div class="oe_form_sidebar"></div>
+        <div class="oe_form_pager"></div>
+        <div class="oe_form_container"><div class="oe_form"><div class="">
+    <div class="oe_form_sheetbg">
+        <div class="oe_form_sheet oe_form_sheet_width">
+        <div class="oe_title"><label class="oe_form_label oe_align_right oe_edit_only" for="oe-field-input-124">
+        Ref. de Contrato
+    </label><h1><span class="oe_form_field oe_form_field_char oe_form_required">
+        
+            <input type="text" placeholder="Ref. de Contrato" id="oe-field-input-124">
+        
+        
+    </span></h1></div><table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="50%" class="oe_form_group_cell" colspan="1"><table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-125">
+        Empleado
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+        
+        
+            <a tabindex="-1" href="#" draggable="false" class="oe_m2o_cm_button oe_e" style="display: none;">/</a>
+            <div>
+                <input type="text" id="oe-field-input-125" class="ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                <span class="oe_m2o_drop_down_button">
+                    <img src="http://192.168.0.103:8069/web/static/src/img/down-arrow.png" draggable="false">
+                </span>
+            </div>
+        
+    </span></td></tr><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-126">
+        Puesto de Trabajo
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_many2one oe_form_field_with_button">
+        
+        
+            <a tabindex="-1" href="#" draggable="false" class="oe_m2o_cm_button oe_e" style="display: none;">/</a>
+            <div>
+                <input type="text" id="oe-field-input-126" class="ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                <span class="oe_m2o_drop_down_button">
+                    <img src="http://192.168.0.103:8069/web/static/src/img/down-arrow.png" draggable="false">
+                </span>
+            </div>
+        
+    </span></td></tr></tbody></table></td><td width="50%" class="oe_form_group_cell oe_group_right" colspan="1"><table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-127">
+        Tipo de contrato
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+        
+        
+            <a tabindex="-1" href="#" draggable="false" class="oe_m2o_cm_button oe_e" style="display: inline;">/</a>
+            <div>
+                <input type="text" id="oe-field-input-127" class="ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                <span class="oe_m2o_drop_down_button">
+                    <img src="http://192.168.0.103:8069/web/static/src/img/down-arrow.png" draggable="false">
+                </span>
+            </div>
+        
+    </span></td></tr></tbody></table></td></tr></tbody></table><div class="oe_clear ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="oe_notebook ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+            <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="notebook_page_128" aria-labelledby="ui-id-31" aria-selected="true">
+                <a href="#notebook_page_128" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-31">
+                    Información
+                </a>
+            </li><li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="notebook_page_133" aria-labelledby="ui-id-32" aria-selected="false">
+                <a href="#notebook_page_133" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-32">
+                    Permiso de trabajo
+                </a>
+            </li>
+        </ul>
+    <div class="oe_notebook_page  ui-tabs-panel ui-widget-content ui-corner-bottom" id="notebook_page_128" aria-labelledby="ui-id-31" role="tabpanel" style="display: block;" aria-expanded="true" aria-hidden="false">
+    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="50%" class="oe_form_group_cell" colspan="1"><div class="oe_horizontal_separator oe_clear ">
+        Salario y complementos
+    </div>
+
+    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label_help oe_align_right" for="oe-field-input-129" data-original-title="" title="">
+        Salario
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_float oe_form_required">
+        
+            <input type="text" id="oe-field-input-129">
+        
+        
+    </span></td></tr><tr class="oe_form_group_row"><td width="100%" class="oe_form_group_cell" colspan="2"><div class="oe_form_field oe_form_field_text">
+        
+            <textarea placeholder="Complementos..." name="advantages" rows="6" class="field_text" style="height: 133px; overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>            
+        
+        
+    </div></td></tr></tbody></table></td><td width="50%" class="oe_form_group_cell oe_group_right" colspan="1"><div class="oe_horizontal_separator oe_clear ">
+        Duración
+    </div>
+
+    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-130">
+        Duración del periodo de prueba
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><div><span class="oe_form_field oe_datepicker_root oe_form_field_date oe_inline"><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723647">
+        <input type="text" name="trial_date_start" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span> - <span class="oe_form_field oe_datepicker_root oe_form_field_date oe_inline"><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723648">
+        <input type="text" name="trial_date_end" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span></div></td></tr><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-131">
+        Duración
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><div><span class="oe_form_field oe_datepicker_root oe_form_field_date oe_inline oe_form_required"><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723649">
+        <input type="text" name="date_start" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span> - <span class="oe_form_field oe_datepicker_root oe_form_field_date oe_inline"><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723650">
+        <input type="text" name="date_end" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span></div></td></tr><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-132">
+        Planificación de trabajo
+    </label></td><td width="99%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_many2one oe_form_field_with_button">
+        
+        
+            <a tabindex="-1" href="#" draggable="false" class="oe_m2o_cm_button oe_e" style="display: none;">/</a>
+            <div>
+                <input type="text" id="oe-field-input-132" class="ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                <span class="oe_m2o_drop_down_button">
+                    <img src="http://192.168.0.103:8069/web/static/src/img/down-arrow.png" draggable="false">
+                </span>
+            </div>
+        
+    </span></td></tr></tbody></table></td></tr></tbody></table><div class="oe_horizontal_separator oe_clear ">
+        Notas
+    </div><div class="oe_form_field oe_form_field_text">
+        
+            <textarea name="notes" rows="6" class="field_text" style="height: 133px; overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>            
+        
+        
+    </div></div><div class="oe_notebook_page  ui-tabs-panel ui-widget-content ui-corner-bottom" id="notebook_page_133" aria-labelledby="ui-id-32" role="tabpanel" style="display: none;" aria-expanded="false" aria-hidden="true">
+    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group "><tbody><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-134">
+        Núm de Visa
+    </label></td><td width="49%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_char">
+        
+            <input type="text" id="oe-field-input-134">
+        
+        
+    </span></td><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-135">
+        Nº Permiso
+    </label></td><td width="49%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_form_field_char">
+        
+            <input type="text" id="oe-field-input-135">
+        
+        
+    </span></td></tr><tr class="oe_form_group_row"><td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1"><label class=" oe_form_label oe_align_right" for="oe-field-input-136">
+        Fecha expiración visado
+    </label></td><td width="33%" class="oe_form_group_cell" colspan="1"><span class="oe_form_field oe_datepicker_root oe_form_field_date"><span>
+        
+        <input type="text" style="display: none;" disabled="disabled" class="oe_datepicker_container hasDatepicker" id="dp1445459723651">
+        <input type="text" name="visa_expire" class="oe_datepicker_master"><img width="16" height="16" border="0" src="http://192.168.0.103:8069/web/static/src/img/ui/field_calendar.png" title="Seleccionar fecha" draggable="false" class="oe_input_icon oe_datepicker_trigger">
+    </span></span></td></tr></tbody></table></div></div></div>
+    </div></div></div></div>
+    </div></div>
+                    
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-33" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-34" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-35" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-36" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+            </div>
+        </div>
+    </div>
+     
+ {% endblock %}
+

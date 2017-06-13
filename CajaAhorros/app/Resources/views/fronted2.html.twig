@@ -1,0 +1,84 @@
+{% extends '::fronted.html.twig' %}
+
+{% block title %}Con Quito{% endblock %}            
+                 
+
+                                
+{% block leftpanel %}
+
+    <div groups="base.group_user,base.group_portal,share.group_shared">
+
+        <a href="#" class="oe_logo">
+            {#<span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>#}
+            <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+        </a>
+        <div>
+            <div>
+                <div class="oe_secondary_menus_container">
+
+                    <div data-menu-parent="99" class="oe_secondary_menu" style="">
+
+                        <!-- <div class="oe_secondary_menu_section">
+                            Registro
+                        </div> -->
+
+                        <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+
+                            <li id="VerLibroDiario">
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('libro') }}">
+                                <span class="oe_menu_text">
+                                    Ver Libro Diario
+                                </span>
+                                </a>
+                            </li>
+
+                            <li id="Libro">
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('libro_create') }}">
+                                <span class="oe_menu_text">
+                                    Registrar Transacción
+                                </span>
+                                </a>
+                            </li>
+
+
+                            
+                            <!--<li id="veraportesocios">
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('aportesocio') }}">
+                                <span class="oe_menu_text">
+                                    Aportes de Socios
+                                </span>
+                                </a>
+                            </li>
+                            
+                            <li id="verresaportesocios">
+                                <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('resumenAportes',{'mes':01,'ano':2016}) }}">
+                                <span class="oe_menu_text">
+                                    Resumen Aportes de Socios
+                                </span>
+                                </a>
+                            </li>-->
+
+
+                            
+                        </ul>
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="oe_footer">
+            Desarrollado por:<br><a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+        </div>
+
+    </div>
+
+{% endblock %}
+            
+   

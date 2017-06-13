@@ -1,0 +1,183 @@
+modulos_personas_metodoamortizacionahorro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/metodoamortizacionahorro.yml"
+    prefix:   /metodoamortizacionahorro
+
+modulos_personas_estadoahorro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/estadoahorro.yml"
+    prefix:   /estadoahorro
+
+modulos_personas_tipoahorro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipoahorro.yml"
+    prefix:   /tipoahorro
+
+modulos_personas_estadocreditos:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/estadocreditos.yml"
+    prefix:   /estadocreditos
+
+modulos_personas_libro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/libro.yml"
+    prefix:   /libro
+
+modulos_personas_cargo:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/cargo.yml"
+    prefix:   /cargo
+
+modulos_personas_pagocuotacredito:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/pagocuotacredito.yml"
+    prefix:   /pagocuotacredito
+
+modulos_personas_caja:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/caja.yml"
+    prefix:   /caja
+
+modulos_personas_cajapersona:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/cajapersona.yml"
+    prefix:   /cajapersona
+
+modulos_personas_productodocumentoafectacion:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/productodocumentoafectacion.yml"
+    prefix:   /productodocumentoafectacion
+
+modulos_personas_documentocontable:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/documentocontable.yml"
+    prefix:   /documentocontable
+
+modulos_personas_tipoproductocontable:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipoproductocontable.yml"
+    prefix:   /tipoproductocontable
+
+modulos_personas_reglaahorro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/reglaahorro.yml"
+    prefix:   /reglaahorro
+
+modulos_personas_ahorro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/ahorro.yml"
+    prefix:   /ahorro
+
+modulos_personas_metododeamortizacion:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/metododeamortizacion.yml"
+    prefix:   /metododeamortizacion
+
+modulos_personas_productocontablecuenta:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/productocontablecuenta.yml"
+    prefix:   /productocontablecuenta
+
+modulos_personas_productocontable:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/productocontable.yml"
+    prefix:   /productocontable
+
+modulos_personas_estadodocumento:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/estadodocumento.yml"
+    prefix:   /estadodocumento
+
+modulos_personas_niveldecuenta:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/niveldecuenta.yml"
+    prefix:   /niveldecuenta
+
+modulos_personas_operador:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/operador.yml"
+    prefix:   /operador
+
+modulos_personas_cuenta:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/cuenta.yml"
+    prefix:   /cuenta
+
+modulos_personas_tipodecuenta:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipodecuenta.yml"
+    prefix:   /tipodecuenta
+
+modulos_personas_creditos:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/creditos.yml"
+    prefix:   /creditos
+
+modulos_personas_reglasdecreditos:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/reglasdecreditos.yml"
+    prefix:   /reglasdecreditos
+
+modulos_personas_tipodeparcialidad:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipodeparcialidad.yml"
+    prefix:   /tipodeparcialidad
+
+modulos_personas_tipodecobro:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipodecobro.yml"
+    prefix:   /tipodecobro
+
+modulos_personas_destinofinanciamiento:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/destinofinanciamiento.yml"
+    prefix:   /destinofinanciamiento
+
+modulos_personas_productodecreditos:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/productodecreditos.yml"
+    prefix:   /productodecreditos
+
+modulos_personas_frecuenciadepagos:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/frecuenciadepagos.yml"
+    prefix:   /frecuenciadepagos
+
+modulos_personas_empresa:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/empresa.yml"
+    prefix:   /empresa
+
+modulos_personas_entidad:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/entidad.yml"
+    prefix:   /entidad
+
+modulos_personas_persona:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/persona.yml"
+    prefix:   /persona
+
+modulos_personas_parroquia:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/parroquia.yml"
+    prefix:   /parroquia
+
+modulos_personas_provincia:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/provincia.yml"
+    prefix:   /provincia
+
+modulos_personas_estado:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/estado.yml"
+    prefix:   /estado
+
+modulos_personas_region:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/region.yml"
+    prefix:   /region
+
+modulos_personas_ciudad:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/ciudad.yml"
+    prefix:   /ciudad
+
+modulos_personas_pais:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/pais.yml"
+    prefix:   /pais
+
+modulos_personas_tipodocidentificacion:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipodocidentificacion.yml"
+    prefix:   /tipodocidentificacion
+
+modulos_personas_genero:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/genero.yml"
+    prefix:   /genero
+
+modulos_personas_regimenfiscal:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/regimenfiscal.yml"
+    prefix:   /regimenfiscal
+
+modulos_personas_regimenmatrimonial:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/regimenmatrimonial.yml"
+    prefix:   /regimenmatrimonial
+
+modulos_personas_tipopersona:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/tipopersona.yml"
+    prefix:   /tipopersona
+
+modulos_personas_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ModulosPersonasBundle:Default:index }
+
+modulos_personas_ahorrosimular:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/ahorrosimular.yml"
+    prefix:   /ahorrosimular
+
+modulos_personas_creditossimular:
+    resource: "@ModulosPersonasBundle/Resources/config/routing/creditossimular.yml"
+    prefix:   /creditossimular

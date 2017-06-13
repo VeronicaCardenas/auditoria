@@ -1,0 +1,42 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Regimen matrimonial{% endblock %}
+{% block encabezado %}Regimen matrimonial{% endblock %}
+
+{% block contenedor %}  
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Regimen</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('regimenmatrimonial_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.regimen }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('regimenmatrimonial_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('regimenmatrimonial_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('regimenmatrimonial_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

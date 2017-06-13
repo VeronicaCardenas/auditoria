@@ -1,0 +1,30 @@
+reglasdecreditos:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:index" }
+
+reglasdecreditos_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:show" }
+
+reglasdecreditos_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:new" }
+
+reglasdecreditos_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:create" }
+
+
+reglasdecreditos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:edit" }
+
+reglasdecreditos_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:update" }
+    methods:  [POST, PUT]
+
+reglasdecreditos_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:ReglasDeCreditos:delete",id:""}
+    

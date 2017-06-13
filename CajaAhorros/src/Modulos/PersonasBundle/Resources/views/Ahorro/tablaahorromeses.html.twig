@@ -1,0 +1,143 @@
+
+<div class="oe_form_sheetbg">
+    <div class="oe_form_sheet oe_form_sheet_width">
+        <h3>{{ entity.persona }} - {{ entity.tipoAhorro }} {{ entity.id }} </h3>
+        <br>
+        {% set cantPagada=0 %}
+        {% set intereses=0 %}
+        {% for pagorealizado in pagosrealizados %}
+            {% set cantPagada = cantPagada + (pagorealizado.cuota * pagorealizado.tipo) %}
+            {% set intereses = intereses + pagorealizado.interes %}
+        {% endfor %}
+
+        <br>
+        <table >
+            <thead>
+            <th width="25%" class="tabla_right_align"></th>
+            <th width="25%" class="tabla_left_align"></th>
+            <th width="25%" class="tabla_right_align"></th>
+            <th width="25%" class="tabla_left_align"></th>
+
+
+            </thead>
+            <tbody>
+            <tr class="oe_header_row oe_header_row_top" style="margin-bottom: 5px !important; height: 30px !important;">
+
+            <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                <h3>
+                        Valor Autorizado:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        $ {{ (entity.valorAhorrar )| number_format(2, '.' , ',' ) }}
+                    </h3>
+                </td>
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                <h3>
+                        Valor en Caja:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        $ {{ (intereses + cantPagada) }}
+                        {#$ {{ (intereses + cantPagada) |  round(2, 'ceil'))| number_format(2, '.' , ',' ) }}#}
+                    </h3>
+                </td>
+            </tr>
+            <tr class="oe_header_row oe_header_row_top" style="margin-bottom: 5px !important; height: 30px !important;">
+
+            <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                <h3>
+                        Valor sin Interés:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                <h3>
+                        $ {{ (cantPagada )| number_format(2, '.' , ',' ) }}
+                    </h3>
+                </td>
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Interés Ganado:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                <h3>
+                        $ {{ intereses }}
+                    </h3>
+                </td>
+            </tr>
+            <tr class="oe_header_row oe_header_row_top" style="margin-bottom: 5px !important; height: 30px !important;">
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Valor máximo a Ingresar:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="vertical-align: middle !important;">
+                    <h3>
+                        $ {{ entity.valorAhorrar - cantPagada }}
+                    </h3>
+                </td>
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Disponible para Extracción:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="vertical-align: middle !important;">
+                    <h3>
+                        $ {{ posibleExtraccion }}
+                    </h3>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
+        <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+        <h2>Tabla de movimientos realizados</h2>
+        <table class="table">
+            <thead>
+            <th width="150px" class="tabla_center_align">Fecha</th>
+            <th width="150px" class="tabla_center_align">Operación</th>
+            <th width="250px" class="tabla_center_align">Valor cuota</th>
+            <th width="250px" class="tabla_center_align">Interés Ganado</th>
+            </thead>
+            <tbody>
+            {% for pagorealizado in pagosrealizados %}
+                <tr>
+                    <td width=""
+                        class="tabla_center_align"> {{ pagorealizado.fechaDeEntrada | date('d/m/Y') }}</td>
+                    <td width=""
+                        class="tabla_left_align">&nbsp;&nbsp; {{ pagorealizado.tipo == 1 ? "Depósito" : "Retiro" }}</td>
+                    <td width="" class="tabla_right_align">
+                        $ {{ (pagorealizado.cuota   )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">  {{ pagorealizado.interes }} &nbsp;&nbsp;</td>
+                        {#{$ {{ (pagorealizado.interes   |  round(2, 'ceil'))| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>}#}
+                </tr>
+            {% endfor %}
+            <tr>
+                <td width=""
+                    class="tabla_center_align"> </td>
+                <td width=""
+                    class="tabla_left_align" style="font-weight: bold !important; font-size: 14px !important;">&nbsp;&nbsp; Totales</td>
+                <td width="" class="tabla_right_align" style="font-weight: bold !important; font-size: 14px !important;">
+                    $ {{ (cantPagada   )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                <td width="" class="tabla_right_align" style="font-weight: bold !important; font-size: 14px !important;">
+                    $ {{ intereses }}&nbsp;&nbsp;</td>
+                    {#$ {{ (intereses   |  round(2, 'ceil'))| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>#}
+            </tr>
+            </tbody>
+        </table>
+
+        <br><br><br><br><br><br><br><br><br>
+    </div>
+</div>
+<script>
+    var pagocouta = "{{ pagocuota }}";
+    var montocredito = "{{ entity.valorAhorrar }}";
+    var ahorroValorEnCaja = "{{ entity.valorEnCaja }}";
+    var ahorroValorNetoEnCaja = "{{ intereses + cantPagada }}";
+    var ahorroPosibleExtraccion = "{{ posibleExtraccion }}";
+</script>

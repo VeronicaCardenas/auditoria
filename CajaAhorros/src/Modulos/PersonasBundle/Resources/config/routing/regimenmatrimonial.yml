@@ -1,0 +1,30 @@
+regimenmatrimonial:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:index" }
+
+regimenmatrimonial_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:show" }
+
+regimenmatrimonial_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:new" }
+
+regimenmatrimonial_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:create" }
+    methods:  POST
+
+regimenmatrimonial_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:edit" }
+
+regimenmatrimonial_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:update" }
+    methods:  [POST, PUT]
+
+regimenmatrimonial_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:RegimenMatrimonial:delete" }
+    methods:  [POST, DELETE]

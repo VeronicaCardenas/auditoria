@@ -1,0 +1,880 @@
+{% extends '::fronted6.html.twig' %}
+{% block title %}Datos de la persona {% endblock %}
+{% block encabezado %}Datos de la persona {% endblock %}
+
+
+{% block contenedor %}
+    <script>
+        $(function(){
+            $(".file-3").fileinput({
+                showCaption: true,
+                browseClass: "btn btn-primary",
+                browseLabel:"...",
+                removeLabel:"",
+                showUpload:false,
+                fileType: "any"
+            });
+        });
+
+        $(function(){
+            $('.datetimepicker1').datetimepicker({
+                //viewMode: 'years',
+
+                //format: 'DD/MM/YYYY HH:mm',
+                locale: 'es'
+            });
+
+            $(document).on("click","#aportes",function(){
+                $('#aportes').attr("href","{{ path('aportes',{'personalist':''}) }}" + '/' + "{{ entity.id }}");
+            });
+            $(document).on("click","#morocidad",function(){
+                $('#morocidad').attr("href","{{ path('persona_mora',{'id':''}) }}" + '/' + "{{ entity.id }}");
+            });
+            $(document).on("click","#carteracredito",function(){
+                $('#carteracredito').attr("href","{{ path('persona_carteracredito',{'parametro':''},{'id':''}) }}" + '/' + 1 + '/' + "{{ entity.id }}");
+            });
+            $(document).on("click","#carteraahorro",function(){
+                $('#carteraahorro').attr("href","{{ path('persona_carteraahorro',{'parametro':''},{'id':''}) }}" + '/' + 1+ '/' + "{{ entity.id }}");
+            });
+
+        });
+
+        //$("#modulos_personasbundle_persona_region option[value="+ 1 +"]").prop("selected",true);
+        //$("#modulos_personasbundle_persona_provincia option[value="+ 17 +"]").prop("selected",true);
+        //$("#modulos_personasbundle_persona_ciudad option[value="+ 178 +"]").prop("selected",true);
+
+        $(document).ready(function() {
+            $("#Personas").addClass("active");
+            $("#Socios").addClass("active");
+
+            var tipoID$=$("#modulos_personasbundle_persona_tipo_identificacion").val();
+            if(tipoID$!=2){
+                $("#Guardar").attr('disabled',false);
+                $("#cedula").hide();
+            }else{
+                var valorCedula = $("#modulos_personasbundle_persona_ci").val();
+                var validacion=validarCedula(valorCedula);
+                if(validacion=='ok'){
+                    $("#Guardar").attr('disabled',false);
+                    $("#cedula").hide();
+                }
+                else{
+                    $("#Guardar").attr('disabled',true);
+                    $("#cedula").html('<span id="" class="label label-warning">'+validacion+'</span>')
+                    $("#cedula").show();
+                }
+            }
+            $("#modulos_personasbundle_persona_tipo_identificacion").change(function(){
+                var tipoID$ = $(this).val();
+                if(tipoID$!=2){
+                    $("#Guardar").attr('disabled',false);
+                    $("#cedula").hide();
+                }else{
+                    var valorCedula =  $("#modulos_personasbundle_persona_ci").val();
+                    var validacion=validarCedula(valorCedula);
+                    if(validacion=='ok'){
+                        $("#Guardar").attr('disabled',false);
+                        $("#cedula").hide();
+                    }
+                    else{
+                        $("#Guardar").attr('disabled',true);
+                        $("#cedula").html('<span id="" class="label label-warning">'+validacion+'</span>')
+                        $("#cedula").show();
+                    }
+                }
+
+            });
+
+            $("#modulos_personasbundle_persona_ci").on('keyup', function(){
+                var tipoID$=$("#modulos_personasbundle_persona_tipo_identificacion").val();
+                if(tipoID$!=2){
+                    $("#Guardar").attr('disabled',false);
+                    $("#cedula").hide();
+                }else{
+                    var valorCedula = $(this).val();
+                    var validacion=validarCedula(valorCedula);
+                    if(validacion=='ok'){
+                        $("#Guardar").attr('disabled',false);
+                        $("#cedula").hide();
+                    }
+                    else{
+                        $("#Guardar").attr('disabled',true);
+                        $("#cedula").html('<span id="" class="label label-warning">'+validacion+'</span>')
+                        $("#cedula").show();
+                    }
+                }
+
+
+
+            });
+
+
+
+            /*$("#modulos_personasbundle_persona_region").change(function(){
+                var region=$(this).val();
+                $(".provincia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + region+ '/' + 1, function(response, status, xhr) {
+                    if(status == "success"){
+                        var provincia=$("#provinciasSel :selected").val();
+                        $("#provinciasSel").change(function(){
+                            var provincia=$("#provinciasSel :selected").val();
+                            $(".ciudad").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + provincia+ '/' + 2, function(response, status, xhr) {
+                                if(status == "success"){
+                                    var ciudad=$("#ciudadesSel :selected").val();
+                                    $("#ciudadesSel").change(function(){
+                                        var ciudad=$("#ciudadesSel :selected").val();
+                                        $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                            if(status == "success"){
+                                                var parroquia=$("#parroquiasSel :selected").val();
+                                                $(".parroquiaOriginal").show();
+                                                $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                                $(".parroquiaOriginal").hide();
+                                            }
+
+                                        });
+                                    });
+                                    $(".ciudadOriginal").show();
+                                    $("#modulos_personasbundle_persona_ciudad option[value="+ ciudad +"]").prop("selected",true);
+                                    $(".ciudadOriginal").hide();
+                                }
+
+                            });
+                        });
+
+                        $(".provinciaOriginal").show();
+                        $("#modulos_personasbundle_persona_provincia option[value="+ provincia +"]").prop("selected",true);
+                        $(".provinciaOriginal").hide();
+                        $("#provinciasSel").change(function(){
+                            var provincia=$("#provinciasSel :selected").val();
+                            $(".ciudad").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + provincia+ '/' + 2, function(response, status, xhr) {
+                                if(status == "success"){
+                                    var ciudad=$("#ciudadesSel :selected").val();
+                                    $(".ciudadOriginal").show();
+                                    $("#modulos_personasbundle_persona_ciudad option[value="+ ciudad +"]").prop("selected",true);
+                                    $(".ciudadOriginal").hide();
+                                    $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                        if(status == "success"){
+                                            var parroquia=$("#parroquiasSel :selected").val();
+                                            $(".parroquiaOriginal").show();
+                                            $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                            $(".parroquiaOriginal").hide();
+                                        }
+
+                                    });
+                                    $("#ciudadesSel").change(function(){
+                                        var ciudad=$("#ciudadesSel :selected").val();
+                                        $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                            if(status == "success"){
+                                                var parroquia=$("#parroquiasSel :selected").val();
+                                                $(".parroquiaOriginal").show();
+                                                $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                                $(".parroquiaOriginal").hide();
+                                            }
+
+                                        });
+                                    });
+                                }
+
+                            });
+                        });
+                        $(".ciudad").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + provincia+ '/' + 2, function(response, status, xhr) {
+                            if(status == "success"){
+                                var ciudad=$("#ciudadesSel :selected").val();
+                                $(".ciudadOriginal").show();
+                                $("#modulos_personasbundle_persona_ciudad option[value="+ ciudad +"]").prop("selected",true);
+                                $(".ciudadOriginal").hide();
+                                $("#ciudadesSel").change(function(){
+                                    var ciudad=$("#ciudadesSel :selected").val();
+                                    $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                        if(status == "success"){
+                                            var parroquia=$("#parroquiasSel :selected").val();
+                                            $(".parroquiaOriginal").show();
+                                            $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                            $(".parroquiaOriginal").hide();
+                                        }
+
+                                    });
+                                });
+                                $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                    if(status == "success"){
+                                        var parroquia=$("#parroquiasSel :selected").val();
+                                        $(".parroquiaOriginal").show();
+                                        $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                        $(".parroquiaOriginal").hide();
+                                    }
+
+                                });
+                            }
+
+                        });
+                    }
+
+                });
+            });
+
+            var region=$("#modulos_personasbundle_persona_region").val();
+            if(region){
+                $(".provincia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + region + '/' + 1, function (response, status, xhr) {
+                    if (status == "success") {
+                        $(".provinciaOriginal").hide();
+                        var provincia=$("#modulos_personasbundle_persona_provincia").val();
+                        if(provincia){
+                            $("#provinciasSel option[value="+ provincia +"]").prop("selected",true);
+                            $(".ciudad").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + provincia + '/' + 2, function (response, status, xhr) {
+                                if (status == "success") {
+                                    $(".ciudadOriginal").hide();
+                                    var ciudad=$("#modulos_personasbundle_persona_ciudad").val();
+                                    if(ciudad){
+                                        $("#ciudadesSel option[value="+ ciudad +"]").prop("selected",true);
+                                        $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad + '/' + 3, function (response, status, xhr) {
+                                            if (status == "success") {
+                                                $(".parroquiaOriginal").hide();
+                                                var parroquia=$("#modulos_personasbundle_persona_parroquia").val();
+                                                if(parroquia){
+                                                    $("#parroquiasSel option[value="+ parroquia +"]").prop("selected",true);
+                                                }
+
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }*/
+
+
+            $(document).on("ajaxStop",function(){
+                $("#provinciasSel").change(function() {
+                    var provincia = $(this).val();
+                    $(".ciudad").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + provincia + '/' + 2, function (response, status, xhr) {
+                        if (status == "success") {
+                            var ciudad=$("#ciudadesSel :selected").val();
+                                $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad+ '/' + 3, function(response, status, xhr) {
+                                    if(status == "success"){
+                                        var parroquia=$("#parroquiasSel :selected").val();
+                                        $(".parroquiaOriginal").show();
+                                        $("#modulos_personasbundle_persona_parroquia option[value="+ parroquia +"]").prop("selected",true);
+                                        $(".parroquiaOriginal").hide();
+                                    }
+
+                            });
+                            $(".ciudadOriginal").show();
+                            $("#modulos_personasbundle_persona_ciudad option[value="+ ciudad +"]").prop("selected",true);
+                            $(".ciudadOriginal").hide();
+                        }
+                    });
+                    $(".provinciaOriginal").show();
+                    $("#modulos_personasbundle_persona_provincia option[value="+ provincia +"]").prop("selected",true);
+                    $(".provinciaOriginal").hide();
+                });
+
+                $("#ciudadesSel").change(function() {
+                    var ciudad = $(this).val();
+                    $(".parroquia").load("{{ path('persona_cargarubicacion',{'idPadre':''},{'tipo':''})}}" + '/' + ciudad + '/' + 3, function (response, status, xhr) {
+                        if (status == "success") {
+                        }
+                    });
+                    $(".ciudadOriginal").show();
+                    $("#modulos_personasbundle_persona_ciudad option[value="+ ciudad +"]").prop("selected",true);
+                    $(".ciudadOriginal").hide();
+
+                });
+            });
+
+
+        });
+        function validarCedula(cedula){
+            /**
+             * Algoritmo para validar cedulas de Ecuador
+             * @Author : Victor Diaz De La Gasca.
+             * @Fecha  : Quito, 15 de Marzo del 2013
+             * @Email  : vicmandlagasca@gmail.com
+             * @Pasos  del algoritmo
+             * 1.- Se debe validar que tenga 10 numeros
+             * 2.- Se extrae los dos primero digitos de la izquierda y compruebo que existan las regiones
+             * 3.- Extraigo el ultimo digito de la cedula
+             * 4.- Extraigo Todos los pares y los sumo
+             * 5.- Extraigo Los impares los multiplico x 2 si el numero resultante es mayor a 9 le restamos 9 al resultante
+             * 6.- Extraigo el primer Digito de la suma (sumaPares + sumaImpares)
+             * 7.- Conseguimos la decena inmediata del digito extraido del paso 6 (digito + 1) * 10
+             * 8.- restamos la decena inmediata - suma / si la suma nos resulta 10, el decimo digito es cero
+             * 9.- Paso 9 Comparamos el digito resultante con el ultimo digito de la cedula si son iguales todo OK sino existe error.
+             */
+
+            //Preguntamos si la cedula consta de 10 digitos
+            if(cedula.length == 10){
+
+                //Obtenemos el digito de la region que sonlos dos primeros digitos
+                var digito_region = cedula.substring(0,2);
+
+                //Pregunto si la region existe ecuador se divide en 24 regiones
+                if( digito_region >= 1 && digito_region <=24 ){
+
+                    // Extraigo el ultimo digito
+                    var ultimo_digito   = cedula.substring(9,10);
+
+                    //Agrupo todos los pares y los sumo
+                    var pares = parseInt(cedula.substring(1,2)) + parseInt(cedula.substring(3,4)) + parseInt(cedula.substring(5,6)) + parseInt(cedula.substring(7,8));
+
+                    //Agrupo los impares, los multiplico por un factor de 2, si la resultante es > que 9 le restamos el 9 a la resultante
+                    var numero1 = cedula.substring(0,1);
+                    var numero1 = (numero1 * 2);
+                    if( numero1 > 9 ){ var numero1 = (numero1 - 9); }
+
+                    var numero3 = cedula.substring(2,3);
+                    var numero3 = (numero3 * 2);
+                    if( numero3 > 9 ){ var numero3 = (numero3 - 9); }
+
+                    var numero5 = cedula.substring(4,5);
+                    var numero5 = (numero5 * 2);
+                    if( numero5 > 9 ){ var numero5 = (numero5 - 9); }
+
+                    var numero7 = cedula.substring(6,7);
+                    var numero7 = (numero7 * 2);
+                    if( numero7 > 9 ){ var numero7 = (numero7 - 9); }
+
+                    var numero9 = cedula.substring(8,9);
+                    var numero9 = (numero9 * 2);
+                    if( numero9 > 9 ){ var numero9 = (numero9 - 9); }
+
+                    var impares = numero1 + numero3 + numero5 + numero7 + numero9;
+
+                    //Suma total
+                    var suma_total = (pares + impares);
+
+                    //extraemos el primero digito
+                    var primer_digito_suma = String(suma_total).substring(0,1);
+
+                    //Obtenemos la decena inmediata
+                    var decena = (parseInt(primer_digito_suma) + 1)  * 10;
+
+                    //Obtenemos la resta de la decena inmediata - la suma_total esto nos da el digito validador
+                    var digito_validador = decena - suma_total;
+
+                    //Si el digito validador es = a 10 toma el valor de 0
+                    if(digito_validador == 10)
+                        var digito_validador = 0;
+
+                    //Validamos que el digito validador sea igual al de la cedula
+                    if(digito_validador == ultimo_digito){
+                        console.log('la cedula:' + cedula + ' es correcta');
+                        return 'ok';
+                    }else{
+                        console.log('la cedula:' + cedula + ' es incorrecta');
+                        return 'La cédula es incorrecta';
+                    }
+
+                }else{
+                    // imprimimos en consola si la region no pertenece
+                    console.log('Esta cedula no pertenece a ninguna region');
+                    return 'Esta cédula no pertenece a ninguna región';
+                }
+            }else{
+                //imprimimos en consola si la cedula tiene mas o menos de 10 digitos
+                console.log('Esta cedula tiene menos de 10 Digitos');
+                return 'La cédula debe tener 10 dígitos';
+            }
+        }
+    </script>
+
+    <form action="{{ path('persona_update',{'id':entity.id}) }}" class="" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_start(edit_form) }}
+        {{ form_errors(edit_form) }}
+
+        <div>
+            <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                <table class="oe_view_manager_header">
+                    <tbody><tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('persona')}}">Listado de personas</a> <span class="oe_fade">/</span> <span class="oe_breadcrumb_item">Modificar</span></span>
+                            </h2>
+                        </td>
+
+                    </tr>
+
+                    <tr class="oe_header_row">
+                        <td>
+                            <div class="oe_view_manager_buttons">
+                                <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                        <button  id="Guardar" type="submit" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Guardar</button>
+                                        <a  href="{{ path('persona') }}" class="oe_button oe_form_button_cancel" accesskey="D">Cancelar</a>
+                                        <label  href="{{ path('persona') }}" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                        <a type="button" id="aportes"  class="oe_button oe_list_add" href="#">Historial Aportaciones</a>
+                                        <a type="button" id="carteracredito"  class="oe_button oe_list_add" href="#">Historial Créditos</a>
+                                        <a type="button" id="carteraahorro"  class="oe_button oe_list_add" href="#">Historial Ahorros</a>
+                                        <a type="button" id="morocidad" class="oe_button oe_list_add" href="#"> Morosidad </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="oe_view_manager_wrapper">
+                    <div>
+
+                        <div class="oe_view_manager_view_form" style="display: block;">
+                            <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                                <div class="oe_form_container">
+                                    <div class="oe_form">
+                                        <div class="">
+                                            <header>
+                                                <ul class="oe_form_field_status oe_form_status" data-original-title="" title="">
+
+                                                    <li data-id="draft" class="oe_active">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="open" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="paid" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                </ul>
+                                                <div class="oe_clear"></div>
+                                            </header>
+
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Datos de la persona </label>
+                                                    </h1>
+                                                    {% if entity.rutaFoto != "" %}
+
+                                                        <img style="height: 63px;" src="{{ asset('bundles/PE/imagesuser/' ~ entity.rutaFoto) }}" class="img-polaroid"/>
+
+                                                    {% endif %}
+
+
+                                                    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                        <tbody>
+                                                        <tr class="oe_form_group_row">
+                                                            <td width="100%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                    <tbody>
+                                                                    
+                                                                      <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Tipo persona
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.tipo_persona,{'attr':{'title':'Seleccione el clasificador del registro SOCIO, CLIENTE, EMPRESA, OTROS'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Nombres
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.nombre,{'attr':{'title':'Introduzca el o los nombres de la persona'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Apellidos
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.primerApellido,{'attr':{'title':'Introduzca los apellidos de la persona'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                     <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Tipo identificación
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.tipo_identificacion,{'attr':{'title':'Seleccione el Tipo de identificación Cedula Identidad, Pasaporte VALIDADA'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                     <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Identificación
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{  form_widget(edit_form.ci,{'attr':{'title':'Introduzca la identificación'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                                 <span id="cedula"> </span>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Fecha de Nacimiento
+                                                                                <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div class="input-group">
+                                                                                      {{  form_widget(edit_form.fechaNacimiento,{'attr':{'title':'Seleccione la fecha de nacimiento'} }) }}
+                                                                                     <span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                     <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Género
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.genero,{'attr':{'title':'Seleccione el género'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Estado Civil
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.regimen_matrimonial,{'attr':{'title':'Seleccione el estado civil'} } ) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                      <tr class="oe_form_group_row">
+                                                                          <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                              <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                  Ubicación Geográfica
+                                                                              </label>
+                                                                          </td>
+                                                                          <td width="99%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                              <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                                  <tbody>
+                                                                                  <tr class="oe_form_group_row">
+                                                                                      <!--<td width="25%" class="oe_form_group_cell" colspan="1">
+                                                                                          <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                                              <tbody>
+                                                                                              <tr class="oe_form_group_row">
+                                                                                                  <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                                                      <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                                          Región
+                                                                                                      </label>
+                                                                                                  </td>
+
+                                                                                              </tr>
+
+                                                                                              <tr class="oe_form_group_row">
+
+
+                                                                                                  <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                                                      <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                                          <div class="regionOriginal">
+                                                                                                              {##}{ form_widget(edit_form.region,{'attr':{'title':' Ingrese la ubicación geográfica de su residencia'} }) }}
+                                                                                                              <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                                          </div>
+                                                                                                     </span>
+                                                                                                  </td>
+                                                                                              </tr>
+
+                                                                                              </tbody>
+                                                                                          </table>
+                                                                                      </td>-->
+                                                                                      <!--<td width="25%" class="oe_form_group_cell" colspan="1">
+                                                                                          <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                                              <tbody>
+                                                                                              <tr class="oe_form_group_row">
+                                                                                                  <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                                                      <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                                          Provincia
+                                                                                                      </label>
+                                                                                                  </td>
+
+                                                                                              </tr>
+
+                                                                                              <tr class="oe_form_group_row">
+
+                                                                                                  <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                                                      <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                                          <div class="provincia">
+
+                                                                                                          </div>
+                                                                                                          <div class="provinciaOriginal">
+                                                                                                              {##}{ form_widget(edit_form.provincia,{'attr':{'title':'Ingrese la ubicación geográfica de su residencia'} }) }}
+                                                                                                              <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                                          </div>
+                                                                                                     </span>
+                                                                                                  </td>
+                                                                                              </tr>
+
+                                                                                              </tbody>
+                                                                                          </table>
+                                                                                      </td>-->
+                                                                                      <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                                          <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                                              <tbody>
+                                                                                              <tr class="oe_form_group_row">
+                                                                                                  <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                                                      <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                                          Ciudad
+                                                                                                      </label>
+                                                                                                  </td>
+
+                                                                                              </tr>
+
+                                                                                              <tr class="oe_form_group_row">
+
+                                                                                                  <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                                                      <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                                           <div class="ciudad">
+
+                                                                                                           </div>
+                                                                                                          <div class="ciudadOriginal">
+                                                                                                              {{ form_widget(edit_form.ciudad,{'attr':{'title':'Ingrese la ubicación geográfica de su residencia'} }) }}
+                                                                                                              <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                                          </div>
+                                                                                                     </span>
+                                                                                                  </td>
+                                                                                              </tr>
+
+                                                                                              </tbody>
+                                                                                          </table>
+                                                                                      </td>
+                                                                                      <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                                          <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                                              <tbody>
+                                                                                              <tr class="oe_form_group_row">
+                                                                                                  <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                                                      <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                                          Parroquia
+                                                                                                      </label>
+                                                                                                  </td>
+
+                                                                                              </tr>
+
+                                                                                              <tr class="oe_form_group_row">
+                                                                                                  <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                                                      <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                                          <div class="parroquia">
+
+                                                                                                          </div>
+                                                                                                          <div class="parroquiaOriginal">
+                                                                                                              {{ form_widget(edit_form.parroquia,{'attr':{'title':'Ingrese la ubicación geográfica de su residencia'} }) }}
+                                                                                                              <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                                          </div>
+                                                                                                     </span>
+                                                                                                  </td>
+                                                                                              </tr>
+
+                                                                                              </tbody>
+                                                                                          </table>
+                                                                                      </td>
+                                                                                  </tr>
+                                                                                  </tbody>
+                                                                              </table>
+                                                                          </td>
+                                                                      </tr>
+
+
+                                                                      <tr class="oe_form_group_row">
+                                                                          <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                              <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                  Dirección
+                                                                              </label>
+                                                                          </td>
+                                                                          <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.lugardeRecidencia,{'attr':{'title':'Registre la Calle principal, el numero de vivienda, la calle secundaria y el sector'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                          </td>
+                                                                      </tr>
+
+
+                                                                      <tr class="oe_form_group_row">
+                                                                          <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                              <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                  Correo
+                                                                              </label>
+                                                                          </td>
+                                                                          <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.correo,{'attr':{'title':'Correo electrónico de la persona o contacto'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                          </td>
+                                                                      </tr>
+
+                                                                      <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Teléfono
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{  form_widget(edit_form.telefonoFijo,{'attr':{'title':'Introduzca Telefono Movil y/o Fijo (separe con coma)'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Ingresos Mensuales
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.salarioMensual,{'attr':{'title':'Registre un promedio de sus Ingresos Mensuales'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                Foto
+                                                                            </label>
+                                                                        </td>
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.foto,{'attr':{'class':'file-3','title':'Subir una foto tamaño carnet cargada con anterioridad en este computador'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                                          {% if entity.estadoPersona == 1 %}
+                                                                              <tr class="oe_form_group_row">
+                                                                                  <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                                      <label class=" oe_form_label oe_align_right" for="oe-field-input-11">
+                                                                                          Activar
+                                                                                      </label>
+                                                                                  </td>
+                                                                                  <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                                      <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                          <div>
+                                                                                              {{ form_widget(edit_form.estadoPersona,{'attr':{'title':'Desmarque si el Socio volverá a estar activo en la Caja'} }) }}
+                                                                                              <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                          </div>
+                                                                                     </span>
+                                                                                  </td>
+                                                                              </tr>
+                                                                          {% endif %}
+                                                                    {% endif %}
+                                                                      
+
+                                                    </table>
+                                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                                    <table class="table">
+                                                        <thead >
+                                                        <th width="50%">Nombre</th>
+                                                        <th width="50%">Documento</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for documento in documentos %}
+                                                            <tr>
+                                                                <td width="50%">{{ documento.nombre }}</td>
+                                                                <td width="50%"><a href="{{ asset('bundles/PE/documentos/' ~ documento.rutaDocumento ) }}">{{documento.rutaDocumento}}</a></td>
+
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                            </td>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+
+                        <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                        <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+                </div>
+            </div>
+        </div></div>
+        {#{{ form_rest(edit_form)}}
+        {{ form_end(edit_form)}}#}
+        {{ form_row(edit_form._token) }}
+    </form>
+
+{% endblock %}
+

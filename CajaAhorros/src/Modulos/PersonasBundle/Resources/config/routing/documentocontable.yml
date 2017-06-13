@@ -1,0 +1,30 @@
+documentocontable:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:index" }
+
+documentocontable_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:show" }
+
+documentocontable_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:new" }
+
+documentocontable_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:create" }
+
+
+documentocontable_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:edit" }
+
+documentocontable_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:update" }
+    methods:  [POST, PUT]
+
+documentocontable_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:DocumentoContable:delete",id:""}
+

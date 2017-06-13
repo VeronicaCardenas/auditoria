@@ -1,0 +1,222 @@
+{% extends forma %}
+{% block title %}Cartera Ahorros{% endblock %}
+{% block encabezado %}Cartera Ahorros{% endblock %}
+
+{% block contenedor %}
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'asc']]
+
+            });
+            $("#example_length").hide();
+            $("#example_filter").prop("style",'margin-top:-18%;width:30%;margin-left:23%;');
+
+            $("#example_filter input").hide();
+
+            $("#example_info").prop("style",'padding-left: 8px');
+
+            $("#example_paginate").prop("style",'padding-right: 8px');
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+            $(document).on("click","#example tbody tr a.detalle",function(){
+
+                var nTr = $(this).parents('tr')[0];
+                if ( oTable.fnIsOpen(nTr) )
+                {
+                    /* This row is already open - close it */
+                    //this.src = "{#{asset('bundles/CP/images/details_open.png')}#}";
+                    $(this).removeClass("glyphicon glyphicon-minus");
+                    $(this).addClass("glyphicon glyphicon-plus");
+                    oTable.fnClose( nTr );
+                }
+                else
+                {
+
+                    $(this).removeClass("glyphicon glyphicon-plus");
+                    $(this).addClass("glyphicon glyphicon-minus");
+
+
+                    var details = oTable.fnGetData( nTr )[1];
+                    var id = details;
+
+                    oTable.fnOpen( nTr, 'Cargando...' , 'details'+details);
+
+                    $('.details' + details).addClass('details');
+                    $('.details'+ details).children("td").load("{{  path('persona_carteraahorrounico',{'id':''})}}" + '/' + id);
+//                    $('.details'+ details).children("td").html("a");
+                }
+
+            });
+
+
+            $('[data-toggle="tooltip"]').tooltip()
+            $("#GestionarAhorros").addClass("active");
+            $("#Ahorros").addClass("active");
+
+
+        });
+
+        $(document).ready(function () {
+//            $(document).on("click","#aportes",function(){
+//            });
+            if( "{{ forma}}" =='::fronted6.html.twig')
+            {
+                $("#Personas").addClass("active");
+                $("#Socios").addClass("active");
+            }
+            else
+            {
+                $("#GestionarAhorros").addClass("active");
+                $("#Ahorros").addClass("active");
+            }
+
+        });
+
+    </script>
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+        .tabla_right_align {
+            text-align: right !important;
+        }
+        .tabla_left_align {
+            text-align: left !important;
+        }
+    </style>
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            <table class="oe_view_manager_header">
+                <tbody>
+                    <tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            {% if forma =='::fronted6.html.twig' %}
+                                <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('persona_update',{'id':persona.id}) }}">Editar Persona</a>
+                                <span class="oe_fade">/</span>
+                                <span class="oe_breadcrumb_item">Ahorros de {{ persona }}</span>
+                            </span>
+                                </h2>
+                            {% else %}
+                                <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('ahorro') }}">
+                                    Listado de Ahorros </a>
+                                <span class="oe_fade">/</span>
+                                <span class="oe_breadcrumb_item">Ahorros de {{ persona }}</span>
+                            </span>
+                                </h2>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tabla_center_align" >
+            <div class="oe_form_sheetbg">
+                <div class="oe_form_sheet oe_form_sheet_width" style="max-width:80% !important;">
+                    <div class="tabla_center_align" style="margin: 10px">
+                        <label style="font-size: 18px;">REPORTE DE AHORROS</label>
+                        <br>
+                        <label style="font-size: 18px;">{{ fecha }}</label>
+                    </div>
+                    <table id="example" class="table table-striped" cellspacing="0" width="100%" style="margin-top: -1px;">
+                        <thead>
+                        <tr>
+                            <th class="tabla_center_align">Acciones</th>
+                            <th>ID</th>
+                            <th class="tabla_center_align">ID AHORRO</th>
+                            <th class="tabla_center_align">VALOR</th>
+                            <th class="tabla_center_align">INTERÉS</th>
+                            <th class="tabla_center_align">TIPO</th>
+                            <th class="tabla_center_align">DEPÓSITO</th>
+                            <th class="tabla_center_align">RETIRO</th>
+                            <th class="tabla_center_align">NRO MESES</th>
+                            <th class="tabla_center_align">ESTADO</th>
+
+                        </tr>
+                        </thead>
+                        <tbody style="border-bottom: 1px solid #ddd">
+                        {% for ahorro in ahorros %}
+                            <tr>
+                                <td>
+                                    <a class="detalle details glyphicon glyphicon-plus details" href="#" title="Detalles Ahorro" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"></a>
+                                </td>
+                                <td>{{ahorro['ahorro'].id}}</td>
+                                <td class="tabla_center_align">{{ahorro['ahorro'].id}}</td>
+                                <td class="tabla_right_align">&nbsp;$&nbsp;{{(ahorro['ahorro'].valorAhorrar)| number_format(2, '.' , ',' )}}&nbsp;</td>
+
+                                {% if ahorro['ahorro'].estadoAhorro=='DEPOSITADO' %}
+                                    <td class="tabla_center_align"> - </td>
+                                {% else %}
+                                    <td class="tabla_right_align">&nbsp;$&nbsp;{{(ahorro['interes'])| number_format(2, '.' , ',' )}}&nbsp;</td>
+                                {% endif %}
+
+                                <td class="tabla_left_align"> {{ahorro['ahorro'].tipoAhorro}}&nbsp;</td>
+                                <td class="tabla_center_align">{{ahorro['fechainicio']}}</td>
+                                <td class="tabla_center_align">{{ahorro['fechafin']}}</td>
+
+                                {% if ahorro['ahorro'].estadoAhorro=='DEPOSITADO' %}
+                                    <td class="tabla_center_align"> - </td>
+                                {% else %}
+                                    <td class="tabla_center_align">  {{ahorro['num']}}&nbsp;</td>
+                                {% endif %}
+
+                                <td class="tabla_center_align">{{ahorro['ahorro'].estadoAhorro}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    

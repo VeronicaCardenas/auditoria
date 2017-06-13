@@ -1,0 +1,10 @@
+{% if flag == 2 %}
+    {%  set listaCreditos = lista %}
+    <select id="aa">
+        {% for elem in lista %}
+            <option value="{{ elem.persona.id }}" name="{{ elem.id }}">{{ elem.persona }}  ({{ elem.id }}): {{ elem.idProductosDeCreditos }}</option>
+            (89): Crédito Ordinario
+        {% endfor %}
+
+    </select>
+{% endif %}

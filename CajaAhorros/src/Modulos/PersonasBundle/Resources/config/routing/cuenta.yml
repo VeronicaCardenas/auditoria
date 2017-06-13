@@ -1,0 +1,35 @@
+cuenta:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:index" }
+
+cuenta_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:show" }
+
+cuenta_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:new" }
+
+cuenta_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:create" }
+
+cuenta_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:edit" }
+
+cuenta_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:update" }
+
+
+cuenta_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Cuenta:delete",id:"" }
+
+exportarCuentas:
+    path:     /exportarCuentas/
+    defaults: {_controller: "ModulosPersonasBundle:Cuenta:exportarCuentas"}
+
+
+

@@ -1,0 +1,30 @@
+tipodecuenta:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:index" }
+
+tipodecuenta_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:show" }
+
+tipodecuenta_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:new" }
+
+tipodecuenta_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:create" }
+    
+
+tipodecuenta_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:edit" }
+
+tipodecuenta_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:update" }
+    methods:  [POST, PUT]
+
+tipodecuenta_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCuenta:delete",id:"" }
+    

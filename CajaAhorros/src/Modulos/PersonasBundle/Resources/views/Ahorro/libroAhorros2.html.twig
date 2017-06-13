@@ -1,0 +1,294 @@
+{% extends '::fronted4.html.twig' %}
+{% block title %}Libro de Ahorros{% endblock %}
+{% block encabezado %}Libro de Ahorros{% endblock %}
+
+{% block contenedor %}
+
+
+<style>
+    .tabla_center_align {
+        text-align: center !important;
+    }
+
+    .tabla_right_align {
+        text-align: right !important;
+    }
+
+    .tabla_left_align {
+        text-align: left !important;
+    }
+
+
+</style>
+<script>
+    $(document).on("click","#export",function(){
+        $('#export').attr("href","{{ path('exportarAhorro') }}");
+    });
+
+    $(document).ready(function() {
+        $("#LibroAhorros").addClass("active");
+    });
+
+    $(document).ready(function() {
+        $("#Ahorros").addClass("active");
+    });
+
+
+
+    $(document).ready(function() {
+        $("#LibroAhorros").addClass("active");
+        $("#Ahorros").addClass("active");
+    });
+
+</script>
+
+<div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+    <div class="oe_view_manager_header">
+        <table class="oe_view_manager_header">
+            <tbody>
+            <tr class="oe_header_row oe_header_row_top">
+                <td colspan="2">
+                    <h2 class="oe_view_title">
+                        LIBRO GENERAL DE AHORROS
+                    </h2>
+                </td>
+
+            </tr>
+
+            <tr class="oe_header_row">
+                <td>
+                    <div class="oe_view_manager_buttons">
+                        <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                          <a type="button" id="export" class="oe_button oe_list_add oe_highlight  "
+                                             href="{{ path('exportarAhorro') }}">
+                                              Exportar
+                                          </a>
+                                        <!-- <a href="{{ path('libro') }}" class="oe_button oe_form_button_cancel"
+                                               accesskey="D">Cancelar</a> -->
+                                    </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="oe_view_manager_wrapper">
+        <div>
+
+            <div class="oe_view_manager_view_form" style="display: block;">
+                <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                    <div class="oe_form_container">
+                        <div class="oe_form">
+                            <div class="">
+                                <header>
+                                    <ul class="oe_form_field_status oe_form_status" data-original-title=""
+                                        title="">
+
+                                        <li data-id="draft" class="oe_active">
+                                            <span class="label">&nbsp;</span>
+                                            <span class="arrow"><span></span></span>
+                                        </li>
+
+                                        <li data-id="open" class="">
+                                            <span class="label">&nbsp;</span>
+                                            <span class="arrow"><span></span></span>
+                                        </li>
+
+                                        <li data-id="paid" class="">
+                                            <span class="label">&nbsp;</span>
+                                            <span class="arrow"><span></span></span>
+                                        </li>
+
+
+                                    </ul>
+                                    <div class="oe_clear"></div>
+                                </header>
+
+
+                                <div class="oe_form_sheetbg"
+                                     style="padding-right: 15px !important;padding-left: 15px !important;">
+                                    <div class="tabla_center_align"><h2>LIBRO GENERAL DE AHORRO</h2>
+                                    </div>
+                                    <div class="tabla_center_align"><label style="font-size: 16px !important;">{{ nombrecaja }} </label></div>
+                                    <br>
+                                    {% for mes in meses %}
+                                        <h3>{{ mesesTexto[mes] }}</h3>
+                                    <table border="1">
+                                        <thead>
+                                        <th width="5%" class="tabla_center_align">No</th>
+                                        <th width="15%" class="tabla_center_align">Nombre y Apellidos</th>
+                                        <th width="10%" class="tabla_center_align">Saldo Anterior</th>
+                                        <th width="10%" class="tabla_center_align">Depósito a la Vista</th>
+                                        <th width="10%" class="tabla_center_align">Depósito a Plazo Fijo</th>
+                                        <th width="10%" class="tabla_center_align">Depósito Restringido</th>
+                                        <th width="10%" class="tabla_center_align">Retiro de Ahorro</th>
+                                        <th width="10%" class="tabla_center_align">Interés Pagado</th>
+                                        <th width="10%" class="tabla_center_align">Saldo de Ahorros a Plazo Fijo</th>
+                                        <th width="10%" class="tabla_center_align">Saldo Final de Ahorros</th>
+                                        </thead>
+                                        <tbody>
+                                        {% set cont=1 %}
+                                        {% set saldoAnteriorTotal=0 %}
+                                        {% set depoVistaTotal=0 %}
+                                        {% set depoPlazoFijoTotal=0 %}
+                                        {% set depoRestringidoTotal=0 %}
+                                        {% set retiroAhorrosTotal=0 %}
+                                        {% set interesTotal=0 %}
+                                        {% set saldoAhorrosTotal=0 %}
+                                        {% set saldoFinalAhorrosTotal=0 %}
+                                        {% for personacarpeta in ahorros[mes] %}
+                                            <tr>
+                                                <td width=""
+                                                    class="tabla_center_align"> {{ cont }}</td>
+                                                <td width=""
+                                                    class="tabla_center_align">{{ personacarpeta['persona']}}&nbsp;</td>
+                                                {#class="tabla_center_align">{{ personacarpeta.getNombreCompleto }}&nbsp;</td>#}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['saldoAnterior']|number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set saldoAnteriorTotal = saldoAnteriorTotal + personacarpeta['saldoAnterior'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['depoVista'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set depoVistaTotal= depoVistaTotal +personacarpeta['depoVista'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['depoPlazoFijo'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set depoPlazoFijoTotal = depoPlazoFijoTotal + personacarpeta['depoPlazoFijo'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['depoRestringido'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set depoRestringidoTotal = depoRestringidoTotal + personacarpeta['depoRestringido'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{ ( personacarpeta['retiroAhorrosVista']+personacarpeta['retiroAhorrosPlazoFijo']+personacarpeta['retiroAhorrosRestringidos']) |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set retiroAhorrosTotal = retiroAhorrosTotal + ( personacarpeta['retiroAhorrosVista']+personacarpeta['retiroAhorrosPlazoFijo']+personacarpeta['retiroAhorrosRestringidos']) %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['interes'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set interesTotal = interesTotal + personacarpeta['interes'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['saldoAhorros'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set saldoAhorrosTotal = saldoAhorrosTotal + personacarpeta['saldoAhorros'] %}
+                                                <td width="" class="tabla_right_align">
+                                                    &nbsp;$&nbsp;{{  personacarpeta['saldoFinalAhorros']|number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                {% set saldoFinalAhorrosTotal = saldoFinalAhorrosTotal + personacarpeta['saldoFinalAhorros'] %}
+                                                {% set cont=cont + 1 %}
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td width=""
+                                                class="tabla_center_align"></td>
+                                            <td width="" class="tabla_center_align"><b>TOTAL</b></td>
+
+                                            {% if saldoAnteriorTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if depoVistaTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ depoVistaTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ depoVistaTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if depoPlazoFijoTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ depoPlazoFijoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ depoPlazoFijoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if depoRestringidoTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp{{ depoRestringidoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ depoRestringidoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if retiroAhorrosTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ retiroAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ retiroAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if interesTotal >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ interesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ interesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if saldoAhorrosTotal  >= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                            {% if saldoFinalAhorrosTotal>= "0"%}
+                                                <td width="" class="tabla_right_align" style='color: green;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoFinalAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% else%}
+                                                <td width="" class="tabla_right_align" style='color: red;'>
+                                                    <b>&nbsp;$&nbsp;{{ saldoFinalAhorrosTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                            {% endif %}
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+            <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul>
+            <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

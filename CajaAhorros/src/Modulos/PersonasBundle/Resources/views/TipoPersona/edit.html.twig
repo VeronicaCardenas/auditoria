@@ -1,0 +1,133 @@
+{% extends '::fronted6.html.twig' %}
+{% block title %}Datos del tipo de persona{% endblock %}
+{% block encabezado %}Datos del tipo de persona{% endblock %}
+
+{% block contenedor %}
+    <script>
+        $(document).ready(function() {
+            $("#TipodePersona").addClass("active");
+            $("#Socios").addClass("active");
+        });
+    </script>
+
+    <form action="{{ path('tipopersona_update',{'id':entity.id}) }}" class="" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_start(edit_form) }}
+        {{ form_errors(edit_form) }}
+
+        <div>
+            <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                <table class="oe_view_manager_header">
+                    <tbody><tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('tipopersona')}}">Listado de los tipos de personas</a> <span class="oe_fade">/</span> <span class="oe_breadcrumb_item">Modificar</span></span>
+                            </h2>
+                        </td>
+
+                    </tr>
+
+                    <tr class="oe_header_row">
+                        <td>
+                            <div class="oe_view_manager_buttons">
+                                <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                         <button type="submit" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Guardar</button>
+
+                                            <a  href="{{ path('tipopersona') }}" class="oe_button oe_form_button_cancel" accesskey="D">Cancelar</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="oe_view_manager_wrapper">
+                    <div>
+
+                        <div class="oe_view_manager_view_form" style="display: block;">
+                            <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                                <div class="oe_form_container">
+                                    <div class="oe_form">
+                                        <div class="">
+                                            <header>
+                                                <ul class="oe_form_field_status oe_form_status" data-original-title="" title="">
+
+                                                    <li data-id="draft" class="oe_active">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="open" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="paid" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+
+                                                </ul>
+                                                <div class="oe_clear"></div>
+                                            </header>
+
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Tipo de persona </label>
+                                                    </h1>
+
+                                                    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                        <tbody>
+                                                        <tr class="oe_form_group_row">
+                                                            <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Nombre
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(edit_form.tipo,{'attr':{'title':'Introduzca el tipo de persona'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+
+                        <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                        <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+                </div>
+            </div>
+        </div></div>
+
+        {{ form_row(edit_form._token) }}
+
+    </form>
+{% endblock %}
+
+

@@ -1,0 +1,30 @@
+provincia:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:index" }
+
+provincia_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:show" }
+
+provincia_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:new" }
+
+provincia_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:create" }
+    methods:  POST
+
+provincia_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:edit" }
+
+provincia_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:update" }
+    methods:  [POST, PUT]
+
+provincia_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Provincia:delete" }
+    methods:  [POST, DELETE]

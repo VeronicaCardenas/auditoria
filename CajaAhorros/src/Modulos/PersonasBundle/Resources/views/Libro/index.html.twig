@@ -1,0 +1,559 @@
+{% extends '::fronted2.html.twig' %}
+{% block title %}Listado de libro diario{% endblock %}
+{% block encabezado %}Listado de libro diario{% endblock %}
+
+{% block contenedor %}
+
+
+    <script>
+
+        /*$(document).on("click","#cambiarEstado",function(){
+            var mes = $('#mes').val();
+            if( mes==0){
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_DEFAULT,
+                    size: BootstrapDialog.SIZE_SMALL,
+                    title: 'Cambiar Estado',
+                    message: 'Debe seleccionar el mes.'
+                });
+            }
+            else{
+                $('#cambiarEstado').attr("href","{{ path('cambiarEstado',{'mes':''}) }}" + '/' + mes );
+            }
+        });*/
+
+        $(document).on("click","#cambiarEstado",function(){
+           var meses = ["","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",];
+           var mes = $('#mes').val();
+           var ano = $("#ano").val();
+           if( mes==0 || ano==""){
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_DEFAULT,
+                                        size: BootstrapDialog.SIZE_SMALL,
+                                        title: 'Cerrar Periodo',
+                                        message: 'Debe seleccionar el mes y el año.'
+                                    });
+           }else{
+               BootstrapDialog.show({
+                        title: '¿Realmente desea cerrar el libro del mes de: '+meses[mes]+'?',
+                        message: 'Luego del cierre ya no se podrán hacer transacciones en ese mes.',
+                        buttons: [
+                            {
+                                label: 'Cerrar Periodo',
+                                action: function(dialogItself) {
+                                    $('#cambiarEstado').attr("href","{{ path('cambiarEstado',{'mes':'','ano':''}) }}" + '/' + mes + '/' + ano );
+                                    window.location = $('#cambiarEstado').attr('href');
+                                    dialogItself.close();
+                                }
+                            },
+                            {
+                                label: 'Cancelar',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            }]
+                    });
+              }
+             });
+        $(document).on("click","#abrirMes",function(){
+           var meses = ["","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",];
+           var mes = $('#mes').val();
+           var ano = $("#ano").val();
+           if( mes==0 || ano==""){
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_DEFAULT,
+                                        size: BootstrapDialog.SIZE_SMALL,
+                                        title: 'Abrir Periodo',
+                                        message: 'Debe seleccionar el mes y el año.'
+                                    });
+           }else{
+               BootstrapDialog.show({
+                        title: '¿Realmente desea abrir los libros del mes de: '+meses[mes]+'?',
+                        message: '',
+                        buttons: [
+                            {
+                                label: 'Abrir Periodo',
+                                action: function(dialogItself) {
+                                    $('#abrirMes').attr("href","{{ path('abrirMes',{'mes':'','ano':''}) }}" + '/' + mes + '/' + ano );
+                                    window.location = $('#abrirMes').attr('href');
+                                    dialogItself.close();
+                                }
+                            },
+                            {
+                                label: 'Cancelar',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            }]
+                    });
+              }
+             });
+
+        $(document).on("click","#filtrar",function(){
+            var mes = $('#mes').val();
+            var ano = $('#ano').val();
+
+            $('#filtrar').attr("href","{{ path('filtrar',{'mes':'','ano':''}) }}" + '/' + mes + '/'+ ano);
+        });
+
+        $(document).on("click","#export",function(){
+
+            $('#export').attr("href","{{ path('exportarLibro') }}");
+        });
+
+        $(function(){
+
+            {% for a in array %}
+            var a = "{{ a }}";
+            $('#'+a).dataTable({
+
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "bRetrieve":true,
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [0] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'desc']]
+
+            });
+
+           {% endfor %}
+
+            {% for a in array %}
+            {% set flag = false %}
+             {% for listado in listado %}
+                {% if listado.getFecha() | date('Y-m') == a %}
+                    {% if flag == false %}
+                     var estado = "{{ listado.getEstadosLibro() }}";
+                     var valor = $("#titulo"+"{{ a }}").text();
+                     var valorFinal = valor + estado;
+                     $("#titulo"+"{{ a }}").text(valorFinal);
+                     {% endif %}
+                     {% set flag = true %}
+                 //.append("ggggg");
+                {% endif %}
+             {% endfor %}
+            {% endfor %}
+        });
+        $(document).ready(function() {
+        $("#VerLibroDiario").addClass("active");
+        $("#Caja").addClass("active");
+
+
+        });
+
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar Libro',
+                    message: '¿Realmente desea eliminar el libro: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('libro_delete',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+
+        }
+
+
+
+    </script>
+
+    <style>
+        .tabla_center_align{
+            text-align: center !important;
+        }
+        .tabla_right_align{
+            text-align: right !important;
+        }
+        .tabla_left_align{
+            text-align: left !important;
+        }
+    </style>
+
+    <div class="oe_view_manager oe_view_manager_current"   data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="alert alert-success">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="30%">
+                </colgroup>
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Libro Diario</span></span>
+                        </h2>
+                    </td>
+                    <td colspan="2">
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+
+                                <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('libro_create') }}">
+                                    Crear
+                                </a>
+
+
+                                <a type="button"  id="cambiarEstado" class="oe_button oe_list_add  " href="#">
+                                             Cerrar Periodo
+                                         </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                         <a type="button"  id="abrirMes" class="oe_button oe_list_add  " href="#">
+                                             Abrir Periodo
+                                         </a>
+                                {% endif %}
+                                         <a type="button"  id="filtrar" class="oe_button oe_list_add  " href="#">
+                                             Filtrar
+                                         </a>
+                                         <a type="button"  id="export" class="oe_button oe_list_add  " href="#">
+                                              Exportar
+                                          </a>
+                                          
+                              <!--   <button type="button" class="oe_button oe_list_save oe_highlight">Guardar</button>
+        <span class="oe_alternative">
+            <span class="oe_fade">o</span>
+            <a href="#" class="oe_bold oe_list_discard">Descartar</a>
+
+            <a href="#" class="oe_bold oe_list_button_import">Importar</a>
+        </span> -->
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody></table>
+
+
+
+
+
+
+
+        </div>
+
+        <br>
+        <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+            <tbody>
+            <tr class="oe_form_group_row">
+                <td width="90%" class="oe_form_group_cell" colspan="1">
+                    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                        <tbody>
+                        <tr class="oe_form_group_row">
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+
+
+                                </label>
+                            </td>
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                    Año
+
+                                </label>
+                            </td>
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+
+
+                                </label>
+                            </td>
+                            <td width="30%" class="oe_form_group_cell" colspan="1">
+                               <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                  <div>
+                                        <div>
+                                            <select  id="ano" name="ano" >
+                                                <option value="2028">2028</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2016" selected>2016</option>
+                                                <option value="2015">2015</option>
+                                                <option value="2014">2014</option>
+                                                <option value="2013">2013</option>
+                                                <option value="2012">2012</option>
+                                                <option value="2011">2011</option>
+                                                <option value="2010">2010</option>
+                                                <option value="2009">2009</option>
+                                                <option value="2008">2008</option>
+                                                <option value="2007">2007</option>
+                                                <option value="2006">2006</option>
+                                                <option value="2005">2005</option>
+                                                <option value="2004">2004</option>
+                                                <option value="2003">2003</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2001">2001</option>
+                                                <option value="2000">2000</option>
+                                            </select>
+                                        <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                  </div>
+
+                                                                                <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                            </div>
+                                                                            </span>
+                            </td>
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+
+                                    
+                                </label>
+                            </td>
+
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                    Mes
+                                </label>
+                            </td>
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                 &nbsp;
+                                </label>
+                            </td>
+
+                            <td width="30%" class="oe_form_group_cell" colspan="1">
+                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                 <div>
+                                     <select  id="mes" name="mes" >
+
+                                         <option value="1" selected> Enero</option>
+                                         <option value="2"> Febrero</option>
+                                         <option value="3"> Marzo</option>
+                                         <option value="4"> Abril</option>
+                                         <option value="5"> Mayo</option>
+                                         <option value="6"> Junio</option>
+                                         <option value="7"> Julio</option>
+                                         <option value="8"> Agosto</option>
+                                         <option value="9"> Septiembre</option>
+                                         <option value="10"> Octubre</option>
+                                         <option value="11"> Noviembre</option>
+                                         <option value="12"> Diciembre</option>
+                                     </select>
+                                     <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                 </div>
+                             </span>
+                            </td>
+
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                &nbsp;
+
+                                </label>
+                            </td>
+
+                            <td width="30%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+
+                                </label>
+                            </td>
+                            <td width="10%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+
+
+                                </label>
+                            </td>
+
+                            
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+        <div style="padding-left: 10px;">
+        {% for a in array %}
+            <label id="titulo{{ a }}" style="margin-left:39%">Libro de Caja {{ a }} </label>
+            <table id="{{ a }}" class="table table-striped" cellspacing="0" width="100%" style="margin: -1px">
+
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Acciones</th>
+                    <th>Fecha</th>
+                    <th>Tipo Producto Contable</th>
+                    <th>Persona</th>
+                    <th>Cuenta Contable</th>
+                    <th>Código</th>
+                    <th>Debe</th>
+                    <th>Haber</th>
+                    <th>Saldo en Caja</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for listado in listado %}
+                    {% if listado.getFecha() | date('Y-m') == a %}
+                        <tr>
+
+                            <td>{{listado.id}}</td>
+                            <td>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                {% if listado.estadosLibro.estado == "ABIERTO" and (listado.productocontableid is null)==false and
+                                listado.productocontableid.id!=3 and
+                                listado.productocontableid.id!=4 and
+                                listado.productocontableid.id!=5 and
+                                listado.productocontableid.id!=10 and
+                                listado.productocontableid.id!=12 and
+                                listado.productocontableid.id!=13 and
+                                listado.productocontableid.id!=14 and
+                                listado.productocontableid.id!=15 and
+                                listado.productocontableid.id!=16 and
+                                listado.productocontableid.id!=17 and
+                                listado.productocontableid.id!=19 and
+                                listado.productocontableid.id!=20 and
+                                listado.productocontableid.id!=22 and
+                                listado.productocontableid.id!=23 and
+                                listado.productocontableid.id!=9 %}
+                                    <a href="{{ path('libro_update',{'id':listado.id}) }}" title="Editar" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                                        <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/editar.png') }}" class="img-polaroid"/>
+                                    </a>
+
+                                    <a href="#" title="Eliminar" class="delete" id="{{ listado.id }}" name="{{ listado.id }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+
+                                {% elseif listado.estadosLibro.estado == "ABIERTO" and ((listado.productocontableid is null) == false) and (
+                                listado.productocontableid.id==2 or
+                                listado.productocontableid.id==12 or
+                                listado.productocontableid.id==13 or
+                                listado.productocontableid.id==14 or
+                                listado.productocontableid.id==15 or
+                                listado.productocontableid.id==16 or
+                                listado.productocontableid.id==17 or
+                                listado.productocontableid.id==19 or
+                                listado.productocontableid.id==20 or
+                                listado.productocontableid.id==22 or
+                                listado.productocontableid.id==23 or
+                                listado.productocontableid.id==9) %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="#" title="Eliminar" class="delete" id="{{ listado.id }}" name="{{ listado.id }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% endif %}
+                            </td>
+                            <td>{{listado.fecha | date('d/m/Y')}}</td>
+                            {% if listado.productocontableid != null %}
+                                <td>{{listado.productocontableid}}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            {% if listado.persona != null %}
+                                <td>{{listado.persona.primerApellido}}&nbsp;{{listado.persona.nombre}}</td>
+
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            {% if listado.cuentaid != null %}
+                                <td>{{listado.cuentaid.codigo}}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            {% if listado.numeroRecibo != null %}
+                                <td>{{listado.numeroRecibo}}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <!--<td width="7%" class="tabla_right_align">&nbsp;$&nbsp;|number_format(2, '.' , ',' ) }}&nbsp;</td>-->
+                            {% if listado.debe != null %}
+                                {% if  listado.debe == "0" %}
+                                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{(listado.debe )| number_format(2, '.' , ',' )}}</td>
+                                {% else %}
+                                    <td width="" class="tabla_right_align" >&nbsp;$&nbsp;{{(listado.debe )| number_format(2, '.' , ',' )}}</td>
+                                    <!--<td width="" class="tabla_right_align" style='color: green;'>&nbsp;$&nbsp;{{(listado.debe )| number_format(2, '.' , ',' )}}</td>-->
+                                {% endif %}
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            {% if listado.haber != null %}
+                                {% if  listado.haber == "0"%}
+                                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{(listado.haber )| number_format(2, '.' , ',' )}}</td>
+                                {% else%}
+                                    <td width="" class="tabla_right_align" >&nbsp;$&nbsp;{{(listado.haber )| number_format(2, '.' , ',' )}}</td>
+                                    <!--<td width="" class="tabla_right_align" style='color: red;'>&nbsp;$&nbsp;{{(listado.haber )| number_format(2, '.' , ',' )}}</td>-->
+                                {% endif %}
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+
+                            {% if  listado.fecha == fechasaldo and listado.numeroRecibo == numsaldo %}
+                                {% if  listado.saldo >= "0" %}
+                                    <td width="" class="tabla_right_align" style='color: green;'>
+                                        <b>&nbsp;$&nbsp;{{ listado.saldo|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                {% else %}
+                                    <td width="" class="tabla_right_align" style='color: red;'>
+                                        <b>&nbsp;$&nbsp;{{ listado.saldo|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                                {% endif %}
+                            {% else %}
+                                <td width="" class="tabla_right_align" ><b>&nbsp;$&nbsp;{{ listado.saldo|number_format(2, '.' , ',' ) }}&nbsp; </b></td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+
+            </table>
+            <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+
+        {% endfor %}
+       </div>
+    </div>
+
+
+{% endblock %}
+
+

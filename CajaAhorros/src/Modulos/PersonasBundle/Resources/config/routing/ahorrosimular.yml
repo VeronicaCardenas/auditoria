@@ -1,0 +1,8 @@
+
+simulacionAhorro:
+    path:     /simulacionAhorro
+    defaults: { _controller: "ModulosPersonasBundle:AhorroSimular:simulacionAhorro" }
+    
+despliegue_Simulacion:
+    path:     /{id}/despliegueSimulacion
+    defaults: { _controller: "ModulosPersonasBundle:AhorroSimular:despligue" }

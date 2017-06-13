@@ -1,0 +1,29 @@
+productodecreditos:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:index" }
+
+productodecreditos_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:show" }
+
+productodecreditos_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:new" }
+
+productodecreditos_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:create" }
+    
+
+productodecreditos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:edit" }
+
+productodecreditos_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:update" }
+
+productodecreditos_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:ProductoDeCreditos:delete",id:"" }
+    

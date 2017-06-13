@@ -1,0 +1,30 @@
+tipopersona:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:index" }
+
+tipopersona_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:show" }
+
+tipopersona_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:new" }
+
+tipopersona_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:create" }
+
+
+tipopersona_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:edit" }
+
+tipopersona_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:update" }
+
+
+tipopersona_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:TipoPersona:delete",id:""}
+

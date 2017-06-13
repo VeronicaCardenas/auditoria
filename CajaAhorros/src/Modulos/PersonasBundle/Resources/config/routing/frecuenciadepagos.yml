@@ -1,0 +1,30 @@
+frecuenciadepagos:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:index" }
+
+frecuenciadepagos_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:show" }
+
+frecuenciadepagos_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:new" }
+
+frecuenciadepagos_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:create" }
+    
+
+frecuenciadepagos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:edit" }
+
+frecuenciadepagos_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:update" }
+    methods:  [POST, PUT]
+
+frecuenciadepagos_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:FrecuenciaDePagos:delete",id:""}
+    

@@ -1,0 +1,442 @@
+{% extends '::fronted3.html.twig' %}
+{% block title %}Listado de créditos{% endblock %}
+{% block encabezado %}Listado de créditos{% endblock %}
+
+{% block contenedor %}
+
+
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[1, 'desc','number']]
+
+            });
+            $("#example_length").hide();
+            $("#example_filter").prop("style",'margin-top:-18%;width:30%;margin-left:23%;');
+
+            $("#example_filter input").prop("style",'width:254%;border-radius:20px;height:26px;margin-top:53px');
+
+            $("#example_info").prop("style",'padding-left: 8px');
+
+            $("#example_paginate").prop("style",'padding-right: 8px');
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+
+
+            $('#EliminarUsuarios').click(function(){
+                oTable= $('#example').dataTable();
+                var lll = $('input', oTable.fnGetNodes()).serialize();
+                if(lll== "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Eliminar Usuarios',
+                        message: 'No existen usuarios marcados',
+                        buttons: [{
+                            label: 'Cancelar',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }
+                        ]
+                    });
+                }
+                else{
+                    BootstrapDialog.show({
+                        title: 'Eliminar Usuarios',
+                        message: '¿Realmente desea eliminar los usuarios marcados?',
+                        buttons: [{
+                            label: 'Si',
+                            action: function(dialogItself) {
+
+                                oTable= $('#example').dataTable();
+                                var sData = $('input', oTable.fnGetNodes()).serialize();
+
+                                var dividir = sData.split("&");
+                                var elementos = new Array();
+                                var auxiliar = "";
+                                for(var i= 0; i < dividir.length; i++)
+                                {
+                                    if(i!=0)
+                                    {
+                                        elementos.push("§");
+                                    }
+                                    auxiliar = dividir[i].split("=");
+                                    elementos.push(auxiliar[1]);
+                                    auxiliar = "";
+                                }
+                                $('#EliminarUsuarios').attr('href',"{{ path('eliminar_usuariosmarcados',{'elementos':''})}}" + '/' + elementos);
+                                window.location = $('#EliminarUsuarios').attr('href');
+                                dialogItself.close();
+
+                            }
+                        },
+                            {
+                                label: 'No',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            } ]
+                    });
+
+                }
+
+
+
+
+            });
+            $('[data-toggle="tooltip"]').tooltip()
+
+            $(document).on("click","#export",function(){
+                var valor =  $("#example_filter input").val();
+                                
+                $('#export').attr("href","{{ path('exportarCreditos') }}");
+
+
+            });
+
+
+        });
+
+
+
+        function aprobar(id,name)
+        {
+            if(name=='APROBADO'){
+                     BootstrapDialog.show({
+                     title: 'Rechazar Crédito',
+                     message: '¿Desea rechazar el crédito: '+id+'?',
+                     buttons: [
+                     {
+                     label: 'NO',
+                     action: function(dialogItself) {
+                     $('.aprobar').attr('href',"{{ path('creditos')}}");
+                 window.location = $('.aprobar').attr('href');
+                 dialogItself.close();
+                 }
+                 },
+                 {
+                 label: 'SI',
+                 action: function(dialogItself) {
+                 $('.aprobar').attr('href',"{{ path('creditos_rechazar',{'id':''})}}" + '/' + id);
+                 window.location = $('.aprobar').attr('href');
+                 dialogItself.close();
+                 }
+                 }]
+                 });
+            }else{
+                if(name=="EN REVISION"){
+                    BootstrapDialog.show({
+                        title: 'Aprobar Crédito',
+                        message: '¿Desea aprobar o rechazar el crédito: '+id+'?',
+                        buttons: [
+                            {
+                                label: 'Aprobar',
+                                action: function(dialogItself) {
+                                    //$('.aprobar').attr('onClick',"{#{ path('impresion_tabla_amortizacion_creditos')}#}" + '/' + id);
+                                    //$('.aprobar').attr('target',"_blank");
+                                    $('.aprobar').attr('href',"{{ path('creditos_aprobar',{'id':''})}}" + '/' + id);
+                                    window.location = $('.aprobar').attr('href');
+                                    //window.location = $('.aprobar').attr('target');
+                                    //window.location = $('.aprobar').attr('onClick');
+                                    dialogItself.close();
+                                }
+                            },
+                            {
+                                label: 'Rechazar',
+                                action: function(dialogItself) {
+                                    $('.aprobar').attr('href',"{{ path('creditos_rechazar',{'id':''})}}" + '/' + id);
+                                    window.location = $('.aprobar').attr('href');
+                                    dialogItself.close();
+                                }
+                            }]
+                    });
+                }else{
+                    if(name=="DESGRAVAMEN PAGADO"){
+                    BootstrapDialog.show({
+                        title: 'Rechazar Crédito',
+                        message: '¿Desea rechazar el crédito: '+id+'?',
+                        buttons: [
+                            {
+                                label: 'NO',
+                                action: function(dialogItself) {
+                                    $('.aprobar').attr('href',"{{ path('creditos')}}");
+                                    window.location = $('.aprobar').attr('href');
+                                    dialogItself.close();
+                                }
+                            },
+                            {
+                                label: 'SI',
+                                action: function(dialogItself) {
+                                    $('.aprobar').attr('href',"{{ path('creditos_rechazar',{'id':''})}}" + '/' + id);
+                                    window.location = $('.aprobar').attr('href');
+                                    dialogItself.close();
+                                }
+                            }]
+                    });
+                }}
+
+            }
+
+        }
+
+
+
+
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar Crédito',
+                    message: '¿Realmente desea eliminar el crédito: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('creditos_delete',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+
+        }
+
+        $(document).ready(function() {
+        $("#Gestionarcréditos").addClass("active");
+        $("#Créditos").addClass("active");
+        });
+
+
+    </script>
+    <style>
+        .tabla_center_align{
+            text-align: center !important;
+        }
+        .tabla_right_align{
+            text-align: right !important;
+        }
+        .tabla_left_align{
+            text-align: left !important;
+        }
+    </style>
+    <div class="oe_view_manager oe_view_manager_current"   data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="alert alert-success">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">
+                <strong>{{ flashMessage }}</strong>
+            </div>
+            {% endfor %}
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="30%">
+                </colgroup>
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Listado de Créditos</span></span>
+                        </h2>
+                    </td>
+                    <td colspan="2">
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons">
+                            <div class="oe_list_buttons">
+
+                                <a type="button "  class="oe_button oe_list_add oe_highlight" href="{{ path('creditos_create') }}">
+                                    Nuevo Crédito
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody></table>
+
+
+
+        </div>
+        <table id="example" class="table table-striped" cellspacing="0" width="100%" style="margin-top: -1px;">
+            <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>ESTADO</th>
+                <th>PRODUCTO DE CRÉDITO</th>
+                <th>FECHA SOLICITUD</th>
+                <th>VALOR</th>
+                <th>PLAZO</th>
+                <th>FRECUENCIA</th>
+                <th>ID CRÉDITO</th>
+
+                <!-- <th>Vencimiento</th>
+                <th>Solicitud</th>
+                
+                
+                <th>Interes Anual</th>
+                <th>Financiamiento</th>
+                <th>Estado</th> -->
+
+            </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #ddd">
+            {% for entity in entities %}
+                <tr>
+                    <td>
+                        <!--<input type="checkbox" value="{{ entity.id }}" class="EliminarChechbox" name="valor" style="margin-right: 5px;">-->
+                        {#{% if  entity.estadocreditos != null and entity.estadocreditos.tipo == "APROBADO" %}#}
+                          {#<a href="{{ path('creditos_pago',{'id':entity.id,'estado':0}) }}" title="Pago" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></a>#}
+                        {#{% else %}#}
+
+                        {% if  entity.estadocreditos != "APROBADO" and entity.estadocreditos != "EN REVISION" %}
+                            <a href="{{ path('creditos_update',{'id':entity.id,'estado':0}) }}" title="Información" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+                        {% endif %}
+
+                        {% if  entity.estadocreditos == "APROBADO" or entity.estadocreditos == "EN REVISION" %}
+                            <a href="{{ path('creditos_update',{'id':entity.id,'estado':0}) }}" title="Editar" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/editar.png') }}" class="img-polaroid"/>
+                            </a>
+                        {% endif %}
+
+                        {% if  entity.estadocreditos == "INGRESADO" or entity.estadocreditos == "EN REVISION" %}
+                           <a href="#" title="Eliminar" class="delete" id="{{ entity.id }}" name="{{ entity.id }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                        {% endif %}
+                        {#{% endif %}{{ path('asociarDocumentoCredito',{'id':entity.id}) }}#}
+                        {% if  entity.estadocreditos != "RECHAZADO" and entity.estadocreditos != "PAGADO" %}
+                            <a href="{{ path('asociarDocumentoCredito',{'id':entity.id}) }}" title="Asociar Documento" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/docs.png') }}" class="img-polaroid"/>
+                            </a>
+                        {% endif %}
+
+                        {% if  entity.estadocreditos == "EN REVISION"%}
+                            <a href="{{ path('impresion_tabla_amortizacion_creditos',{'idCredito':entity.id}) }}" title="Aprobar Crédito" title="Aprobar Crédito" class="aprobar" id="{{ entity.id }}" name="{{ entity.estadocreditos }}" onclick="aprobar(id,name)"  style="color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/aprobar.png') }}" class="img-polaroid"/>
+                            </a>
+                        {% endif %}
+
+                        {% if  entity.estadocreditos == "APROBADO"%}
+                            <a href="{{ path('pagoDesgravamen',{'persona':entity.persona.id, 'id':entity.id}) }}" title="Pago Desgravamen" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/desgrav.png') }}" class="img-polaroid"/>
+                            </a>
+                            <a href="#" title="Rechazar Crédito" title="Aprobar Crédito" class="aprobar" id="{{ entity.id }}" name="{{ entity.estadocreditos }}" onclick="aprobar(id,name)"  style="color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/eliminar.png') }}" class="img-polaroid"/>
+                            </a>
+                        {% endif %}
+
+                        {% if entity.estadocreditos == "DESGRAVAMEN PAGADO" and (entity.idProductosDeCreditos.metodoAmortizacion.id=='1' or entity.idProductosDeCreditos.metodoAmortizacion.id=='3') %}
+                            <a href="{{ path('otorgarCredito',{'persona':entity.persona.id, 'id':entity.id}) }}" title="Otorgar Crédito" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="	glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                        {% endif %}
+
+                        {% if entity.estadocreditos == "DESGRAVAMEN PAGADO" and entity.idProductosDeCreditos.metodoAmortizacion.id=='2' %}
+                            <a href="{{ path('otorgarCreditoEmergente',{'persona':entity.persona.id, 'id':entity.id}) }}" title="Otorgar Crédito" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="	glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                        {% endif %}
+
+                        {% if  entity.estadocreditos == "OTORGADO" %}
+                            <a href="{{ path('creditos_pago',{'id':entity.id,'estado':0}) }}" title="Pago cuotas de Crédito" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                                <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/cuotas.png') }}" class="img-polaroid"/>
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('impresion_tabla_amortizacion_creditos',{'idCredito':entity.id }) }}" title="Plan de Pagos" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-save-file" aria-hidden="true"></span></a>
+
+
+                        <!--glyphicon glyphicon-remove
+
+                        idProductosDeCreditos-->
+
+
+                    </td>
+                    <td>{{ entity.id }}</td>
+                    <td>&nbsp;{{ entity.persona is null ? "" : (entity.persona.primerApellido is null ? " " : entity.persona.primerApellido) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.nombre is null ? " " : entity.persona.nombre) }}&nbsp;</td>
+
+                    {% if  entity.estadocreditos == "INGRESADO"%}
+                        <td class="tabla_right_center" style='color: blue;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "EN REVISION"%}
+                        <td class="tabla_right_center" style='color: saddlebrown;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "APROBADO"%}
+                        <td class="tabla_right_center" style='color: green;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "RECHAZADO"%}
+                        <td class="tabla_right_center" style='color: red;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "OTORGADO"%}
+                        <td class="tabla_right_center" style='color: limegreen;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "DESGRAVAMEN PAGADO"%}
+                        <td class="tabla_right_center" style='color: black;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% elseif  entity.estadocreditos == "PAGADO"%}
+                        <td class="tabla_right_center" style='color: darkblue;'><b>&nbsp;{{entity.estadocreditos}}&nbsp;</b></td>
+                    {% endif %}
+
+                    <td>&nbsp;{{entity.idProductosDeCreditos}}&nbsp;</td>
+                    <td>&nbsp;{{entity.fechaSolicitud | date('d/m/Y')}}&nbsp;</td>
+                    <td class="tabla_right_align">&nbsp;$&nbsp;{{entity.montoSolicitado|number_format(2, '.' , ',' )}}&nbsp;</td>
+                    <td class="tabla_right_align">&nbsp;{{entity.numeroDePagos}}&nbsp;</td>
+                    <td class="tabla_right_align">&nbsp;{{entity.frecuencia_pago}}&nbsp;</td>
+                    <td class="tabla_right_align">&nbsp;{{entity.id}}&nbsp;</td>
+
+
+
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+
+
+    {% endblock %}
+    

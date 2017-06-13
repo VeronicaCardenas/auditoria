@@ -1,0 +1,172 @@
+{% extends '::fronted1.html.twig' %}
+{% block title %}Visualizar usuario{% endblock %}
+{% block encabezado %}Visualizar usuario{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $(document).ready(function() {
+
+            $("#Usuarios").addClass("active");
+            $("#Configurar").addClass("active");
+        });
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar Usuario',
+                    message: '¿Realmente desea eliminar el usuario: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('eliminar_usuario',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+
+        }
+    </script>
+{% endblock %}
+
+{% block contenedor %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="alert alert-success" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('noticeerror') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="list-group">
+        <a href="#" class="list-group">
+            <a href="{{ path('editar_usuario',{'id':usuario.id,'estado':1}) }}" type="submit" class="button cancelar btn btn-link"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a>
+        </a>
+        <a href="#" class="list-group">
+            <a href="#" type="submit" class="button cancelar btn btn-link delete" id="{{ usuario.id }}" name="{{ usuario.usuario }}" onclick="Eliminar(id,name)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</a>
+        </a>
+        <a href="#" class="list-group">
+             <a href="{{ path('listadousuarios') }}" type="submit" class="button cancelar btn btn-link"><span class="glyphicon glyphicon glyphicon-menu-left" aria-hidden="true"></span> Regresar al listado</a>
+        </a>
+
+    </div>
+
+     <div class="col-xs-6 col-sm-6">
+            <strong>Nombre y apellidos</strong><br>
+            {{ usuario.nombre }}<br><br>
+            <strong>Nombre de usuario</strong><br>
+            {{ usuario.usuario }}
+             <br><br>
+             <strong>Privilegios</strong><br>
+             {% for rol in usuario.role %}
+                 {{ rol.descripcion }}<br>
+             {% endfor %}
+             <br><br>
+             {% if usuario.rutaFoto != "" %}
+                 <label><strong>Foto</strong></label><br>
+                 <img style="height: 63px;width: 70px;" src="{{ asset('bundles/PE/imagesuser/' ~ usuario.rutaFoto) }}" class="img-polaroid"/>
+             {% endif %}
+
+        </div>
+
+    <!--<div class="col-xs-6 col-sm-6">
+            {% set telefono = "" %}
+            {% if usuario.telefono is null %}
+                {% set telefono = "No Especificado" %}
+            {% else %}
+                {% set telefono = usuario.telefono %}
+            {% endif %}
+            <strong>Teléfono</strong><br>
+            {{ telefono }}-->
+            <!--<strong>Ci</strong><br>
+            {% set ci = "" %}
+            {% if usuario.ci is not empty %}
+                {% set ci =  usuario.ci %}
+            {% else %}
+                {% set ci = "No especificado "%}
+            {% endif %}
+            {{ ci }}
+            <br><br>
+            {% set correo = "" %}
+            {% if usuario.email is null %}
+                {% set correo = "No posee" %}
+            {% else %}
+                {% set correo = usuario.email %}
+            {% endif %}
+            <strong>Correo electrónico</strong><br>
+            {{ correo }}
+            <br><br>
+            <strong>Privilegios</strong><br>
+            {% for rol in usuario.role %}
+                {{ rol.descripcion }}<br>
+            {% endfor %}
+            <br><br>
+            {% if usuario.rutaFoto != "" %}
+                <label><strong>Foto</strong></label><br>
+                <img style="height: 63px;width: 70px;" src="{{ asset('bundles/PE/imagesuser/' ~ usuario.rutaFoto) }}" class="img-polaroid"/>
+            {% endif %}
+        </div>-->
+
+        <!--<div class="col-xs-6 col-sm-4">
+            <strong>Género</strong><br>
+            {% set sexo = "" %}
+            {% if usuario.sexo is not empty %}
+                {% set sexo =  usuario.sexo %}
+            {% else %}
+                {% set sexo = "No especificado "%}
+            {% endif %}
+            {{sexo }}
+            <br><br>
+            <strong>Dirección particular</strong><br>
+            {% set direccion = "" %}
+            {% if usuario.direccion is not empty %}
+                {% set direccion =  usuario.direccion %}
+            {% else %}
+                {% set direccion = "No especificado "%}
+            {% endif %}
+            {{ direccion }}
+            <br><br>
+            {% if usuario.rutaFoto != "" %}
+                <label><strong>Foto</strong></label><br>
+                <img style="height: 63px;width: 70px;" src="{{ asset('bundles/PE/imagesuser/' ~ usuario.rutaFoto) }}" class="img-polaroid"/>
+            {% endif %}
+        </div>-->
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <a id="Si" type="button" class="btn btn-primary">Si</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,57 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Configurar servidor ldap{% endblock %}
+{% block encabezado %}Configurar servidor ldap{% endblock %}
+{% block contenedor %}
+
+        <div class="list-group">
+
+         <a href="#" class="list-group">
+            <a href="{{ path('listadousuarios') }}" class="button cancelar btn btn-link"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Activos</a>
+         </a>
+
+        </div>
+
+        <form action="{{ path('insertarldap') }}" class="" method="post" {{ form_enctype(form) }}>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-xs-6 col-sm-4">
+                    <strong>{{ form_label(form.dominio) }}<br></strong>
+                    {{ form_widget(form.dominio) }}
+                    {{ form_errors(form.dominio) }}<br><br>
+
+                    <strong>{{ form_label(form.basedn) }}</strong><br>
+                    {{ form_widget(form.basedn) }}
+                    {{ form_errors(form.basedn) }}
+
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <strong>{{ form_label(form.nombre) }}<br></strong>
+                    {{ form_widget(form.nombre) }}
+                    {{ form_errors(form.nombre) }}
+                    <br><br>
+                    <strong>{{ form_label(form.user) }}<br></strong>
+                    {{ form_widget(form.user) }}
+                    {{ form_errors(form.user) }}
+                </div>
+
+                <div class="col-xs-6 col-sm-4">
+                    <strong>{{ form_label(form.puerto) }}</strong><br>
+                    {{ form_widget(form.puerto) }}
+                    {{ form_errors(form.puerto) }}
+                    <br><br>
+                    <strong>{{ form_label(form.pass) }}</strong><br>
+                    {{ form_widget(form.pass) }}
+                    {{ form_errors(form.pass) }}
+                </div>
+
+        </div>
+            <button type="submit" class="btn btn-info" style="margin-top: 23px;">Guardar</button>
+            {{ form_rest(form)}}
+            {{ form_end(form) }}
+        </form>
+
+
+{% endblock %}
+
+

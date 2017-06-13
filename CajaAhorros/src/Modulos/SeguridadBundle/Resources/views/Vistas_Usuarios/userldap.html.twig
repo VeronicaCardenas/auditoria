@@ -1,0 +1,234 @@
+{% extends '::fronted.html.twig' %}
+{% block title %}Listado de usuarios ldap{% endblock %}
+{% block encabezado %}Listado de usuarios ldap{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': 'Buscar',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'asc']]
+
+            });
+
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+
+
+            $('#EliminarUsuarios').click(function(){
+                oTable= $('#example').dataTable();
+                var lll = $('input', oTable.fnGetNodes()).serialize();
+                if(lll== "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Cargar Usuarios',
+                        message: 'No existen usuarios marcados',
+                        buttons: [{
+                            label: 'Cancelar',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }
+                        ]
+                    });
+                }
+                else{
+                    BootstrapDialog.show({
+                        title: 'Eliminar Usuarios',
+                        message: '¿Realmente desea cargar los usuarios marcados?',
+                        buttons: [
+                            {
+                                label: 'Si',
+                                action: function(dialogItself) {
+
+                                    oTable= $('#example').dataTable();
+                                    var sData = $('input', oTable.fnGetNodes()).serialize();
+
+                                    var dividir = sData.split("&");
+                                    var elementos = new Array();
+                                    var auxiliar = "";
+                                    for(var i= 0; i < dividir.length; i++)
+                                    {
+                                        if(i!=0)
+                                        {
+                                            elementos.push("§");
+                                        }
+                                        auxiliar = dividir[i].split("=");
+                                        elementos.push(auxiliar[1]);
+                                        auxiliar = "";
+                                    }
+                                    $('#EliminarUsuarios').attr('href',"{{ path('cargarUserLdap',{'elementos':''})}}" + '/' + elementos);
+                                    window.location = $('#EliminarUsuarios').attr('href');
+                                    dialogItself.close();
+
+                                }
+                            },
+                            {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                    });
+
+                }
+
+
+
+
+            });
+            $('[data-toggle="tooltip"]').tooltip()
+
+        });
+        function Cargar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Cargar Usuario',
+                    message: '¿Realmente desea cargar el usuario: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('cargarUsuarioLdap',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                        label: 'No',
+                        action: function(dialogItself) {
+                            dialogItself.close();
+                        }
+                    }]
+                });
+            });
+
+        }
+
+
+    </script>
+{% endblock %}
+{% block contenedor %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="alert alert-success" role="alert">
+           {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('noticeerror') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="list-group">
+
+        <a href="#" class="list-group">
+
+            <a href="#" id="SeleccionarTodos" class="button cancelar btn btn-link"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Marcar todos</a>
+
+        </a>
+
+        <a href="#" class="list-group">
+            <a href="#" id="DesmarcarTodos" class="button cancelar btn btn-link"><span class="glyphicon glyphicon-share" aria-hidden="true"></span> Desmarcar</a>
+
+        </a>
+
+        <a href="#" class="list-group">
+
+            <a href="#" id="EliminarUsuarios" class="button cancelar btn btn-link" ><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar marcados</a>
+
+        </a>
+
+        <a href="#" class="list-group">
+            <a href="{{ path('listadousuarios') }}" class="button cancelar btn btn-link"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Activos</a>
+        </a>
+
+
+    </div>
+      <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>Nombre y apellidos</th>
+                <th>Usuario</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in user %}
+                <tr>
+                    <td>
+                        <input type="checkbox" value="{{ user.id }}" class="EliminarChechbox" name="valor" style="margin-right: 10px;margin-left: 10px;">
+                        <a href="#" title="Cargar" class="delete" id="{{ user.id }}" name="{{ user.nombre }}" onclick="Cargar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span></a>
+                    </td>
+                    <td>{{ user.id}}</td>
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.usuario }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <a id="Si" type="button" class="btn btn-primary">Si</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+{% endblock %}

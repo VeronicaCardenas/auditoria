@@ -1,0 +1,142 @@
+libro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Libro:index" }
+
+libro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Libro:show" }
+
+libro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Libro:new" }
+
+libro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Libro:create" }
+
+libro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Libro:edit" }
+
+libro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Libro:update" }
+
+libro_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:delete",id:"" }
+    
+
+exportarLibro:
+    path:     /exportarLibro
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarLibro" }
+
+
+filtrar:
+    path:     /filtrar/{mes}/{ano}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:filtrar",mes:'',ano:'' }
+
+
+cambiarEstado:
+    path:     /cambiarEstado/{mes}/{ano}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cambiarEstado",mes:'',ano:''}
+
+abrirMes:
+    path:     /abrirMes/{mes}/{ano}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:abrirMes",mes:'',ano:''}
+
+libro_cartera:
+    path:     /cartera
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cartera" }
+
+exportarCartera:
+    path:     /exportarCartera
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarCartera"}
+
+libro_pyg:
+    path:    /pyg
+    defaults: { _controller: "ModulosPersonasBundle:Libro:pyg" }
+
+libro_balancegeneral:
+    path:     /balancegeneral
+    defaults: { _controller: "ModulosPersonasBundle:Libro:balancegeneral" }
+
+exportarpyg:
+    path:     /exportarpyg
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarpyg"}
+
+exportarbalancegral:
+    path:     /exportarbalancegral
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarbalancegral"}
+
+cargarPeronas:
+    path:     /cargarPeronas/{idTransaccion}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarPeronas",idTransaccion:''}
+
+cargarTablaAmort:
+    path:     /cargarTablaAmort/{idCredito}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaAmort",idCredito:''}
+
+cargarTablaAmortPagos:
+    path:     /cargarTablaAmortPagos/{idCredito}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaAmortPagos",idCredito:''}
+
+#cargarTablaAhorro:
+ #   path:     /cargarTablaAhorro/{idAhorro}/{fecha}
+  #  defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaAhorro",idAhorro:'',fecha:''}
+
+cargarTablaAhorro:
+    path:     /cargarTablaAhorro/{idAhorro}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaAhorro",idAhorro:''}
+
+#cargarTablaLiqui:
+ #   path:     /cargarTablaLiquidacion/{idpersona}/{fecha}
+  #  defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaLiquidacion",idpersona:'',fecha:''}
+
+cargarTablaLiqui:
+    path:     /cargarTablaLiquidacion/{idpersona}/{ano}/{mes}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaLiquidacion",idpersona:'',ano:'',mes:''}
+
+exportarTablaLiqui:
+    path:     /exportarTablaLiquidacion/{idpersona}/{ano}/{mes}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarTablaLiquidacion",idpersona:'',ano:'',mes:''}
+
+cargarTablaRetiro:
+    path:     /cargarTablaRetiro/{idpersona}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:cargarTablaRetiroAportes",idpersona:''}
+
+aportesocio:
+    path:     /aportesocio
+    defaults: { _controller: "ModulosPersonasBundle:Libro:aportesocio" }
+    
+exportarAporte:
+    path:     /exportarAporte
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarAporte"}
+    
+utilidad:
+    path:     /utilidad
+    defaults: { _controller: "ModulosPersonasBundle:Libro:utilidad"}
+    
+exportarUtilidad:
+    path:     /exportarUtilidad
+    defaults: { _controller: "ModulosPersonasBundle:Libro:exportarUtilidad"}
+    
+estadosfinancieros:
+    path:     /estadosfinancieros
+    defaults: { _controller: "ModulosPersonasBundle:Libro:estadosfinancieros"}
+
+pagoCreditos:
+    path:     /pagoCreditos
+    defaults: { _controller: "ModulosPersonasBundle:Libro:pagarCredito" }
+
+actualizarSaldo:
+    path:     /actualizarSaldo/{fecha}/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Libro:actualizarSaldo",fecha:'',id:''}
+
+resumenTransacciones:
+     path:     /resumenTransacciones/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Libro:resumenTransacciones",mes:'',ano:'' }
+
+imprimirResumenTransacciones:
+     path:     /imprimirResumenTransacciones/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Libro:impresionResumenTransacciones",mes:'',ano:'' }

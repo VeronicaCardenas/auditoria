@@ -1,0 +1,29 @@
+estadocreditos:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:index" }
+
+estadocreditos_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:show" }
+
+estadocreditos_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:new" }
+
+estadocreditos_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:create" }
+
+
+estadocreditos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:edit" }
+
+estadocreditos_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:update" }
+
+estadocreditos_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:EstadoCreditos:delete",id:'' }
+

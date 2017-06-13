@@ -1,0 +1,150 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ProductoContable list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Productocontable</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('productocontable_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.productoContable }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('productocontable_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('productocontable_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('productocontable_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}
+    {% block leftpanel %}
+
+        <div groups="base.group_user,base.group_portal,share.group_shared">
+
+            <a href="/web" class="oe_logo">
+                <span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>
+                <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+            </a>
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+
+                        <div data-menu-parent="99" class="oe_secondary_menu" style="">
+
+                            <div class="oe_secondary_menu_section">
+                                Contabilidad
+                            </div>
+
+                            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+
+                                <li >
+                                    <a data-action-id="94" data-action-model="ir.actions.client" data-menu="102" class="oe_menu_leaf" href="{{ path('cuenta') }}">
+                <span class="oe_menu_text">
+                    Gestionar cuentas
+                </span>
+
+                                        <div id="menu_counter" class="badge pull-right">
+
+                                            1
+                                        </div>
+                                    </a>
+
+
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipodecuenta') }}">
+                         <span class="oe_menu_text">
+                            Tipos de cuentas
+                         </span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('tipoproductocontable') }}">
+                         <span class="oe_menu_text">
+                            Productos contables
+                         </span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('documentocontable') }}">
+                         <span class="oe_menu_text">
+                            Documentos contables
+                         </span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('estadodocumento') }}">
+                         <span class="oe_menu_text">
+                            Estado documento
+                         </span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('productodocumentoafectacion') }}">
+                         <span class="oe_menu_text">
+                            Prod. Documento Afectaci�n
+                         </span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('caja') }}">
+                         <span class="oe_menu_text">
+                            Caja
+                         </span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('cajapersona') }}">
+                         <span class="oe_menu_text">
+                            Caja Persona
+                         </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Desarrollado por:<br> <a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+            </div>
+
+        </div>
+
+    {% endblock %}

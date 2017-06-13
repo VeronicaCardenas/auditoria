@@ -1,0 +1,218 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Con Quito{% endblock %}            
+                 
+
+                
+                                
+{% block body %}
+     <nav id="oe_main_menu_navbar" class="navbar navbar-inverse" role="navigation" groups="base.group_user,base.group_portal,share.group_shared">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>    
+                    </div>
+                    <div class="navbar-collapse collapse" id="oe_main_menu_placeholder">
+                        
+            <ul class="nav navbar-nav navbar-left oe_application_menu_placeholder">
+                <li id="Configurar">
+                     <a href="{{ path('entidad') }}" class="oe_menu_toggler" data-menu="99">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-config.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                           Configurar
+                        </span>
+                    </a>
+        
+                </li>
+
+                <li id="Socios">
+                    <a href="{{ path('persona') }}" class="oe_menu_toggler" data-menu="68">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-persona.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                        Socios
+                        </span>
+                    </a>
+                </li>
+
+                <li id="Caja">
+                    <a href="{{ path('libro') }}" class="oe_menu_toggler" data-menu="68">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-librodiario.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                        Libro Diario
+                        </span>
+                    </a>
+                </li>
+
+
+                
+                <li id="Créditos">
+                    <a href="{{ path('creditos') }}" class="oe_menu_toggler" data-menu="68">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-credito.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                        Créditos
+                        </span>
+                    </a>
+                </li>
+
+                <li id="Ahorros">
+                    <a href="{{ path('ahorro') }}" class="oe_menu_toggler" data-menu="68">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-ahorro.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                        Ahorros
+                        </span>
+                    </a>
+                </li> 
+                        
+                <li id="Contabilidad">
+                    <a href="{{ path('libro_pyg') }}" class="oe_menu_toggler" data-menu="68">
+                        <img style="height: 25px;width: 25px;" src="{{ asset('bundles/PE/images/ico-contab.png') }}" class="img-polaroid"/>
+                        <span class="oe_menu_text">
+                        Contabilidad
+                        </span>
+                    </a>
+                </li> 
+                        
+                 
+                            
+                        
+                        
+                        
+                <li id="menu_more_container" class="dropdown" style="display: none;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Más <b class="caret"></b></a>
+                    <ul id="menu_more" class="dropdown-menu"></ul>
+                </li>
+            </ul>
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bienvenido: <span class="glyphicon glyphicon-user" aria-hidden="true"></span>  {{ app.user }}<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ path('entidad') }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Inicio</a></li>
+                                    <li class="divider"></li>
+                                   {# {% if is_granted('ROLE_ADMIN') %}
+                                        <li><a href="{{ path('listadousuarios') }}"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Usuarios</a></li>
+                                    {% endif %}
+                                    <li><a href="#" id="Miperfil"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Mi perfil</a></li>
+                                    {% if app.user.getIsldap() == 0 %}
+                                        <li><a href="#" id="Cambiar"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Cambiar contraseña</a></li>
+                                    {% endif %}#}
+                                    <li><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Salir</a></li>
+
+                                </ul>
+                            </li>
+                        </ul>
+{#            <ul class="nav navbar-nav navbar-right oe_user_menu_placeholder" style="display: none;"></ul>
+            <ul class="nav navbar-nav navbar-right oe_systray" style="display: none;"></ul>#}
+        
+                    </div>
+                </nav>
+     <div class="openerp openerp_webclient_container" style="height: calc(100% - 34px);">
+                    <table class="oe_webclient">
+                        <tbody><tr>
+                            <td valign="top" class="oe_leftbar" style="display: table-cell;">
+                                
+{% block leftpanel %}
+                                <div groups="base.group_user,base.group_portal,share.group_shared">
+                                    
+            <a href="/web" class="oe_logo">
+                <span class="oe_logo_edit oe_logo_edit_admin">Editar datos de la compañía</span>
+                <img src="{{ asset('bundles/PE/images/logo-quitodm.png')    }}">
+            </a>
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+                        
+                            <div data-menu-parent="99" class="oe_secondary_menu" style="">
+                                
+                                    <div class="oe_secondary_menu_section">
+                                        Datos Empresas
+                                    </div>
+                                    
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li class="active">
+                    
+            
+            <a data-action-id="97" data-action-model="ir.actions.client" data-menu="105" class="oe_menu_leaf" href="{{ path('entidad') }}">
+                <span class="oe_menu_text">
+                    Caja de Ahorros
+                </span>
+            </a>
+        
+                    
+            
+        
+                </li>
+            </ul>
+        
+                                
+                                    <div class="oe_secondary_menu_section">
+                                        Personas
+                                    </div>
+                                    
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li> 
+                     <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('persona') }}">
+                     <span class="oe_menu_text">Personas juridicas</span>
+                     </a>
+                </li>
+            </ul>
+                                
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li> 
+                     <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('persona') }}">
+                     <span class="oe_menu_text">Personas naturales</span>
+                     </a>
+                </li>
+            </ul> 
+                                
+            <ul class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li> 
+                     <a  data-action-model="ir.actions.act_window" data-menu="432" class="oe_menu_leaf" href="{{ path('cargo') }}">
+                     <span class="oe_menu_text">Cargos</span>
+                     </a>
+                </li>
+            </ul>     
+            </div>
+      
+       
+                       
+    
+                        
+         
+      
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Desarrollado por:<br><a target="_blank" href="http://www.leadsolutions.ec/"><span>LeadSolutions Cía. Ltda.</span></a>
+            </div>
+        
+                                </div>
+            
+{% endblock %}
+        
+            
+            
+            
+            
+            
+            
+            
+                            </td>
+                            <td class="oe_application"><div><div class="oe_view_manager oe_mail_wall oe_view_manager_current">
+                                        
+                                        
+{% block contenedor %}                                       
+                                        
+                        
+{% endblock %}                   
+                                        
+                            </td>
+                        </tr>
+                    </tbody></table>
+                <div class="oe_notification ui-notify"></div><div class="oe_loading" style="display: none;">Cargando</div></div>
+   
+{% endblock %}
+        

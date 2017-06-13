@@ -1,0 +1,163 @@
+<h1 align="center">Cuadro para el Cálculo y Reparto de Excedentes</h1>
+
+<h3>{{ fechaLabel }}</h3>
+<table border="1" style="margin: 5px">
+    <!--<thead>-->
+    <tbody>
+    <tr>
+        <td width="5%" align="center" style= "background-color: #F0F0F0"><b>No</b></td>
+        <td width="15%" align="center" style= "background-color: #F0F0F0"><b>Persona</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Aporte Inicial</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>A los Cuatro meses posteriores</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>A los Ocho meses posteriores</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Al Año</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Total</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Pocentaje por Socio</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Total Excedente por Socio</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Excedente a entregar 100%</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Multas y otros Descuentos</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Excedente Neto a Entregar</b></td>
+        <td width="7%" align="center" style= "background-color: #F0F0F0"><b>Excedente a Capitalizar 100%</b></td>
+    </tr>
+    <!--</thead>
+    <tbody>-->
+    {% set cont=1 %}
+    {% for resumenAporte in aportes %}
+        <tr>
+            <td width="5%" align="center"> {{ cont }}</td>
+            <td width="15%" align="left"> {{ resumenAporte['persona'] }}</td>
+            <td width="7%" align="right">{{ resumenAporte['aporteInicial']|number_format(2, '.' , ',' ) }}</td>
+            <td width="7%" align="right">{{ resumenAporte['totalcuatro']|number_format(2, '.' , ',' ) }}</td>
+            <td width="7%" align="right">{{ resumenAporte['totalocho']|number_format(2, '.' , ',' ) }}</td>
+            <td width="7%" align="right">{{ resumenAporte['total']|number_format(2, '.' , ',' ) }}</td>
+            <td width="7%" align="right">{{ resumenAporte['totalSuma']|number_format(2, '.' , ',' )}}</td>
+
+            {% if totalTotalSuma==0 %}
+                <td width="7%" align="right">0.00%</td>
+            {% else %}
+                <td width="7%" align="right">{{ ((resumenAporte['totalSuma']/totalTotalSuma )*100)|number_format(2, '.' , ',' )}}%</td>
+            {% endif  %}
+
+            {% if totalTotalSuma==0 %}
+                <td width="7%" align="right">0.00</td>
+            {% else %}
+                <td width="7%" align="right">{{ (pyg * (resumenAporte['totalSuma']/totalTotalSuma )) |number_format(2, '.' , ',' )}}</td>
+            {% endif  %}
+
+            {% if (totalTotalSuma==0 or pyg<0) %}
+                <td width="7%" align="right">0.00</td>
+            {% else %}
+                <td width="7%" align="right">{{ (pyg * (resumenAporte['totalSuma']/totalTotalSuma )) |number_format(2, '.' , ',' )}}</td>
+            {% endif  %}
+
+            <td width="7%" align="right"></td>
+
+            {% if (totalTotalSuma==0 or pyg<0) %}
+                <td width="7%" align="right">0.00</td>
+            {% else %}
+                <td width="7%" align="right">{{ (pyg * (resumenAporte['totalSuma']/totalTotalSuma )) |number_format(2, '.' , ',' )}}</td>
+            {% endif  %}
+
+            {% if (totalTotalSuma==0 or pyg<0)  %}
+                <td width="7%" align="right">0.00</td>
+            {% else %}
+                <td width="7%" align="right">{{ (pyg * (resumenAporte['totalSuma']/totalTotalSuma )) |number_format(2, '.' , ',' )}}</td>
+            {% endif  %}
+            {% set cont=cont + 1 %}
+        </tr>
+    {% endfor %}
+    {% set total=0  %}
+    <tr>
+        <td width="5%" align="center"> </td>
+        <td width="15%" align="center" style="font-weight: bold"> Totales </td>
+
+            <td width="7%" align="right">
+                <b>{{ totalAportesIni |number_format(2, '.' , ',' ) }} </b></td>
+            <td width="7%" align="right" >
+                <b>{{ totalTotalCuatro |number_format(2, '.' , ',' ) }} </b></td>
+            <td width="7%" align="right">
+                <b>{{ totalTotalOcho |number_format(2, '.' , ',' ) }} </b></td>
+            <td width="7%" align="right" >
+                <b>{{ totalTotalAnio |number_format(2, '.' , ',' ) }} </b></td>
+            <td width="7%" align="right" >
+                <b>{{ totalTotalSuma |number_format(2, '.' , ',' ) }} </b></td>
+
+        {% if totalTotalSuma==0 %}
+            <td width="7%" align="right">0.00%</td>
+        {% else %}
+            <td width="7%" align="right">100%</td>
+        {% endif  %}
+
+            <td width="7%" align="right" >
+                <b>{{  pyg |number_format(2, '.' , ',' ) }} </b></td>
+
+        {% if (totalTotalSuma==0 or pyg<0)  %}
+            <td width="7%" align="right">0.00</td>
+        {% else %}
+            <td width="7%" align="right">{{ pyg |number_format(2, '.' , ',' )}}</td>
+        {% endif  %}
+
+        <td width="7%" align="right" style="font-weight: bold"></td>
+
+        {% if (totalTotalSuma==0 or pyg<0)  %}
+            <td width="7%" align="right">0.00</td>
+        {% else %}
+            <td width="7%" align="right">{{ pyg |number_format(2, '.' , ',' )}}</td>
+        {% endif  %}
+
+        {% if (totalTotalSuma==0 or pyg<0)  %}
+            <td width="7%" align="right">0.00</td>
+        {% else %}
+            <td width="7%" align="right">{{ pyg |number_format(2, '.' , ',' )}}</td>
+        {% endif  %}
+    </tr>
+    <tr>
+        <td width="5%" align="center"> </td>
+        <td width="15%" align="center" style="font-weight: bold"> Total de Socios/as </td>
+        <td width="7%" align="right" style="font-weight: bold"> {{ numsocios }}</td>
+        <td width="7%" align="right" style="font-weight: bold"> {{ numsocios }}</td>
+        <td width="7%" align="right" style="font-weight: bold"> {{ numsocios }}</td>
+        <td width="7%" align="right" style="font-weight: bold"> {{ numsocios }}</td>
+        <td colspan="7" align="right" style="background-color: #F0F0F0"></td>
+    </tr>
+    <tr>
+        <td colspan="13" align="left" style= "background-color: #F0F0F0">/ </td>
+    </tr>
+    <tr>
+        <td width="5%" align="right" style="font-weight: bold"></td>
+        <td colspan="2" align="center" style= "background-color: #F0F0F0"><b> Excedente Acumulado {{ fechaLabel }}</b></td>
+        {% if   pyg>= "0"%}
+            <td width="7%" align="right" >
+                <b>{{  pyg |number_format(2, '.' , ',' ) }} </b></td>
+        {% else%}
+            <td width="7%" align="right">
+                <b>{{  pyg |number_format(2, '.' , ',' ) }} </b></td>
+        {% endif %}
+
+        <td colspan="9" align="right" style="font-weight: bold"></td>
+    </tr>
+    <tr>
+        <td colspan="13" align="left" style= "background-color: #F0F0F0">/ </td>
+    </tr>
+    <tr>
+        <td colspan="13" align="left" >El total de aportes de socios al final de cada trimestre según los estados financieros es igual a la suma de:</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center" style= "background-color: #F0F0F0"><b> Aportes Iniciales</b></td>
+        <td width="7%" align="right">{{ totalAportesIni |number_format(2, '.' , ',' )}}</td>
+        <td width="7%" align="right">{{ totalAportesIni |number_format(2, '.' , ',' )}}</td>
+        <td width="7%" align="right">{{ totalTotalCuatro |number_format(2, '.' , ',' )}}</td>
+        <td width="7%" align="right">{{ totalTotalOcho |number_format(2, '.' , ',' )}}</td>
+        <td colspan="7" align="right" style="font-weight: bold"></td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center" style= "background-color: #F0F0F0"><b> Aportes Mensuales</b></td>
+        <td width="7%" align="right"><b>{{ 0|number_format(2, '.' , ',' )}}</b> </td>
+        <td width="7%" align="right"><b>{{ (totalTotalCuatro - totalAportesIni)|number_format(2, '.' , ',' )}}</b></td>
+        <td width="7%" align="right"><b>{{ (totalTotalOcho - totalTotalCuatro)|number_format(2, '.' , ',' )}}</b></td>
+        <td width="7%" align="right"><b>{{ (totalTotalAnio - totalTotalOcho)|number_format(2, '.' , ',' )}}</b></td>
+        <td colspan="7" align="right" style="font-weight: bold"></td>
+    </tr>
+    </tbody>
+</table>
+    

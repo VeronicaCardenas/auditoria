@@ -1,0 +1,261 @@
+<div class="oe_form_sheetbg">
+    <div class="oe_form_sheet oe_form_sheet_width">
+        <h3>{{ persona}} - Liquidación</h3>
+        <br>
+        <span class="oe_form_buttons_edit" style="display: inline;">
+              <a type="button" id="export" class="btn btn-success btn-sm"
+                 href="{{ path('exportarTablaLiqui',{'idpersona':persona.id,'ano':ano,'mes':mes}) }}">
+                  Exportar Recibo
+              </a>
+        </span>
+        <br>
+        <br>
+        <table >
+            <thead>
+            <th width="25%" class="tabla_right_align"></th>
+            <th width="25%" class="tabla_left_align"></th>
+            <th width="25%" class="tabla_right_align"></th>
+            <th width="25%" class="tabla_left_align"></th>
+
+
+            </thead>
+            <tbody>
+            <tr class="oe_header_row oe_header_row_top" style="margin-bottom: 5px !important; height: 30px !important;">
+
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Saldo a Favor:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        $ {{ (aportes+saldoAhorroVista+interesVista+saldoAhorroPlazoFijo+interesPlazo+saldoAhorroRestringido+interesRes)|number_format(2, '.' , ',' )}}
+                    </h3>
+                </td>
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Saldo en Contra:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        $ {{( retiro+creditoCuotaFija+interescreditoCuotaFija+creditoCuotaCapitalCte+interescreditoCuotaCapitalCte+desgracreditoCuotaCapitalCte+creditoCuotaCapitalCteFijo+interescreditoCuotaCapitalCteFijo+desgracreditoCuotaCapitalCteFijo ) |number_format(2, '.' , ',' )}}
+                    </h3>
+                </td>
+            </tr>
+            <tr class="oe_header_row oe_header_row_top" style="margin-bottom: 5px !important; height: 30px !important;">
+
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Total:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        $ {{ (liquidacion )| number_format(2, '.' , ',' ) }}
+                    </h3>
+                </td>
+
+                <td class="tabla_right_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    <h3>
+                        Neto a Recibir:
+                    </h3>
+                </td>
+                <td class="tabla_left_align" style="padding-right: 20px; vertical-align: middle !important;">
+                    {% if liquidacion >= 0  %}
+                    <h3>
+                        $ {{ (liquidacion )| number_format(2, '.' , ',' ) }}
+                    </h3>
+                    {% else %}
+                    <h3>
+                        $ 0.00 <!--<p>El Saldo es negativo no se puede realizar la liquidación</p>-->
+                    </h3>
+                    {% endif %}
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
+        <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+        <h2>Tabla de movimientos realizados</h2>
+        <table class="table">
+            <thead>
+            <th width="500px" class="tabla_center_align">Operación</th>
+            <th width="150px" class="tabla_center_align">Saldo a Favor</th>
+            <th width="150px" class="tabla_center_align">Saldo en Contra</th>
+            <th width="150px" class="tabla_center_align">Valor Acumulado</th>
+            </thead>
+            <tbody>
+            {% if aportes !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Aportes</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if retiro !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Retiro Aportes</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (retiro )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes - retiro)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if saldoAhorroVista !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Ahorros Vista</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (saldoAhorroVista)| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes - retiro + saldoAhorroVista)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interesVista !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Ahorros Vista</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interesVista )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes - retiro + saldoAhorroVista + interesVista)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if saldoAhorroPlazoFijo !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Ahorros a Plazo Fijo</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (saldoAhorroPlazoFijo )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo )|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interesPlazo !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Ahorros a Plazo Fijo</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interesPlazo )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if saldoAhorroRestringido !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Ahorros Restringidos</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (saldoAhorroRestringido)| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interesRes !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Ahorros Restringidos</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interesRes )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if creditoCuotaFija !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Créditos Cuota Fija</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (creditoCuotaFija )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interescreditoCuotaFija !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Créditos Cuota Fija</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interescreditoCuotaFija )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if creditoCuotaCapitalCte !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Créditos Cuota Capital Constante</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (creditoCuotaCapitalCte )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interescreditoCuotaCapitalCte !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Créditos Cuota Capital Constante</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interescreditoCuotaCapitalCte )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte-interescreditoCuotaCapitalCte)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if desgracreditoCuotaCapitalCte !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Desgravamen Créditos Cuota Capital Constante</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (desgracreditoCuotaCapitalCte )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte-interescreditoCuotaCapitalCte-desgracreditoCuotaCapitalCte)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if creditoCuotaCapitalCteFijo !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Créditos Cuota Capital Constante Fijo</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (creditoCuotaCapitalCteFijo )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte-interescreditoCuotaCapitalCte-desgracreditoCuotaCapitalCte-creditoCuotaCapitalCteFijo)|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if interescreditoCuotaCapitalCteFijo !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Interés Créditos Cuota Capital Constante Fijo</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (interescreditoCuotaCapitalCteFijo )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte-interescreditoCuotaCapitalCte-desgracreditoCuotaCapitalCte-creditoCuotaCapitalCteFijo-interescreditoCuotaCapitalCteFijo )|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            {% if desgracreditoCuotaCapitalCteFijo !=0 %}
+                <tr>
+                    <td width="" class="tabla_left_align"><b>Total Desgravamen Créditos Cuota Capital Constante Fijo</b></td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;0.00&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (desgracreditoCuotaCapitalCteFijo )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                    <td width="" class="tabla_right_align">&nbsp;$&nbsp;{{ (aportes- retiro + saldoAhorroVista + interesVista+saldoAhorroPlazoFijo + interesPlazo+saldoAhorroRestringido + interesRes-creditoCuotaFija-interescreditoCuotaFija-creditoCuotaCapitalCte-interescreditoCuotaCapitalCte-desgracreditoCuotaCapitalCte-creditoCuotaCapitalCteFijo-interescreditoCuotaCapitalCteFijo-desgracreditoCuotaCapitalCteFijo )|number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td width="" class="tabla_left_align" style="font-weight: bold !important; font-size: 14px !important;">&nbsp;&nbsp; TOTALES</td>
+                <td width="" class="tabla_right_align" ><b>&nbsp;$&nbsp;{{ (aportes+saldoAhorroVista+interesVista+saldoAhorroPlazoFijo+interesPlazo+saldoAhorroRestringido+interesRes)|number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                <td width="" class="tabla_right_align" ><b>&nbsp;$&nbsp;{{(retiro+creditoCuotaFija+interescreditoCuotaFija+creditoCuotaCapitalCte+interescreditoCuotaCapitalCte+desgracreditoCuotaCapitalCte+creditoCuotaCapitalCteFijo+interescreditoCuotaCapitalCteFijo+desgracreditoCuotaCapitalCteFijo) |number_format(2, '.' , ',' )}}&nbsp;&nbsp;</b></td>
+                <td width="" class="tabla_right_align"style="font-weight: bold !important; font-size: 14px !important;">&nbsp;$&nbsp;{{ (liquidacion )| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>
+
+                {#$ {{ (intereses   |  round(2, 'ceil'))| number_format(2, '.' , ',' ) }}&nbsp;&nbsp;</td>#}
+            </tr>
+            </tbody>
+        </table>
+
+        <br><br><br><br><br><br><br><br><br>
+    </div>
+</div>
+<script>
+    var saldoAporte = "{{ saldoAporte }}";
+    var saldoAhorroVis = "{{ saldoAhorroVista }}";
+    var interesAhorroVis = "{{ interesVista }}";
+    var saldoAhorroPlazo = "{{ saldoAhorroPlazoFijo }}";
+    var interesAhorroPla = "{{ interesPlazo }}";
+    var saldoAhorroRes = "{{ saldoAhorroRestringido }}";
+    var interesAhorroRes = "{{ interesRes }}";
+    var creditoCuotafija = "{{ creditoCuotaFija }}"
+    var creditoCuotaCapitalCte = "{{ creditoCuotaCapitalCte }}"
+    var creditoCuotaCapitalCteFijo = "{{ creditoCuotaCapitalCteFijo }}"
+    var liquidacion ="{{ liquidacion }}"
+</script>

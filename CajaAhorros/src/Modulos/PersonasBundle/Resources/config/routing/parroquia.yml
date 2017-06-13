@@ -1,0 +1,30 @@
+parroquia:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:index" }
+
+parroquia_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:show" }
+
+parroquia_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:new" }
+
+parroquia_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:create" }
+    methods:  POST
+
+parroquia_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:edit" }
+
+parroquia_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:update" }
+    methods:  [POST, PUT]
+
+parroquia_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Parroquia:delete" }
+    methods:  [POST, DELETE]

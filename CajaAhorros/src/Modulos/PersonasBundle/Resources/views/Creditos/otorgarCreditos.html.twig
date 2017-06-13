@@ -1,0 +1,692 @@
+
+{% extends 'fronted3.html.twig' %}
+{% block title %}Registrar Transacción{% endblock %}
+{% block encabezado %}Registrar Transacción{% endblock %}
+
+
+{% block contenedor %}
+    <script>
+
+
+        $(function(){
+
+            $("#Guardar").attr('disabled',true);
+
+            $("#modulos_personasbundle_libro_debe").attr('readonly',true);
+            {% for a in array %}
+            var a = "{{ a }}";
+            $('#'+a).dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "bRetrieve":true,
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [0] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ]
+                //"aaSorting": [[1, 'asc']]
+
+            });
+
+
+            {% endfor %}
+
+            $("#modulos_personasbundle_libro_numeroRecibo").attr("readonly",true);
+            $("#modulos_personasbundle_libro_numeroRecibo").val("{{ consec }}");
+
+            var fecha = $("input.datetimepicker1").val();
+            var fechaSubm=fecha.substr(0, 5);
+
+            var debe = 0;
+            var haber = 0;
+            var saldo = 0;
+            var saldoAnterior = "{{ saldo }}";
+            saldoAnterior=new Number(saldoAnterior);
+            $("#modulos_personasbundle_libro_saldo").attr("readonly",true);
+            $("#modulos_personasbundle_libro_debe").on('keyup', function(){
+                var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                debe = $(this).val();
+                if(tipoTrans=="12" || tipoTrans=="13" || tipoTrans=="14") {
+                    var posibleEntrada =  new Number(montocredito) - new Number(ahorroValorEnCaja);
+                    if (posibleEntrada < new Number(debe)) {
+                        debe = posibleEntrada;
+                        $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                    }
+                }
+                haber = $("#modulos_personasbundle_libro_haber").val();
+                saldo = new Number(saldoAnterior) + new Number(debe) - new Number(haber);
+                $("#modulos_personasbundle_libro_saldo").val(saldo.toFixed(2));
+
+            });
+            $("#modulos_personasbundle_libro_haber").on('keyup', function(){
+                var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                haber = $(this).val();
+                if(tipoTrans=="15" || tipoTrans=="16" || tipoTrans=="17") {
+                    var posibleEntrada =  ahorroPosibleExtraccion;
+                    if (posibleEntrada < new Number(haber)) {
+                        haber = posibleEntrada;
+                        $("#modulos_personasbundle_libro_haber").val(Number(haber).toFixed(2));
+                    }
+                }
+                debe = $("#modulos_personasbundle_libro_debe").val();
+                saldo = new Number(saldoAnterior) + new Number(debe) - new Number(haber);
+                $("#modulos_personasbundle_libro_saldo").val(saldo.toFixed(2));
+
+            });
+
+            $("input.datetimepicker1").on("dp.change",function(e) {
+                var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                fecha = $(this).val();
+                fechaSubm=fecha.substr(0, 5);
+                if(tipoTrans=="12" || tipoTrans=="13" || tipoTrans=="14"){//Ahorros
+                    var nome=$("#aa").find('option:selected').attr("name");
+                    if(nome){
+                        //$("#tablaAmort").load("{{ path('cargarTablaAhorro',{'idAhorro':'','fecha':''})}}" + '/' + nome + '/' + fechaSubm, function(response, status, xhr ) {
+                        $("#tablaAmort").load("{{ path('cargarTablaAhorro',{'idAhorro':''})}}" + '/' + nome, function(response, status, xhr ) {
+                            if(status == "success"){
+                                debe=pagocouta;
+                                $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                                saldo = new Number(saldoAnterior) + new Number(debe);
+                                $("#modulos_personasbundle_libro_saldo").val(saldo.toFixed(2));
+                                $("#modulos_personasbundle_libro_info").val(nome);
+                            }
+                        });
+                    }else{
+                        $("#tablaAmort").html(" ");
+                        $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                        $("#modulos_personasbundle_libro_info").val("-1");
+
+                    }
+                }
+
+                {#$.ajax({#}
+                {#type: 'POST',#}
+                {#dataType: 'html',#}
+                {#url: '{{ path('buscarFacturasRutas') }}',#}
+                {#data: ({fecha:fecha,fechaFinal:fechaFinal }),#}
+                {#success:function(data){#}
+
+                {#$("#ListadoFacturas").html(data);#}
+                {#}#}
+                {#});#}
+
+
+            });
+
+            $("#modulos_personasbundle_libro_productocontableid").on('change', function(){
+                var valor = $(this).val();
+                {% for tiposProductosContables in tiposProductosContables %}
+                var tipoProducto = "{{ tiposProductosContables.id }}";
+
+                if(valor==tipoProducto){
+                    {% if  tiposProductosContables.tipotransaccion != null %}
+                    var tipoProductoCont = "{{ tiposProductosContables.tipotransaccion.tipo }}";
+                    if(tipoProductoCont=="DEUDORA"){
+                        $("#modulos_personasbundle_libro_haber").attr('readonly',false);
+                        $("#modulos_personasbundle_libro_haber").val(0);
+                        $("#modulos_personasbundle_libro_debe").attr('readonly',true);
+                        $("#modulos_personasbundle_libro_debe").val(0);
+                        var valorCuenta = "{{ tiposProductosContables.cuentaHaber.id }}";
+
+                        $("#modulos_personasbundle_libro_cuentaid option[value="+ valorCuenta +"]").prop("selected",true);
+                        //$("#modulos_personasbundle_libro_cuentaid option value=""+valorCuenta+"").prop('selected',true);
+
+                    }
+                    else{
+                        $("#modulos_personasbundle_libro_debe").attr('readonly',true);
+                        $("#modulos_personasbundle_libro_debe").val(0);
+                        $("#modulos_personasbundle_libro_haber").attr('readonly',true);
+                        $("#modulos_personasbundle_libro_haber").val("");
+
+                        var valorCuenta = "{{ tiposProductosContables.cuentaDebe.id }}";
+
+                        $("#modulos_personasbundle_libro_cuentaid option[value="+ valorCuenta +"]").prop("selected",true);
+                    }
+
+
+                    {%  endif %}
+                }
+                {%endfor%}
+
+
+            });
+            $("#modulos_personasbundle_libro_productocontableid").change(function(){
+                var valor = $(this).val();
+                {#$(".Persona").load("{{ path('cargarPeronas',{'idTransaccion':''})}}" + '/' + valor);#}
+
+                {#$(".Persona").load("{{ path('cargarPeronas',{'idTransaccion':''})}}" + '/' + valor, function(response, status, xhr) {#}
+                $(".Persona").load("{{ path('cargarPersonas',{'idTransaccion':'','persona':'','id':''})}}" + '/' + valor+ '/'+{{ persona }}+ '/'+{{ id }}, function(response, status, xhr) {
+
+                    if(status == "success"){
+                        var valor = $("#aa").val();
+//                var nome=$("#aa :selected").text();
+                        var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                        if( tipoTrans=="4" ){//Pago desgravamen, Credito Otorgado, Credito Emergente
+                            var nome=$("#aa").find('option:selected').attr("name");
+                            if(nome){
+                                $("#tablaAmort").load("{{ path('cargarTablaAmort',{'idCredito':''})}}" + '/' + nome, function(response, status, xhr ) {
+                                    if(status == "success"){
+                                        if(tipoTrans=="4"){
+
+                                            haber=montocredito;
+                                            $("#modulos_personasbundle_libro_haber").val(Number(haber).toFixed(2));
+                                            $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) - Number(haber)).toFixed(2));
+
+                                        }else{
+                                            debe=amortiz;
+                                            $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                                            $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) + Number(debe)).toFixed(2));
+                                        }
+                                        $("#modulos_personasbundle_libro_info").val(nome);
+                                    }
+
+                                });
+                            }else{
+                                $("#tablaAmort").html(" ");
+                                $("#modulos_personasbundle_libro_info").val("-1");
+                                $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                            }
+                        }else{
+                            $("#tablaAmort").html(" ");
+                            $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                            $("#modulos_personasbundle_libro_info").val("-1");
+
+                        }
+
+
+                        $("#aa").change(function(){
+                            valor =  $("#aa").val();
+                            $(".personaOriginal").show();
+                            $("#modulos_personasbundle_libro_persona option[value="+ valor +"]").prop("selected",true);
+                            $(".personaOriginal").hide();
+                            var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                            if(tipoTrans=="4"){
+                                var nome=$("#aa").find('option:selected').attr("name");
+                                if(nome){
+                                    $("#tablaAmort").load("{{ path('cargarTablaAmort',{'idCredito':''})}}" + '/' + nome, function(response, status, xhr ) {
+                                        if(status == "success"){
+                                            if(status == "success"){
+                                                if(tipoTrans=="4"){
+                                                    haber=montocredito;
+                                                    $("#modulos_personasbundle_libro_haber").val(Number(haber).toFixed(2));
+                                                    $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) - Number(haber)).toFixed(2));
+
+                                                }else{
+
+                                                    debe=amortiz;
+                                                    $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                                                    $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) + Number(debe)).toFixed(2));
+                                                }
+                                                $("#modulos_personasbundle_libro_info").val(nome);
+                                            }
+                                        }
+
+                                    });
+                                }else{
+                                    $("#tablaAmort").html(" ");
+                                    $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                                    $("#modulos_personasbundle_libro_info").val("-1");
+                                }
+                            }else{
+                                $("#tablaAmort").html(" ");
+                                $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                                $("#modulos_personasbundle_libro_info").val("-1");
+                            }
+
+
+                            //alert( $("#modulos_personasbundle_libro_persona").val());
+                        });
+                        $(".personaOriginal").show();
+                        $("#modulos_personasbundle_libro_persona option[value="+ valor +"]").prop("selected",true);
+                        $(".personaOriginal").hide();
+
+
+                    }
+
+                });
+
+                $(".personaOriginal").hide();
+            });
+
+            /***********************************************************/
+
+            var valor = $("#modulos_personasbundle_libro_productocontableid").val();
+            {#$(".Persona").load("{{ path('cargarPeronas',{'idTransaccion':''})}}" + '/' + valor);#}
+
+            $(".Persona").load("{{ path('cargarPersonas',{'idTransaccion':'','persona':'','id':''})}}" + '/' + valor+ '/'+{{ persona }}+ '/'+{{ id }}, function(response, status, xhr) {
+
+                 {# $(".Persona").load("{{ path('cargarPeronas',{'idTransaccion':''})}}" + '/' + valor, function(response, status, xhr) {#}
+                if(status == "success"){
+                    var valor = $("#aa").val();
+//                var nome=$("#aa :selected").text();
+                    var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                    if( tipoTrans=="4"){//Pago desgravamen, Credito Otorgado, Credito Emergente
+                        var nome=$("#aa").find('option:selected').attr("name");
+                        if(nome){
+                            $("#tablaAmort").load("{{ path('cargarTablaAmort',{'idCredito':''})}}" + '/' + nome, function(response, status, xhr ) {
+                                if(status == "success"){
+                                    if(tipoTrans=="4"){
+                                        haber=montocredito;
+                                        $("#modulos_personasbundle_libro_haber").val(Number(haber).toFixed(2));
+                                        $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) - Number(haber)).toFixed(2));
+
+                                    }else{
+                                        debe=amortiz;
+                                        $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                                        $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) + Number(debe)).toFixed(2));
+
+                                    }
+                                    $("#modulos_personasbundle_libro_info").val(nome);
+                                }
+                                $("#Guardar").attr('disabled',false);
+                            });
+                        }else{
+                            $("#tablaAmort").html(" ");
+                            $("#modulos_personasbundle_libro_info").val("-1");
+                            $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                        }
+                    }else {
+                        $("#tablaAmort").html(" ");
+                        $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                        $("#modulos_personasbundle_libro_info").val("-1");
+
+                    }
+
+
+                    $("#aa").change(function(){
+                        valor =  $("#aa").val();
+                        $(".personaOriginal").show();
+                        $("#modulos_personasbundle_libro_persona option[value="+ valor +"]").prop("selected",true);
+                        $(".personaOriginal").hide();
+                        var tipoTrans=$("#modulos_personasbundle_libro_productocontableid :selected").val();
+                        if(tipoTrans=="4"){
+                            var nome=$("#aa").find('option:selected').attr("name");
+                            if(nome){
+                                $("#tablaAmort").load("{{ path('cargarTablaAmort',{'idCredito':''})}}" + '/' + nome, function(response, status, xhr ) {
+                                    if(status == "success"){
+                                        if(status == "success"){
+                                            if(tipoTrans=="4"){
+                                                haber=montocredito;
+                                                $("#modulos_personasbundle_libro_haber").val(Number(haber).toFixed(2));
+                                                $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) - Number(haber)).toFixed(2));
+
+                                            }else{
+                                                debe=amortiz;
+                                                $("#modulos_personasbundle_libro_debe").val(Number(debe).toFixed(2));
+                                                $("#modulos_personasbundle_libro_saldo").val((Number(saldoAnterior) + Number(debe)).toFixed(2));
+                                            }
+                                            $("#modulos_personasbundle_libro_info").val(nome);
+                                        }
+                                    }
+
+                                });
+                            }else{
+                                $("#tablaAmort").html(" ");
+                                $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                                $("#modulos_personasbundle_libro_info").val("-1");
+                            }
+                        }else{
+                            $("#tablaAmort").html(" ");
+                            $("#modulos_personasbundle_libro_saldo").val(saldoAnterior.toFixed(2));
+                            $("#modulos_personasbundle_libro_info").val("-1");
+                        }
+
+
+                        //alert( $("#modulos_personasbundle_libro_persona").val());
+                    });
+                    $(".personaOriginal").show();
+                    $("#modulos_personasbundle_libro_persona option[value="+ valor +"]").prop("selected",true);
+                    $(".personaOriginal").hide();
+
+
+                }
+
+            });
+
+            $(".personaOriginal").hide();
+            /***********************************************************/
+
+        });
+
+        $(function(){
+            $('.datetimepicker1').datetimepicker({
+                //viewMode: 'years',
+
+                //format: 'DD/MM/YYYY HH:mm',
+                locale: 'es'
+            });
+
+        });
+
+        $(document).ready(function() {
+            $("#Gestionarcréditos").addClass("active");
+            $("#Créditos").addClass("active");
+        });
+
+        $( "#tooltip" ).tooltip();
+
+    </script>
+
+    <style>
+        .tabla_center_align{
+            text-align: center !important;
+        }
+        .tabla_right_align{
+            text-align: right !important;
+        }
+        .tabla_left_align{
+            text-align: left !important;
+        }
+    </style>
+
+    <form action="{{ path('otorgarCredito',{'persona':entity.persona.id,'id':id}) }}" class="" method="post" {{ form_enctype(form) }}>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+
+            <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="alert alert-success">
+                        <strong>{{ flashMessage }}</strong>
+                    </div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('danger') %}
+                    <div class="alert alert-danger">
+                        <strong>{{ flashMessage }}</strong>
+                    </div>
+                {% endfor %}
+
+                <table class="oe_view_manager_header">
+                    <tbody><tr class="oe_header_row oe_header_row_top">
+                        <td colspan="2">
+                            <h2 class="oe_view_title">
+                                <span class="oe_view_title_text oe_breadcrumb_title"><a data-id="breadcrumb_3" class="oe_breadcrumb_item" href="{{ path('libro')}}">Registrar Transacción</a> <span class="oe_fade">/</span> <span class="oe_breadcrumb_item">Nuevo</span></span>
+                            </h2>
+                        </td>
+
+                    </tr>
+
+                    <tr class="oe_header_row">
+                        <td>
+                            <div class="oe_view_manager_buttons">
+                                <div class="oe_form_buttons">
+
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                         <button id="Guardar" type="submit" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Guardar</button>
+
+                                            <a  href="{{ path('creditos') }}" class="oe_button oe_form_button_cancel" accesskey="D">Cancelar</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="oe_view_manager_wrapper">
+                    <div>
+
+                        <div class="oe_view_manager_view_form" style="display: block;">
+                            <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                                <div class="oe_form_container">
+                                    <div class="oe_form">
+                                        <div class="">
+                                            <header>
+                                                <ul class="oe_form_field_status oe_form_status" data-original-title="" title="">
+
+                                                    <li data-id="draft" class="oe_active">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="open" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+                                                    <li data-id="paid" class="">
+                                                        <span class="label">&nbsp;</span>
+                                                        <span class="arrow"><span></span></span>
+                                                    </li>
+
+
+                                                </ul>
+                                                <div class="oe_clear"></div>
+                                            </header>
+
+                                            <div class="oe_form_sheetbg">
+                                                <div class="oe_form_sheet oe_form_sheet_width">
+                                                    <h1>
+                                                        <label class="oe_form_label oe_align_right"> Datos de la transacción </label>
+                                                    </h1>
+
+                                                    <h2>
+                                                        <label class="oe_form_label oe_align_right" style='color: saddlebrown;'> SALDO ACTUAL: $ {{ saldo|number_format(2, '.' , ',' ) }}&nbsp; </label>
+                                                    </h2>
+
+                                                    <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                        <tbody>
+
+
+                                                        <tr class="oe_form_group_row">
+
+                                                            <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Tipo de Transacción
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div >
+                                                                                      {{ form_widget(form.productocontableid,{'attr':{'title':'Seleccione el tipo de transacción'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Persona
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      <div class="Persona">
+
+                                                                                      </div>
+                                                                                      <div class="personaOriginal">
+                                                                                          {{ form_widget(form.persona,{'attr':{'title':'Seleccione la persona'} }) }}
+                                                                                          <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                      </div>
+
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Fecha
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell " colspan="1">
+                                                                              <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div class="input-group">
+
+                                                                                      {{ form_widget(form.fecha,{'attr':{'title':'Seleccione la fecha'} }) }}
+
+                                                                                      <span class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i></span>
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Cuenta Contable
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.cuentaid,{'attr':{'title':'Seleccione la cuenta'} }) }}
+
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                            <td width="50%" class="oe_form_group_cell" colspan="1">
+                                                                <table cellspacing="0" cellpadding="0" border="0" class="oe_form_group ">
+                                                                    <tbody>
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Código
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.numeroRecibo,{'attr':{'title':'Número de Tranzacción (Generado automáticamente)'} }) }}
+
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Debe/Ingresos
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.debe,{'attr':{'title':'Introduzca el monto (Debe/Ingresos)'} }) }}
+
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Haber/Egresos
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{ form_widget(form.haber,{'attr':{'title':'Introduzca el monto (Haber/Egresos)'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!--<tr class="oe_form_group_row">
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Saldo de Caja
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{  form_widget(form.saldo,{'attr':{'title':'Saldo (Generado automáticamente)'} }) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>-->
+                                                                    <tr class="oe_form_group_row" hidden>
+                                                                        <td width="1%" class="oe_form_group_cell oe_form_group_cell_label" colspan="1">
+                                                                            <label class=" oe_form_label oe_align_right" for="oe-field-input-5">
+                                                                                Info
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td width="99%" class="oe_form_group_cell" colspan="1">
+                                                                             <span class="oe_form_field oe_form_field_many2one oe_form_field_with_button oe_form_required">
+                                                                                  <div>
+                                                                                      {{  form_widget(form.info) }}
+                                                                                      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                                                  </div>
+                                                                             </span>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <div id="tablaAmort" >
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+
+                        <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                        <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul><ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp" id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul></div>
+                </div>
+            </div>
+        </div></div>
+
+        {{ form_row(form._token) }}
+    </form>
+{% endblock %}
+

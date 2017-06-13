@@ -1,0 +1,30 @@
+empresa:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:index" }
+
+empresa_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:show" }
+
+empresa_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:new" }
+
+empresa_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:create" }
+    
+
+empresa_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:edit" }
+
+empresa_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:update" }
+   
+
+empresa_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Empresa:delete",id:""}
+    

@@ -1,0 +1,30 @@
+regimenfiscal:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:index" }
+
+regimenfiscal_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:show" }
+
+regimenfiscal_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:new" }
+
+regimenfiscal_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:create" }
+    methods:  POST
+
+regimenfiscal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:edit" }
+
+regimenfiscal_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:update" }
+    methods:  [POST, PUT]
+
+regimenfiscal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:RegimenFiscal:delete" }
+    methods:  [POST, DELETE]

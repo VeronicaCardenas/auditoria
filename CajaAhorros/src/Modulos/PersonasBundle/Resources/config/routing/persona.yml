@@ -1,0 +1,92 @@
+persona:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Persona:index" }
+
+persona_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Persona:show" }
+
+persona_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Persona:new" }
+
+persona_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Persona:create" }
+
+
+persona_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Persona:edit" }
+
+persona_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Persona:update" }
+    
+persona_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Persona:delete",id:""}
+
+asociarDocumento:
+     path:     /asociarDocumento/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:asociarDocumento" }
+
+editarasociarDocumento:
+     path:     /editarasociarDocumento/{id}/{idPersona}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:editarasociarDocumento" }
+
+eliminarasociarDocumento:
+     path:     /eliminarasociarDocumento/{id}/{idPersona}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:eliminarasociarDocumento" }
+
+resumenAportes:
+     path:     /resumenAportes/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:resumenAportes",mes:'',ano:'' }
+
+aportes:
+     path:     /aportes/{personalist}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:aportes",personalist:'' }
+
+aportesExcel:
+     path:     /aportesExcel/{personalist}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:aportesExcel",personalist:'' }
+
+persona_mora:
+     path:     /mora/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:mora",id:'' }
+
+persona_moraexcel:
+     path:     /moraexcel/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:moraExcel",id:'' }
+
+persona_carteracredito:
+     path:     /carteracredito/{parametro}/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:carteracredito",parametro:'',id:'' }
+
+persona_carteracreditounico:
+     path:     /carteracreditounico/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:carteracreditounico",id:'' }
+
+persona_carteraahorro:
+     path:     /carteraahorro/{parametro}/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:carteraahorro",parametro:'',id:'' }
+
+persona_carteraahorrounico:
+     path:     /carteraahorrounico/{id}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:carteraahorrounico",id:'' }
+
+persona_cargarubicacion:
+     path:     /cargarubicacion/{idPadre}/{tipo}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:cargarubicacion",idPadre:'',tipo:'' }
+
+excedentes:
+     path:     /excedentes/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:excedentes",mes:'',ano:''}
+
+imprimirResumenAportes:
+     path:     /imprimirResumenAportes/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:impresionResumenAportes",mes:'',ano:'' }
+
+imprimirExcedentes:
+     path:     /imprimirExcedentes/{mes}/{ano}
+     defaults: { _controller: "ModulosPersonasBundle:Persona:impresionExcedentes",mes:'',ano:'' }

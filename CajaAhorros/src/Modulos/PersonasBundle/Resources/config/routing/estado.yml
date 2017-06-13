@@ -1,0 +1,30 @@
+estado:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Estado:index" }
+
+estado_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Estado:show" }
+
+estado_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Estado:new" }
+
+estado_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Estado:create" }
+    methods:  POST
+
+estado_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Estado:edit" }
+
+estado_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Estado:update" }
+    methods:  [POST, PUT]
+
+estado_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Estado:delete" }
+    methods:  [POST, DELETE]

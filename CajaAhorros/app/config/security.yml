@@ -1,0 +1,69 @@
+security:
+    firewalls:
+        fronted:
+            pattern:       ^/
+            anonymous:     ~
+            simple_form:
+                authenticator: ldap_authenticator
+                login_path:          /autenticacion
+                check_path:          /login_check
+                default_target_path: /entidad
+
+            logout:
+                path:   /logout
+                target: /autenticacion
+
+#            remember_me:
+#                key: portadores
+#                lifetime: 3600
+               
+            access_denied_url: /entidad
+
+    access_control:
+        - { path: ^/autenticacion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/autenticacion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/inicio, roles: [ROLE_ADMIN,ROLE_USER] }
+        #- { path: ^/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/seguridad/*, roles: [ROLE_ADMIN] }
+        - { path: ^/configuracion/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/productodecreditos/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/estadocreditos/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/metododeamortizacion/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/tipoahorro/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/estadoahorro/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/metodoamortizacionahorro/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/tipoproductocontable/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/cuenta/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/tipopersona/*, roles: [ROLE_ADMIN ] }
+        - { path: ^/entidad/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/persona/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/creditos/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/creditossimular/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/libro/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/ahorro/*, roles: [ROLE_ADMIN,ROLE_USER] }
+        - { path: ^/ahorrosimular/*, roles: [ROLE_ADMIN,ROLE_USER] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    providers:
+        usuarios:
+            entity: { class: Modulos\SeguridadBundle\Entity\Usuario, property: usuario }
+            
+    encoders:
+        Modulos\SeguridadBundle\Entity\Usuario: {algorithm: sha512,iterations: 10}

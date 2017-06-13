@@ -1,0 +1,9 @@
+modulos_personas:
+    resource: "@ModulosPersonasBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+seguridad:
+    resource: "@SeguridadBundle/Resources/config/routing.yml"
+    prefix:   /
+
+

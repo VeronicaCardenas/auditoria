@@ -1,0 +1,364 @@
+{% extends '::fronted3.html.twig' %}
+{% block title %}Cartera general{% endblock %}
+{% block encabezado %}Cartera general{% endblock %}
+
+{% block contenedor %}
+
+
+    <style>
+        .tabla_center_align {
+            text-align: center !important;
+        }
+
+        .tabla_right_align {
+            text-align: right !important;
+        }
+
+        .tabla_left_align {
+            text-align: left !important;
+        }
+
+
+    </style>
+    <script>
+        $(document).on("click","#export",function(){
+            $('#export').attr("href","{{ path('exportarCartera') }}");
+        });
+
+        $(document).ready(function() {
+            $("#carterageneral").addClass("active");
+        });
+
+        $(document).ready(function() {
+            $("#contabilidad").addClass("active");
+        });
+
+
+
+        $(document).ready(function() {
+            $("#carterageneral").addClass("active");
+            $("#Créditos").addClass("active");
+        });
+
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="list">
+        <div class="oe_view_manager_header">
+            <table class="oe_view_manager_header">
+                <tbody>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+                        <h2 class="oe_view_title">
+                            LIBRO GENERAL DE CARTERA DE CRÉDITO
+                        </h2>
+                    </td>
+
+                </tr>
+
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons">
+                            <div class="oe_form_buttons">
+                                    <span class="oe_form_buttons_edit" style="display: inline;">
+                                          <a type="button" id="export" class="oe_button oe_list_add oe_highlight  "
+                                             href="{{ path('exportarCartera') }}">
+                                              Exportar
+                                          </a>
+                                        <!-- <a href="{{ path('libro') }}" class="oe_button oe_form_button_cancel"
+                                               accesskey="D">Cancelar</a> -->
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="oe_view_manager_wrapper">
+            <div>
+
+                <div class="oe_view_manager_view_form" style="display: block;">
+                    <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+
+                        <div class="oe_form_container">
+                            <div class="oe_form">
+                                <div class="">
+                                    <header>
+                                        <ul class="oe_form_field_status oe_form_status" data-original-title=""
+                                            title="">
+
+                                            <li data-id="draft" class="oe_active">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="open" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+                                            <li data-id="paid" class="">
+                                                <span class="label">&nbsp;</span>
+                                                <span class="arrow"><span></span></span>
+                                            </li>
+
+
+                                        </ul>
+                                        <div class="oe_clear"></div>
+                                    </header>
+
+                                    <div class="oe_form_sheetbg"
+                                         style="padding-right: 15px !important;padding-left: 15px !important;">
+                                        <!-- <div class="tabla_center_align"><h2>LIBRO GENERAL DE CARTERA DE CRÉDITO</h2>
+                                        </div> -->
+                                        <div class="tabla_center_align"><label style="font-size: 16px !important;">{{ nombrecaja }} </label></div>
+                                        <br>
+                                        {% for mes in meses %}
+                                            <h3>{{ mesesTexto[mes] }}</h3>
+                                            <table border="1">
+                                                <thead>
+                                                <th width="5%" class="tabla_center_align">No</th>
+                                                <th width="15%" class="tabla_center_align">Nombre y Apellidos</th>
+                                                <th width="5%" class="tabla_center_align">Socio</th>
+                                                <th width="5%" class="tabla_center_align">Saldo Anterior</th>
+                                                <th width="5%" class="tabla_center_align">Capital Pagado</th>
+                                                <th width="5%" class="tabla_center_align">Interés Ganado</th>
+                                                <th width="5%" class="tabla_center_align">Mora Pagada</th>
+                                                <th width="5%" class="tabla_center_align">Pago de Desgrav.</th>
+                                                <th width="5%" class="tabla_center_align">Total Pagado</th>
+                                                <th width="5%" class="tabla_center_align">Crédito del Mes</th>
+                                                <th width="5%" class="tabla_center_align">Crédito No</th>
+                                                <th width="5%" class="tabla_center_align">&nbsp;CCMxV&nbsp;</th>
+                                                <th width="5%" class="tabla_center_align">&nbsp;CCMV&nbsp;</th>
+                                                <th width="5%" class="tabla_center_align">&nbsp;CCxV&nbsp;</th>
+                                                <th width="5%" class="tabla_center_align">&nbsp;CCCV&nbsp;</th>
+                                                <th width="5%" class="tabla_center_align">Días Atraso</th>
+                                                <th width="5%" class="tabla_center_align">H</th>
+                                                <th width="5%" class="tabla_center_align">M</th>
+
+                                                </thead>
+                                                <tbody>
+                                                {% set cont=1 %}
+                                                {% set saldoAnteriorTotal=0 %}
+                                                {% set capitalTotal=0 %}
+                                                {% set interesTotal=0 %}
+                                                {% set moraTotal=0 %}
+                                                {% set saldoAnteriorTotal=0 %}
+                                                {% set desgravamenTotal=0 %}
+                                                {% set totalpagadoTotal=0 %}
+                                                {% set creditomesTotal=0 %}
+                                                {% set creditonoTotal=0 %}
+                                                {% set ccmvxTotal=0 %}
+                                                {% set ccmvTotal=0 %}
+                                                {% set ccxvTotal=0 %}
+                                                {% set cccvTotal=0 %}
+                                                {% set hombreTotal=0 %}
+                                                {% set mujerTotal=0 %}
+                                                {% for personacarpeta in creditos[mes] %}
+                                                    <tr>
+                                                        <td width=""
+                                                            class="tabla_center_align"> {{ cont }}</td>
+                                                        <td width=""
+                                                            class="tabla_center_align">{{ personacarpeta['persona']}}&nbsp;</td>
+                                                        {#class="tabla_center_align">{{ personacarpeta.getNombreCompleto }}&nbsp;</td>#}
+                                                        <td width="" class="tabla_center_align">
+                                                            {{ personacarpeta['socio'] }}&nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['saldoAnterior']|number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set saldoAnteriorTotal = saldoAnteriorTotal + personacarpeta['saldoAnterior'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['capital'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set capitalTotal= capitalTotal +personacarpeta['capital'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['interes'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set interesTotal = interesTotal + personacarpeta['interes'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['mora'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set moraTotal = moraTotal + personacarpeta['mora'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['desgravamen'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set desgravamenTotal = desgravamenTotal + personacarpeta['desgravamen'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['totalpagado'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set totalpagadoTotal = totalpagadoTotal + personacarpeta['totalpagado'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['creditomes'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set creditomesTotal = creditomesTotal + personacarpeta['creditomes'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;{{  personacarpeta['creditono']}}&nbsp;</td>
+                                                        {% set creditonoTotal = creditonoTotal + personacarpeta['creditono'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['ccmxv'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set ccmvxTotal  = ccmvxTotal + personacarpeta['ccmxv'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['ccmv']|number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set ccmvTotal = ccmvTotal + personacarpeta['ccmv'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['ccxv'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set ccxvTotal = ccxvTotal + personacarpeta['ccxv'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            &nbsp;$&nbsp;{{  personacarpeta['cccv'] |number_format(2, '.' , ',' )}}&nbsp;</td>
+                                                        {% set cccvTotal = cccvTotal + personacarpeta['cccv'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            {{ personacarpeta['atraso']}}&nbsp;</td>
+                                                        <td width="" class="tabla_right_align">
+                                                            {{ personacarpeta['hombre'] }}&nbsp;</td>
+                                                        {% set hombreTotal = hombreTotal + personacarpeta['hombre'] %}
+                                                        <td width="" class="tabla_right_align">
+                                                            {{ personacarpeta['mujer'] }}&nbsp;</td>
+                                                        {% set mujerTotal = mujerTotal + personacarpeta['mujer'] %}
+                                                        {% set cont=cont + 1 %}
+                                                    </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td width=""
+                                                        class="tabla_center_align"></td>
+                                                    <td width="" class="tabla_center_align"><b>TOTAL</b></td>
+                                                    <td width="" class="tabla_right_align"></td>
+
+                                                    {% if saldoAnteriorTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ saldoAnteriorTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if  capitalTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ capitalTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ capitalTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if interesTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ interesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ interesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if moraTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp{{ moraTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ moraTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if degravamenTotal < "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ desgravamenTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ desgravamenTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if totalpagadoTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ totalpagadoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ totalpagadoTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if creditomesTotal  >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ creditomesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ creditomesTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    <td width="" class="tabla_right_align" >
+                                                        <b> {{ creditonoTotal}}&nbsp;</b></td>
+
+                                                    {% if ccmvxTotal>= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccmvxTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccmvxTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if ccmvTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccmvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccmvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if ccxvTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccxvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ ccxvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    {% if cccvTotal >= "0"%}
+                                                        <td width="" class="tabla_right_align" style='color: green;'>
+                                                            <b>&nbsp;$&nbsp;{{ cccvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% else%}
+                                                        <td width="" class="tabla_right_align" style='color: red;'>
+                                                            <b>&nbsp;$&nbsp;{{ cccvTotal|number_format(2, '.' , ',' ) }}&nbsp;</b></td>
+                                                    {% endif %}
+
+                                                    <td width="" class="tabla_right_align"></td>
+                                                    <td width="" class="tabla_right_align">
+                                                        <b> {{ hombreTotal }}&nbsp;</b></td>
+                                                    <td width="" class="tabla_right_align">
+                                                        <b> {{ mujerTotal }}&nbsp;</b></td>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_view_manager_view_calendar" style="display: none;"></div>
+
+                <div class="oe_view_manager_view_graph" style="display: none;"></div>
+
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-6" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-7" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-8" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-9" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-10" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-11" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-12" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-13" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-14" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-15" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-16" tabindex="0" style="z-index: 1; display: none;"></ul>
+                <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all openerp"
+                    id="ui-id-17" tabindex="0" style="z-index: 1; display: none;"></ul>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

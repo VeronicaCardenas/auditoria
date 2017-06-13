@@ -1,0 +1,162 @@
+{% extends '::fronted1.html.twig' %}
+{% block title %}Insertar usuario{% endblock %}
+{% block encabezado %}Insertar usuario{% endblock %}
+{% block contenedor %}
+    <script>
+        $(document).ready(function() {
+            $("#Usuarios").addClass("active");
+            $("#Configurar").addClass("active");
+        });
+
+        $(function(){
+            $(".file-3").fileinput({
+               showCaption: true,
+               browseClass: "btn btn-primary",
+               browseLabel:"Examinar...",
+               removeLabel:"Eliminar",
+               showUpload:false,
+               fileType: "any"
+            });
+        });
+
+    </script>
+
+    {% for flashMessage in app.session.flashbag.get('noticeerror') %}
+        <div class="alert alert-error">
+            <strong>{{ flashMessage }}</strong>
+        </div>
+    {% endfor %}
+    <div class="list-group">
+       <a href="#" class="list-group">
+           <a href="{{ path('listadousuarios') }}" type="submit" class="button cancelar btn btn-link"><span class="glyphicon glyphicon glyphicon-menu-left" aria-hidden="true"></span> Regresar al listado</a>
+       </a>
+
+    </div>
+
+    <form action="{{ path('nuevo_usuario') }}" class="" method="post" {{ form_enctype(form) }}>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+            <div class="col-xs-6 col-sm-6">
+                <strong>{{ form_label(form.nombre,'Nombre y apellidos') }}<br></strong>
+                <div class="input-group">
+                <span class="input-group-addon"> <i class="glyphicon glyphicon-sort-by-alphabet"></i></span>
+                {{ form_widget(form.nombre) }}
+                </div>
+                {{ form_errors(form.nombre) }}
+                <br><br>
+                <!--<strong>{{ form_label(form.telefono,'Teléfono') }}</strong><br>
+                <div class="input-group">
+                <span class="input-group-addon"> <i class="glyphicon glyphicon-earphone"></i></span>
+                {{ form_widget(form.telefono) }}
+                 </div>
+                {{ form_errors(form.telefono) }}
+                <br><br>-->
+                <strong>{{ form_label(form.usuario,'Nombre de usuario') }}</strong><br>
+                <div class="input-group">
+                 <span class="input-group-addon">
+                 <i class="glyphicon glyphicon-user"></i>
+                 </span>
+                {{ form_widget(form.usuario) }}
+                </div>
+                {{ form_errors(form.usuario) }}
+                <br><br>
+                <strong>{{ form_label(form.foto,'Foto') }}</strong><br>
+                {{ form_widget(form.foto,{'attr':{'class':'file-3'} }) }}
+                {{ form_errors(form.foto) }}
+                <br>
+                <button type="submit" class="btn btn-info">Guardar</button><br><br>
+            </div>
+
+            <div class="col-xs-6 col-sm-6">
+                <!--<strong>{{ form_label(form.ci,'Ci') }}</strong><br>
+                <div class="input-group">
+                 <span class="input-group-addon"> <i class="glyphicon glyphicon-credit-card"></i></span>
+                {{ form_widget(form.ci) }}
+                </div>
+                {{ form_errors(form.ci) }}
+                <br><br>
+                <strong>{{ form_label(form.email,'Correo electrónico') }}</strong><br>
+                <div class="input-group">
+                <span class="input-group-addon"> <i class="glyphicon glyphicon-envelope"></i></span>{{ form_widget(form.email) }}
+                </div>
+                {{ form_errors(form.email) }}
+                <br><br>-->
+                <strong>{{ form_label(form.password.first, 'Contraseña') }}</strong><br>
+                <p>(*)La contraseña debe contar con mínimo una letra en Mayúscula y tres Números con una extensión de mínimo 8 Carateres</p>
+                <div class="input-group">
+
+                <span class="input-group-addon">
+                 <i class="glyphicon glyphicon-lock"></i>
+                 </span>
+                {{ form_widget(form.password.first,{'attr': {'placeholder': 'Contraseña','title':'Campo obligatorio','class':'form-control'} }) }}
+                </div>
+                <br><br>
+                <strong>{{ form_label(form.password.second, 'Confirmar contraseña') }}</strong><br>
+                <div class="input-group">
+                <span class="input-group-addon">
+                 <i class="glyphicon glyphicon-lock"></i>
+                 </span>
+                {{ form_widget(form.password.second,{'attr': {'placeholder': 'Confirmar Contraseña','title':'Campo obligatorio','class':'form-control'} }) }}
+                 </div>
+                {{ form_errors(form.password.first) }}
+                <br>
+
+                <ul style="padding: 0px;">
+                    <strong>Privilegios</strong>
+                    {% for roles in form.role %}
+                    <div class="userPer">
+                        <li style="list-style: outside none none;">
+                            {{ form_widget(roles) }}
+                            {{ form_label(roles) }}<br>
+                        </li>
+                        {% endfor %}
+                        {{ form_errors(form.role) }}
+                    </div>
+
+                </ul>
+
+            </div>
+
+            <!--<div class="col-xs-6 col-sm-4">
+
+                <strong>{{ form_label(form.sexo,'Género') }}<br></strong>
+                <div class="input-group">
+                    <span class="input-group-addon"> <i class="glyphicon glyphicon-question-sign"></i></span>
+                    {{ form_widget(form.sexo) }}
+                </div>
+                {{ form_errors(form.sexo) }}
+
+                <br><br>
+                <strong>{{ form_label(form.direccion,'Dirección particular') }}</strong><br>
+                <div class="input-group">
+                    <span class="input-group-addon"> <i class="glyphicon glyphicon-sound-5-1"></i></span>
+                    {{ form_widget(form.direccion) }}
+                </div>
+                {{ form_errors(form.direccion) }}
+                <br>
+                <ul style="padding: 0px;">
+                    <strong>Privilegios</strong>
+                    {% for roles in form.role %}
+                    <div class="userPer">
+                        <li style="list-style: outside none none;">
+                            {{ form_widget(roles) }}
+                            {{ form_label(roles) }}<br>
+                        </li>
+                        {% endfor %}
+                        {{ form_errors(form.role) }}
+                    </div>
+
+                </ul>
+
+            </div>-->
+
+
+        {{ form_rest(form)}}
+        {{ form_end(form) }}
+
+    </form>
+
+
+
+{% endblock %}

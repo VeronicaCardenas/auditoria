@@ -1,0 +1,29 @@
+metododeamortizacion:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:index" }
+
+metododeamortizacion_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:show" }
+
+metododeamortizacion_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:new" }
+
+metododeamortizacion_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:create" }
+    methods:  POST
+
+metododeamortizacion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:edit" }
+
+metododeamortizacion_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:update" }
+
+metododeamortizacion_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:MetodoDeAmortizacion:delete" }
+    methods:  [POST, DELETE]

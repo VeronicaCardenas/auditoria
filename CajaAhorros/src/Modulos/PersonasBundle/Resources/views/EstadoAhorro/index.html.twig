@@ -1,0 +1,233 @@
+{% extends '::fronted1.html.twig' %}
+{% block title %}Listado de los estados de ahorro{% endblock %}
+{% block encabezado %}Listado de los estados de ahorro{% endblock %}
+
+{% block contenedor %}
+
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "oLanguage": {
+                    'sProcessing': '',
+                    'sLengthMenu': 'Mostrando _MENU_ registros',
+                    'sZeroRecords': 'La tabla está vacía',
+                    'sSearch': '',
+                    'sInfo': '_START_ hasta _END_ de _TOTAL_ registros',
+                    'sInfoEmpty': '0 hasta 0 de 0 registros',
+                    'sInfoFiltered': '(Filtrado de _MAX_ total)',
+                    "oPaginate": {
+                        "sFirst":    "Primera",
+                        "sPrevious": "Anterior",
+                        "sNext":     "Siguiente",
+                        "sLast":     "Última"
+                    }
+
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [1] },{"sWidth": "10%","aTargets": [0]},{ "bSortable": false, "aTargets": [ 0 ] }
+                ],
+                "aaSorting": [[2, 'asc']]
+
+            });
+            $("#example_length").hide();
+            $("#example_filter").prop("style",'margin-top:-18%;width:30%;margin-left:23%;');
+
+            $("#example_filter input").prop("style",'width:254%;border-radius:20px;height:26px;margin-top:53px');
+
+            $("#example_info").prop("style",'padding-left: 8px');
+
+            $("#example_paginate").prop("style",'padding-right: 8px');
+
+            $('#SeleccionarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',true);
+
+            });
+
+            $('#DesmarcarTodos').click(function(){
+                $('.EliminarChechbox').prop('checked',false);
+            });
+
+            var oTable = $('#example').dataTable();
+            if(oTable.fnGetNodes().length==0){
+                $('#SeleccionarTodos').css('display','none');
+                $('#DesmarcarTodos').css('display','none');
+                $('#EliminarUsuarios').css('display','none');
+
+            }
+
+
+            $('#EliminarUsuarios').click(function(){
+                oTable= $('#example').dataTable();
+                var lll = $('input', oTable.fnGetNodes()).serialize();
+                if(lll== "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Eliminar Usuarios',
+                        message: 'No existen usuarios marcados',
+                        buttons: [{
+                            label: 'Cancelar',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }
+                        ]
+                    });
+                }
+                else{
+                    BootstrapDialog.show({
+                        title: 'Eliminar estados de ahorros',
+                        message: '¿Realmente desea eliminar los usuarios marcados?',
+                        buttons: [{
+                            label: 'Si',
+                            action: function(dialogItself) {
+
+                                oTable= $('#example').dataTable();
+                                var sData = $('input', oTable.fnGetNodes()).serialize();
+
+                                var dividir = sData.split("&");
+                                var elementos = new Array();
+                                var auxiliar = "";
+                                for(var i= 0; i < dividir.length; i++)
+                                {
+                                    if(i!=0)
+                                    {
+                                        elementos.push("§");
+                                    }
+                                    auxiliar = dividir[i].split("=");
+                                    elementos.push(auxiliar[1]);
+                                    auxiliar = "";
+                                }
+                                $('#EliminarUsuarios').attr('href',"{{ path('eliminar_usuariosmarcados',{'elementos':''})}}" + '/' + elementos);
+                                window.location = $('#EliminarUsuarios').attr('href');
+                                dialogItself.close();
+
+                            }
+                        },
+                            {
+                                label: 'No',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            } ]
+                    });
+
+                }
+
+
+
+
+            });
+            $('[data-toggle="tooltip"]').tooltip()
+
+
+        });
+        function Eliminar(id,name)
+        {
+
+            $(function(){
+                BootstrapDialog.show({
+                    title: 'Eliminar estado de ahorro',
+                    message: '¿Realmente desea eliminar el estado de ahorro: '+name+'?',
+                    buttons: [
+                        {
+                            label: 'Si',
+                            action: function(dialogItself) {
+                                $('.delete').attr('href',"{{ path('estadoahorro_delete',{'id':''})}}" + '/' + id);
+                                window.location = $('.delete').attr('href');
+                                dialogItself.close();
+                            }
+                        },
+                        {
+                            label: 'No',
+                            action: function(dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                });
+            });
+        }
+        $(document).ready(function() {
+            $("#Configurar").addClass("active");
+            $("#Estadodeahorro").addClass("active");
+        });
+
+    </script>
+
+    <div class="oe_view_manager oe_view_manager_current"   data-view-type="list">
+        <div class="oe_view_manager_header">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    <strong>{{ flashMessage }}</strong>
+                </div>
+            {% endfor %}
+            <table class="oe_view_manager_header">
+                <colgroup><col width="20%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="30%">
+                </colgroup>
+                <tbody><tr class="oe_header_row oe_header_row_top">
+                    <td colspan="2">
+
+
+                        <h2 class="oe_view_title">
+                            <span class="oe_view_title_text oe_breadcrumb_title"><span class="oe_breadcrumb_item">Listado de los estados de ahorros</span></span>
+                        </h2>
+                    </td>
+                    <td colspan="2">
+
+
+                    </td>
+                </tr>
+                <tr class="oe_header_row">
+                    <td>
+                        <div class="oe_view_manager_buttons"><div class="oe_list_buttons">
+
+                                <a type="button"  class="oe_button oe_list_add oe_highlight" href="{{ path('estadoahorro_create') }}">
+                                    Crear
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody></table>
+
+
+
+        </div>
+        <table id="example" class="table table-striped" cellspacing="0" width="100%" style="margin-top: -1px;">
+            <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>Nombre</th>
+            </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #ddd">
+            {% for entity in entities %}
+                <tr>
+                    <td>
+                        <!--<input type="checkbox" value="{{ entity.id }}" class="EliminarChechbox" name="valor" style="margin-right: 5px;">-->
+                        <a href="{{ path('estadoahorro_update',{'id':entity.id,'estado':0}) }}" title="Editar" style="margin-right: 3px;color: #000000" data-toggle="tooltip" data-placement="top">
+                            <img style="height: 18px;width: 18px;" src="{{ asset('bundles/PE/images/editar.png') }}" class="img-polaroid"/>
+                        </a>
+                        <a href="#" title="Eliminar" class="delete" id="{{ entity.id }}" name="{{ entity.tipo }}" onclick="Eliminar(id,name)" style="color: #000000" data-toggle="tooltip" data-placement="top"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    </td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.tipo}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+
+{% endblock %}

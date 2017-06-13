@@ -1,0 +1,30 @@
+region:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Region:index" }
+
+region_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Region:show" }
+
+region_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Region:new" }
+
+region_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Region:create" }
+    methods:  POST
+
+region_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Region:edit" }
+
+region_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Region:update" }
+    methods:  [POST, PUT]
+
+region_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Region:delete" }
+    methods:  [POST, DELETE]

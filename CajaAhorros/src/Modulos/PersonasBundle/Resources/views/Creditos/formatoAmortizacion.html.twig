@@ -1,0 +1,238 @@
+
+<div>
+    <div class="oe_view_manager oe_view_manager_current" data-view-type="form">
+
+        {% set cantPagada=0 %}
+        {% for pagorealizado in pagosrealizados  %}
+            {% set cantPagada=cantPagada + pagorealizado.valorIngresado %}
+        {% endfor %}
+
+        {% set valorTotalPagar=0 %}
+        {% for amortizacion in amortizaciones  %}
+            {% set valorTotalPagar=valorTotalPagar + amortizacion.valorcuota %}
+        {% endfor %}
+
+        {% set valorTotalPagar =  amortizaciones is not empty ? ((valorTotalPagar )| number_format(2, '.' , ',' )) : "No Existente" %}
+
+
+        <div class="oe_view_manager_wrapper">
+            <div>
+                <h1>
+                    <label class="oe_form_label oe_align_right"> Datos del crédito {{ entity.id }} de {{ entity.persona is null ? "" : (entity.persona.nombre is null ? " " : entity.persona.nombre) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.primerApellido is null ? " " : entity.persona.primerApellido) }}&nbsp;{{ entity.persona is null ? "" : (entity.persona.segundoApellido is null ? " " : entity.persona.segundoApellido)}}&nbsp;</label>
+                </h1>
+                <br>
+                <table >
+                    <tbody>
+                    <tr class="oe_header_row oe_header_row_top">
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Valor Autorizado:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align">
+                            <h5 >
+                                $ {{ (entity.montoSolicitado )| number_format(2, '.' , ',' ) }}
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Valor Pagar Total:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align">
+                            <h5 >
+                                $ {{ valorTotalPagar|number_format(2, '.' , ',' ) }}&nbsp;
+                            </h5>
+                        </td>
+
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Cuotas por pagar:
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align">
+                            <h5 >
+                                {{entity.numeroDePagos - (pagosrealizados | length)}}
+                            </h5>
+                        </td>
+
+                    </tr>
+                    <tr class="oe_header_row oe_header_row_top">
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5>
+                                Cuota a pagar:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align">
+                            <h5>
+                                $ {{ amortizaciones is not empty ? ((amortizaciones[1].valorcuota )| number_format(2, '.' , ',' )) : "No Existente"}}
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Valor Entregado:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align">
+                            <h5 >
+                                $ {{ ( cantPagada )| number_format(2, '.' , ',' ) }}
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Cuotas Pagadas:
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align">
+                            <h5 >
+                                {{pagosrealizados | length}}
+                            </h5>
+                        </td>
+
+                    </tr>
+                    <tr class="oe_header_row oe_header_row_top">
+
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Último Pago:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align">
+                            <h5 >
+                                {%if pagosrealizados is not empty %}
+                                {% set ultimopago = pagosrealizados | last %}
+                                {{ ultimopago.fechaDePago | date("m/d/Y")}}
+                                {% else %}
+                                {{ "NUNCA" }}
+                                {% endif %}
+
+                            </h5>
+                        </td>
+                        <td class="tabla_left_align" style="padding-left: 40px">
+                            <h5 >
+                                Saldo por Cobrar:
+                            </h5>
+                        </td>
+                        <td class="tabla_right_align    ">
+                            <h5 >
+                                $ {{ (valorTotalPagar - cantPagada)| number_format(2, '.' , ',' ) }}
+                            </h5>
+                        </td>
+
+
+
+
+                    </tr>
+                    </tbody>
+                </table>
+
+                <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                <h2>Tabla de amortización</h2>
+                <table>
+
+                    <tbody>
+                    <tr>
+                            <td class="tabla_center_align"><b>Cuota</b></td>
+                            <td class="tabla_center_align"><b>Fecha De Pago</b></td>
+                            <td class="tabla_center_align"><b>Capital</b></td>
+                            <td class="tabla_center_align"><b>Interes</b></td>
+                            <td class="tabla_center_align"><b>F.Desgrav</b></td>
+                            <td class="tabla_center_align"><b>Valor cuota</b></td>
+                            <td class="tabla_center_align"><b>Saldo</b></td>
+                            <td class="tabla_center_align"><b>Pagado</b></td>
+                    </tr>
+                    {% set cont=0 %}
+                    {% set totalCapital=0 %}
+                    {% set totalInteres=0 %}
+                    {% set totalCuota=0 %}
+                    {% set totalDesgravamen=0 %}
+                    {% for amortizacion in amortizaciones %}
+                    <tr>
+                        <td  
+                            class="tabla_center_align"> {{ amortizacion.cuota }}</td>
+                        <td 
+                            class="tabla_center_align"> {{ amortizacion.fechaDePago | date('d/m/Y') }}</td>
+                        <td  class="tabla_right_align">
+                            $ {{ amortizacion.capital |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align">
+                            $ {{ amortizacion.interes |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align">
+                            $ {{ amortizacion.desgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align">
+                            $ {{ amortizacion.valorcuota|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align">
+                            $ {{ amortizacion.saldo|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_center_align">
+                            {{ cont == 0 ? (entity.idProductosDeCreditos.id == 1 ? (entity.desgravamenPagado ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>")) :( (pagosrealizados | length) >= cont ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>" )}}</td>
+                        {% set cont=cont + 1%}
+                        {% set totalCapital=totalCapital + amortizacion.capital%}
+                        {% set totalInteres=totalInteres + amortizacion.interes%}
+                        {% set totalCuota=totalCuota + amortizacion.valorcuota%}
+                        {% set totalDesgravamen=totalDesgravamen + amortizacion.desgravamen%}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td  class="tabla_right_align" style="font-weight: bold">TOTAL</td>
+                        <td  class="tabla_right_align"></td>
+                        <td  class="tabla_right_align" style="font-weight: bold">
+                            $ {{ entity.montoSolicitado |number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align" style="font-weight: bold">
+                            $ {{ totalInteres|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align" style="font-weight: bold">
+                            $ {{ totalDesgravamen|number_format(2, '.' , ',' ) }}&nbsp;</td>
+                        <td  class="tabla_right_align" style="font-weight: bold">
+                            {#$ {{ totalCuota|number_format(2, '.' , ',' ) }}&nbsp;</td>#}
+                        $ {{(entity.montoSolicitado+ totalInteres+totalDesgravamen )|number_format(2, '.' , ',' ) }}&nbsp;</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+                <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                <h2>Tabla de Pagos realizados</h2>
+                {% set pago = true %}
+
+                <table  border="1">
+                    <tbody>
+                    <tr>
+                    <td class="tabla_center_align"><b>Fecha De Pago</b></td>
+                    <td class="tabla_center_align"><b>Valor cuota</b></td>
+                    </tr>
+
+                    {% for pagorealizado in pagosrealizados %}
+                    {% set pago = false %}
+                    <tr>
+                        <td  class="tabla_center_align"> {{ pagorealizado.fechaDePago | date('d/m/Y') }}</td>
+                        <td  class="tabla_right_align tabla_center_align">
+                            &nbsp;$&nbsp;{{ (pagorealizado.valorIngresado   )| number_format(2) }}&nbsp;
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if pago %}
+                <label style="padding-left: 20px">No se han realizado Pagos</label>
+                {% endif %}
+                <hr style="width: 96%;padding: 1px;border-color: #7C7BAD">
+                <h2>Documentos asociados al Crédito</h2>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                    <td><b>Nombre</b></td>
+                    <td><b>Documento</b></td>
+                    </tr>
+                    {% for documento in documentos %}
+                    <tr>
+                        <td width="50%">{{ documento.nombre }}</td>
+                        <td width="50%"><a href="{{ asset('bundles/PE/documentos/' ~ documento.rutaDocumento ) }}">{{documento.rutaDocumento}}</a></td>
+
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

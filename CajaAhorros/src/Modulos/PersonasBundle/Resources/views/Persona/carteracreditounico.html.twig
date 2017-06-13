@@ -1,0 +1,195 @@
+
+{% set desgravamenPagar=(creditoEspecif['credito'].idProductosDeCreditos.id==1) ? (creditoEspecif['credito'].desgravamenPagado ? (creditoEspecif['credito'].idProductosDeCreditos.desgravamen * creditoEspecif['credito'].montoSolicitado/100) : 0 ) : 0 %}
+
+{% set cantPagada=desgravamenPagar %}
+{% for pagorealizado in pagosrealizados  %}
+    {% set cantPagada=cantPagada + pagorealizado.valorIngresado %}
+{% endfor %}
+
+{% set valorTotalPagar=0 %}
+{% for amortizacion in creditoEspecif["amortiz"]  %}
+    {% set valorTotalPagar=valorTotalPagar + amortizacion[0].valorcuota %}
+{% endfor %}
+
+{#{% set valorTotalPagar =  creditoEspecif["amortiz"]  is not empty ? ((valorTotalPagar |  round(2, 'ceil'))| number_format(2, '.' , ',' )) : "No Existente" %}#}
+
+
+<div class="tabla_center_align" >
+    <div class="oe_form_sheetbg">
+        <div class="oe_form_sheet oe_form_sheet_width" style="max-width:95% !important;">
+            <table >
+                <thead>
+                <th width="20%" class="tabla_right_align"></th>
+                <th width="20%" class="tabla_left_align"></th>
+                <th width="22%" class="tabla_right_align"></th>
+                <th width="10%" class="tabla_left_align"></th>
+
+                </thead>
+                <tbody>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            ID Crédito:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ creditoEspecif['credito'].id }}
+                        </h4>
+                    </td>
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Valor Autorizado:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ (creditoEspecif['credito'].montoSolicitado )| number_format(2, '.' , ',' ) }}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Valor Entregado:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            &nbsp;$&nbsp;{{ (cantPagada )| number_format(2, '.' , ',' )}}
+                        </h4>
+                    </td>
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Saldo por Cobrar:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            &nbsp;$&nbsp;{{ ((valorTotalPagar - cantPagada))| number_format(2, '.' , ',' )}}
+                        </h4>
+                    </td>
+
+                </tr>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Estado:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ creditoEspecif['credito'].estadocreditos.tipo }}
+                        </h4>
+                    </td>
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Moroso:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ creditoEspecif['moroso'] ? "SI" : "NO" }}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="oe_header_row oe_header_row_top">
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Fecha Inicio:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ creditoEspecif['fechainicio'] }}
+                        </h4>
+                    </td>
+                    <td class="tabla_right_align" style="padding-right: 20px">
+                        <h4 >
+                            Fecha Fin:
+                        </h4>
+                    </td>
+                    <td class="tabla_left_align">
+                        <h4 >
+                            {{ creditoEspecif['fechafin'] }}
+                        </h4>
+                    </td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+            {% if (creditoEspecif["amortiz"] | length) > 0 %}
+                <table  class="table">
+                    <thead>
+                    <th width="5%" class="tabla_center_align">Cuota</th>
+                    <th width="14%" class="tabla_center_align">Fecha de Pago</th>
+                    <th width="14%" class="tabla_center_align">Capital</th>
+                    <th width="14%" class="tabla_center_align">Interes</th>
+                    <th width="14%" class="tabla_center_align">Fondo Desgravamen</th>
+                    <th width="14%" class="tabla_center_align">Valor Cuota</th>
+                    <th width="14%" class="tabla_center_align">Saldo</th>
+                    <th width="8%" class="tabla_center_align">Pagado</th>
+
+                    </thead>
+                    <tbody>
+                    {% set cont=0 %}
+                    {% set totalCapital=0 %}
+                    {% set totalInteres=0 %}
+                    {% set totalCuota=0 %}
+                    {% set totalDesgravamen=0 %}
+                    {% for amortizaciones in creditoEspecif["amortiz"] %}
+                        {% if amortizaciones[1] == 2 %}
+                            <tr style="background-color: #cc9382 !important;">
+                        {% else %}
+                            <tr >
+                        {% endif %}
+                        <td width=""
+                            class="tabla_center_align"> {{ amortizaciones[0].cuota }}</td>
+                        <td width=""
+                            class="tabla_center_align"> {{ amortizaciones[0].fechaDePago | date('d/m/Y') }}</td>
+                        <td width="" class="tabla_right_align">
+                            &nbsp;$&nbsp;{{ amortizaciones[0].capital| number_format(2, '.' , ',' ) }}</td>
+                        <td width="" class="tabla_right_align">
+                            &nbsp;$&nbsp;{{ (amortizaciones[0].interes)| number_format(2, '.' , ',' ) }}</td>
+                        <td width="" class="tabla_right_align">
+                            &nbsp;$&nbsp;{{ (amortizaciones[0].desgravamen)| number_format(2, '.' , ',' )}}</td>
+                        <td width="" class="tabla_right_align">
+                            &nbsp;$&nbsp;{{ (amortizaciones[0].valorcuota)| number_format(2, '.' , ',' )    }}</td>
+                        <td width="" class="tabla_right_align">
+                            &nbsp;$&nbsp;{{ (amortizaciones[0].saldo)| number_format(2, '.' , ',' )}}</td>
+                        {#<td width="" class="tabla_center_align">#}
+                            {#{{ cont == 0 ? " " :( (pagosrealizados | length) >= cont ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>" )}}</td>#}
+                        <td width="" class="tabla_center_align">
+                            {{ cont == 0 ? (creditoEspecif['credito'].idProductosDeCreditos.id == 1 ? (creditoEspecif['credito'].desgravamenPagado ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>")) :( (pagosrealizados | length) >= cont ? "<label style='color: green; font-weight: bold;'> SI </label>" : "<label style='color: brown; font-weight: bold;'> NO </label>" )}}</td>
+                        {% set cont=cont + 1%}
+                        {% set totalCapital=totalCapital + amortizaciones[0].capital%}
+                        {% set totalInteres=totalInteres + amortizaciones[0].interes%}
+                        {% set totalCuota=totalCuota + amortizaciones[0].valorcuota%}
+                        {% set totalDesgravamen=totalDesgravamen + amortizaciones[0].desgravamen%}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+           +             <td width="" class="tabla_right_align" style="font-weight: bold">TOTAL</td>
+                        <td width="" class="tabla_right_align"></td>
+                        <td width="" class="tabla_right_align" style="font-weight: bold">
+                            &nbsp;$&nbsp;{{ creditoEspecif['credito'].montoSolicitado| number_format(2, '.' , ',' ) }}</td>
+                        <td width="" class="tabla_right_align" style="font-weight: bold">
+                            &nbsp;$&nbsp;{{ (totalInteres)| number_format(2, '.' , ',' ) }}</td>
+                        <td width="" class="tabla_right_align" style="font-weight: bold">
+                            &nbsp;$&nbsp;{{ (totalDesgravamen)| number_format(2, '.' , ',' )   }}</td>
+                        <td width="" class="tabla_right_align" style="font-weight: bold">
+                            {#$ {{ (totalCuota|  round(2, 'ceil'))| number_format(2, '.' , ',' ) }}</td>#}
+                            &nbsp;$&nbsp;{{ (creditoEspecif['credito'].montoSolicitado+totalDesgravamen+totalInteres)| number_format(2, '.' , ',' ) }}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+
+        </div>
+    </div>
+</div>
+

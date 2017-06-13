@@ -1,0 +1,28 @@
+cargo:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:index" }
+
+cargo_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:show" }
+
+cargo_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:new" }
+
+cargo_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:create" }
+
+cargo_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:edit" }
+
+cargo_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:update" }
+
+cargo_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:Cargo:delete",id:""}
+

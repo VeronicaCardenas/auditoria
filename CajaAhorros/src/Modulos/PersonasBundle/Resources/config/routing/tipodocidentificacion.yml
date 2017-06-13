@@ -1,0 +1,30 @@
+tipodocidentificacion:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:index" }
+
+tipodocidentificacion_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:show" }
+
+tipodocidentificacion_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:new" }
+
+tipodocidentificacion_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:create" }
+    methods:  POST
+
+tipodocidentificacion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:edit" }
+
+tipodocidentificacion_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:update" }
+    methods:  [POST, PUT]
+
+tipodocidentificacion_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:TipoDocIdentificacion:delete" }
+    methods:  [POST, DELETE]

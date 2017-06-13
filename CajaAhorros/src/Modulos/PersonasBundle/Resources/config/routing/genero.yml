@@ -1,0 +1,30 @@
+genero:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:Genero:index" }
+
+genero_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:Genero:show" }
+
+genero_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:Genero:new" }
+
+genero_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:Genero:create" }
+    methods:  POST
+
+genero_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:Genero:edit" }
+
+genero_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:Genero:update" }
+    methods:  [POST, PUT]
+
+genero_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ModulosPersonasBundle:Genero:delete" }
+    methods:  [POST, DELETE]

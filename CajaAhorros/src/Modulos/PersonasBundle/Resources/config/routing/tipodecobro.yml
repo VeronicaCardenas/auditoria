@@ -1,0 +1,30 @@
+tipodecobro:
+    path:     /
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:index" }
+
+tipodecobro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:show" }
+
+tipodecobro_new:
+    path:     /new
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:new" }
+
+tipodecobro_create:
+    path:     /create
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:create" }
+    
+
+tipodecobro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:edit" }
+
+tipodecobro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:update" }
+    
+
+tipodecobro_delete:
+    path:     /delete/{id}
+    defaults: { _controller: "ModulosPersonasBundle:TipoDeCobro:delete",id:""}
+    
